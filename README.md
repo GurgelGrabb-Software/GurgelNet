@@ -6,7 +6,7 @@ GurgelNet is a simple networking library built on top of [Valve's GameNetworking
 
 All main interfacing with the library is done through the `GurgelNet/Network.h` header and the library functions within it.
 
-A simple setup to get a simple Host (client + server) running:
+Example setup to get a simple Host (client + server) running:
 ```cpp
 #include <GurgelNet/Network.h>
 
