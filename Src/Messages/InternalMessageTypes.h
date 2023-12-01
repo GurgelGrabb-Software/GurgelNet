@@ -14,6 +14,10 @@ enum EInternalMsgT : uint8_t
 	EInternalMsg_ClientToServer_LateJoinConfirm,	// The client confirming late join
 
 	EInternalMsg_ServerToClient_NotifyFinalized,	// The server letting the client know that its now finalized and ready to go
+
+	EInternalMsg_Object_ClientRequestSpawn,			// Client requesting spawn of an object (and will expect a confirmation on the network ID)
+	EInternalMsg_Object_ServerConfirmSpawn,			// Server confirming the spawn of an object that this client has previously requested
+	EInternalMsg_Object_Spawn,						// Server notifying clients about the spawn of an object
 };
 
 struct SHeaderOnlyMsg : public INetMessage

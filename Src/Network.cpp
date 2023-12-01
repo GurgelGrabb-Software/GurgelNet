@@ -95,7 +95,18 @@ void GurgelNet_Shutdown()
 	s_numLayers = 1;
 }
 
-bool GurgelNet_CreateClient(const char* ip, unsigned short port, HNetLayer& outHandle)
+void AssignLayerSettings(CNetLayerBase& layer, const SNetLayerSettings& settings)
+{
+	for (auto& callback : settings.layerCallbacks)
+	{
+		if (callback.callbackPtr == nullptr) continue;
+		layer.SetLayerCallback(callback.callbackType, callback.callbackPtr);
+	}
+
+	layer.RegisterObjectFactory(*settings.objectFactoryPtr);
+}
+
+bool GurgelNet_CreateClient(const SNetLayerSettings& clientSettings, HNetLayer& outHandle)
 {
 	outHandle = 0;
 
@@ -105,13 +116,15 @@ bool GurgelNet_CreateClient(const char* ip, unsigned short port, HNetLayer& outH
 		return false;
 	}
 
-	s_layerPtrs[s_numLayers] = new CClientLayer(ip, port);
+	s_layerPtrs[s_numLayers] = new CClientLayer(clientSettings.ip, clientSettings.port);
+	AssignLayerSettings(*s_layerPtrs[s_numLayers], clientSettings);
 	outHandle = s_numLayers;
 	s_numLayers++;
+
 	return true;
 }
 
-bool GurgelNet_CreateServer(unsigned short port, HNetLayer& outHandle)
+bool GurgelNet_CreateServer(const SNetLayerSettings& serverSettings, HNetLayer& outHandle)
 {
 	outHandle = 0;
 
@@ -121,16 +134,17 @@ bool GurgelNet_CreateServer(unsigned short port, HNetLayer& outHandle)
 		return false;
 	}
 
-	s_layerPtrs[s_numLayers] = new CServerLayer(port);
+	s_layerPtrs[s_numLayers] = new CServerLayer(serverSettings.port);
+	AssignLayerSettings(*s_layerPtrs[s_numLayers], serverSettings);
 	outHandle = s_numLayers;
 	s_numLayers++;
 	return true;
 }
 
-bool GurgelNet_CreateHost(unsigned short port, HNetLayer& outClientHandle, HNetLayer& outServerHandle)
+bool GurgelNet_CreateHost(const SNetLayerSettings& serverSettings, const SNetLayerSettings& clientSettings, HNetLayer& outClientHandle, HNetLayer& outServerHandle)
 {
 	bool result = true;
-	result &= GurgelNet_CreateServer(port, outServerHandle);
-	result &= GurgelNet_CreateClient("127.0.0.1", port, outClientHandle);
+	result &= GurgelNet_CreateServer(serverSettings, outServerHandle);
+	result &= GurgelNet_CreateClient(clientSettings, outClientHandle);
 	return result;
 }

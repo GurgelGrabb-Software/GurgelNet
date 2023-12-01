@@ -2,6 +2,7 @@
 #include "GurgelNet/INetLayer.h"
 #include "Src/Messages/NetMessageQueue.h"
 #include "Src/Messages/ClientInternalMessageProcessor.h"
+#include "GurgelNet/Objects/INetObjectFactory.h"
 
 #include <steam/steamnetworkingsockets.h>
 #include <steam/isteamnetworkingutils.h>
@@ -18,9 +19,13 @@ public:
 	EConnectState CurrentState() const override;
 
 	void RegisterProcessor(INetMessageProcessor* processor) override final;
-	void SetLayerCallback(ENetLayerCallback t, void* fPtr) override final;
+	void SetLayerCallback(ENetLayerCallback t, void* fPtr);
 	
-	INetMessageQueue& MessageQueue() override;
+	INetMessageQueue& MessageQueue();
+
+	INetObjectFactory& GetObjectFactory();
+
+	void RegisterObjectFactory(INetObjectFactory& factory);
 
 	void AssignNetID(ClientID id);
 	ClientID GetNetID() const override;
@@ -45,6 +50,8 @@ protected:
 private:
 	ClientID _localID;
 	EConnectState _currentState = EConnectState_Inactive;
+
+	INetObjectFactory* _objectFactory;
 	
 	std::vector<INetMessageProcessor*> _messageProcessors;
 	void* _layerCallbackPtrs[ENetLayerCallback_Count];

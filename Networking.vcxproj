@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Include\GurgelNet\ConnectState.h" />
+    <ClInclude Include="Include\GurgelNet\Core\LayerSettings.h" />
     <ClInclude Include="Include\GurgelNet\Core\LibrarySettings.h" />
     <ClInclude Include="Include\GurgelNet\Core\NetLogging.h" />
     <ClInclude Include="Include\GurgelNet\Core\NetTypes.h" />
@@ -160,6 +161,8 @@
     <ClInclude Include="Include\GurgelNet\Messages\NetMessageHeader.h" />
     <ClInclude Include="Include\GurgelNet\NetLib.h" />
     <ClInclude Include="Include\GurgelNet\Network.h" />
+    <ClInclude Include="Include\GurgelNet\Objects\INetObjectFactory.h" />
+    <ClInclude Include="Include\GurgelNet\Objects\NetObject.h" />
     <ClInclude Include="Include\GurgelNet\Serializables\NetString.h" />
     <ClInclude Include="Include\GurgelNet\Serialization\INetSerializable.h" />
     <ClInclude Include="Include\GurgelNet\Serialization\INetSerializer.h" />
@@ -170,12 +173,15 @@
     <ClInclude Include="Src\Messages\InternalMessageTypes.h" />
     <ClInclude Include="Src\Messages\NetMessage.h" />
     <ClInclude Include="Src\Messages\NetMessageQueue.h" />
+    <ClInclude Include="Src\Messages\ObjectMessageTypes.h" />
     <ClInclude Include="Src\Messages\ServerInternalMessageProcessor.h" />
+    <ClInclude Include="Src\Objects\NetObjectList.h" />
     <ClInclude Include="Src\Serialization\NetMessageReader.h" />
     <ClInclude Include="Src\Serialization\NetMessageWriter.h" />
     <ClInclude Include="Src\ServerLayer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Objects\NetObject.cpp" />
     <ClCompile Include="Src\BaseNetLayer.cpp" />
     <ClCompile Include="Src\ClientLayer.cpp" />
     <ClCompile Include="Src\Core\LibrarySettings.cpp" />
@@ -185,6 +191,7 @@
     <ClCompile Include="Src\Messages\NetMessageQueue.cpp" />
     <ClCompile Include="Src\Messages\ServerInternalMessageProcessor.cpp" />
     <ClCompile Include="Src\Network.cpp" />
+    <ClCompile Include="Src\Objects\NetObjectList.cpp" />
     <ClCompile Include="Src\Serializables\NetString.cpp" />
     <ClCompile Include="Src\Serialization\NetMessageReader.cpp" />
     <ClCompile Include="Src\Serialization\NetMessageWriter.cpp" />

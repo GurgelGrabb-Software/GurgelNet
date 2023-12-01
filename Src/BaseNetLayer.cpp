@@ -69,6 +69,16 @@ INetMessageQueue& CNetLayerBase::MessageQueue()
 	return _messageQueue;
 }
 
+INetObjectFactory& CNetLayerBase::GetObjectFactory()
+{
+	return *_objectFactory;
+}
+
+void CNetLayerBase::RegisterObjectFactory(INetObjectFactory& factory)
+{
+	_objectFactory = &factory;
+}
+
 void CNetLayerBase::Start()
 {
 	_interfacePtr = SteamNetworkingSockets();

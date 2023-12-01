@@ -4,6 +4,7 @@
 #include "Src/Messages/InternalMessageTypes.h"
 #include "GurgelNet/Messages/NetMessageHeader.h"
 #include "GurgelNet/Serialization/INetSerializer.h"
+#include "Src/Messages/ObjectMessageTypes.h"
 
 void ProcessIDRecieve(CClientLayer& layer, INetMessageReader& reader, INetMessageQueue& msgQueue)
 {
@@ -34,6 +35,23 @@ void ProcessLateJoinSync(INetMessageReader& reader, CClientLayer& layer)
 	layer.MessageQueue().Send(SHeaderOnlyMsg(EInternalMsg_ClientToServer_LateJoinConfirm), true);
 }
 
+void ProcessObjectSpawnConfirmation(INetMessageReader& reader, CClientLayer& layer)
+{
+	CInternalMsg_Object_ServerConfirmSpawn confirmMsg;
+	reader.Read(confirmMsg);
+	layer.ConfirmNetworkObjectSpawn(confirmMsg.PendingID, confirmMsg.ConfirmedID);
+}
+
+void ProcessObjectSpawn(INetMessageReader& reader, CClientLayer& layer)
+{
+	CInternalMsg_Object_Spawn spawnMsg;
+	reader.Read(spawnMsg);
+
+	CNetObject* made = layer.GetObjectFactory().MakeObject(spawnMsg.ObjectTypeID);
+	made->ReadSpawnData(reader);
+
+	layer.ProcessObjectSpawn(*made, spawnMsg.ObjectID);
+}
 
 CClientInternalMessageProcessor::CClientInternalMessageProcessor(CClientLayer& layer)
 	: _layer(layer)
@@ -52,6 +70,9 @@ void CClientInternalMessageProcessor::Process(const SNetMessageHeader& header, I
 	case EInternalMsg_ServerToClient_ID: ProcessIDRecieve(_layer, reader, netLayer.MessageQueue()); break;
 	case EInternalMsg_ServerToClient_LateJoinSync: ProcessLateJoinSync(reader, _layer); break;
 	case EInternalMsg_ServerToClient_NotifyFinalized: _layer.ConnectionFinalized(); break;
+
+	case EInternalMsg_Object_ServerConfirmSpawn: ProcessObjectSpawnConfirmation(reader, _layer); break;
+	case EInternalMsg_Object_Spawn: ProcessObjectSpawn(reader, _layer); break;
 		break;
 	}
 }

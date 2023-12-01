@@ -9,6 +9,21 @@
 #include <cstdint>
 
 // ------------------------------------------------------------
+// NetTypeID
+// ID used to identify types to spawn via network.
+// These should be processable by registered INetObjectFactory
+// ------------------------------------------------------------
+using NetTypeID = uint32_t;
+constexpr static NetTypeID NetTypeID_Unset = 0xFFFFFFFF;
+
+// ------------------------------------------------------------
+// NetObjectID
+// ID for net objects
+// ------------------------------------------------------------
+using NetObjectID = uint16_t;
+constexpr static NetObjectID NetObjectID_Unset = 0xFFFFFFFF;
+
+// ------------------------------------------------------------
 // ClientID
 // Used to identify clients
 // To allow identifying the server, it also has a ClientID

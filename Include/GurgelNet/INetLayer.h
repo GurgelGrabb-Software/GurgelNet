@@ -13,6 +13,8 @@
 #include "GurgelNet/ConnectState.h"
 #include "GurgelNet/LayerCallbacks.h"
 #include "GurgelNet/Core/NetTypes.h"
+#include "GurgelNet/Objects/NetObject.h"
+#include "GurgelNet/Objects/INetObjectFactory.h"
 
 #include <cstdint>
 
@@ -24,12 +26,9 @@ class NETWORK_API INetLayer
 public:
 	virtual ~INetLayer() = default;
 
-	/// <summary>
-	/// Register a callback with this layer
-	/// </summary>
-	/// <param name="t">The ENetLayerCallback type</param>
-	/// <param name="fPtr">Function pointer to invoke on this event</param>
-	virtual void SetLayerCallback(ENetLayerCallback t, void* fPtr) = 0;
+	// ----------------------------------------------------------------------
+	// Information Getters
+	// ----------------------------------------------------------------------
 
 	/// <summary>
 	/// Get the current state of this Layer
@@ -49,9 +48,30 @@ public:
 	/// <param name="processor">Pointer to the processor you wish to register. The NetLayer assumes ownership of this pointer.</param>
 	virtual void RegisterProcessor(INetMessageProcessor* processor) = 0;
 
+	// ----------------------------------------------------------------------
+	// Networking
+	// ----------------------------------------------------------------------
+
 	/// <summary>
-	/// Get the message queue belonging to this layer
+	/// Send a network message through this Network Layer to the default target
+	/// On server: ClientID_AllClients
+	/// On cliend: ClientID_Server
 	/// </summary>
-	/// <returns>Reference to the INetMessageQueue</returns>
-	virtual INetMessageQueue& MessageQueue() = 0;
+	/// <param name="message">The message to send</param>
+	/// <param name="reliable">True if this message should be reliable</param>
+	virtual void Send(const INetMessage& message, bool reliable = false) = 0;
+
+	/// <summary>
+	/// Send a network message through this Network Layer to the specified targets
+	/// </summary>
+	/// <param name="message">The message to send</param>
+	/// <param name="targetMask">ClientID mask to send the message to</param>
+	/// <param name="reliable">True if this message should be reliable</param>
+	virtual void Send(const INetMessage& message, ClientID targetMask, bool reliable = false) = 0;
+
+	/// <summary>
+	/// Spawn an object on the network.
+	/// </summary>
+	/// <param name="spawn">The object to spawn</param>
+	virtual void SpawnNetworkObject(CNetObject& spawn) = 0;
 };
