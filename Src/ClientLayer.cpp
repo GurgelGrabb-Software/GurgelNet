@@ -114,6 +114,8 @@ void CClientLayer::SpawnNetworkObject(CNetObject& spawn)
 void CClientLayer::ProcessObjectSpawn(CNetObject& spawned, NetObjectID objID)
 {
 	_activeObjectList.AddWithID(&spawned, objID);
+	spawned.SetNetObjectID(objID);
+	spawned.MarkAsClient();
 	spawned.OnNetworkSpawn();
 }
 
@@ -123,6 +125,7 @@ void CClientLayer::ConfirmNetworkObjectSpawn(NetObjectID pendingID, NetObjectID 
 	_pendingObjectList.Remove(pendingID);
 	_activeObjectList.AddWithID(object, confirmedID);
 	object->SetNetObjectID(confirmedID);
+	object->MarkAsClient();
 	object->OnNetworkSpawn(); // The object is only really spawned at this point 
 }
 

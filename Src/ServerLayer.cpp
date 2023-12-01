@@ -113,6 +113,7 @@ void CServerLayer::SpawnNetworkObject(CNetObject& spawn)
 {
 	const auto id = _netObjectList.Add(&spawn);
 	spawn.SetNetObjectID(id);
+	spawn.MarkAsServer();
 	spawn.OnNetworkSpawn();
 
 	SendObjectSpawnMessage(spawn, ClientID_AllClients);

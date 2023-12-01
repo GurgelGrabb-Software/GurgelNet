@@ -7,7 +7,12 @@ class INetMessageReader;
 
 class NETWORK_API CNetObject
 {
+	friend class CServerLayer;
+	friend class CClientLayer;
 public:
+	bool IsClient() const;
+	bool IsServer() const;
+
 
 	// Should return the NetTypeID usable by the registered INetObjectFactory
 	virtual NetTypeID GetNetTypeID() const = 0;
@@ -27,10 +32,15 @@ public:
 
 public:
 	virtual ~CNetObject() = default;
-
-	void SetNetObjectID(NetObjectID id);
+	
 	NetObjectID GetNetObjectID() const;
 
 private:
+	void MarkAsServer();
+	void MarkAsClient();
+	void SetNetObjectID(NetObjectID id);
+
 	NetObjectID _objectID = NetObjectID_Unset;
+	bool _isServer = false;
+	bool _isClient = false;
 };
