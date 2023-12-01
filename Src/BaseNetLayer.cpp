@@ -90,7 +90,7 @@ void CNetLayerBase::Shutdown()
 
 void CNetLayerBase::Tick()
 {
-	Recieve();
+	RecieveMessages();
 
 	while (_messageQueue.QueuedRecieved() > 0)
 	{
@@ -119,7 +119,7 @@ void CNetLayerBase::Tick()
 		}
 	}
 
-	Send();
+	SendQueuedMessages();
 }
 
 void CNetLayerBase::AssignNetID(ClientID id)

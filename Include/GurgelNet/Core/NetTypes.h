@@ -21,7 +21,7 @@ constexpr static NetTypeID NetTypeID_Unset = 0xFFFFFFFF;
 // ID for net objects
 // ------------------------------------------------------------
 using NetObjectID = uint16_t;
-constexpr static NetObjectID NetObjectID_Unset = 0xFFFFFFFF;
+constexpr static NetObjectID NetObjectID_Unset = 0xFFFF;
 
 // ------------------------------------------------------------
 // ClientID

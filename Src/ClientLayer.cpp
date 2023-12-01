@@ -60,7 +60,7 @@ void CClientLayer::Shutdown()
 	_connection = 0u;
 }
 
-void CClientLayer::Recieve()
+void CClientLayer::RecieveMessages()
 {
 	SteamNetworkingMessage_t* msg;
 	while (_interfacePtr->ReceiveMessagesOnConnection(_connection, &msg, 1) > 0)
@@ -71,7 +71,7 @@ void CClientLayer::Recieve()
 	}
 }
 
-void CClientLayer::Send()
+void CClientLayer::SendQueuedMessages()
 {
 	while (_messageQueue.QueuedSend() > 0)
 	{

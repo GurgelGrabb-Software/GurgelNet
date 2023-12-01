@@ -12,9 +12,13 @@
 #include "GurgelNet/NetLib.h"
 #include "GurgelNet/ConnectState.h"
 #include "GurgelNet/LayerCallbacks.h"
+
 #include "GurgelNet/Core/NetTypes.h"
+
 #include "GurgelNet/Objects/NetObject.h"
 #include "GurgelNet/Objects/INetObjectFactory.h"
+
+#include "GurgelNet/Messages/INetMessage.h"
 
 #include <cstdint>
 

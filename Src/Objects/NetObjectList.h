@@ -7,19 +7,19 @@ class CNetObjectList
 public:
 	CNetObjectList();
 
-	void AddWithID(CNetObject* object, CNetObject::NetObjectID id);
+	void AddWithID(CNetObject* object, NetObjectID id);
 
-	CNetObject::NetObjectID Add(CNetObject* object);
-	void Remove(CNetObject::NetObjectID id);
-	CNetObject* Get(CNetObject::NetObjectID id);
+	NetObjectID Add(CNetObject* object);
+	void Remove(NetObjectID id);
+	CNetObject* Get(NetObjectID id);
 
-	bool IsIDValid(CNetObject::NetObjectID id) const;
+	bool IsIDValid(NetObjectID id) const;
 
 private:
-	bool TryGetFreeSlot(CNetObject::NetObjectID& outID);
+	bool TryGetFreeSlot(NetObjectID& outID);
 	void IncreaseIDSlotCount();
-	CNetObject::NetObjectID GetCurrentIDSlotCeiling() const;
+	NetObjectID GetCurrentIDSlotCeiling() const;
 
-	std::vector< CNetObject* > _objects;
-	std::vector<CNetObject::NetObjectID> _freeIDs;
+	std::vector<CNetObject*> _objects;
+	std::vector<NetObjectID> _freeIDs;
 };

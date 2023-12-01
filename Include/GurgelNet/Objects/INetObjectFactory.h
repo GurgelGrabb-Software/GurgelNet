@@ -16,5 +16,5 @@
 class INetObjectFactory
 {
 public:
-	virtual CNetObject* MakeObject( CNetObject::NetTypeID id ) = 0;
+	virtual CNetObject* MakeObject( NetTypeID id ) = 0;
 };

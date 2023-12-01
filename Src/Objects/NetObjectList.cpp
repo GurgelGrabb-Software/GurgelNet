@@ -5,7 +5,7 @@ CNetObjectList::CNetObjectList()
 	IncreaseIDSlotCount();
 }
 
-void CNetObjectList::AddWithID(CNetObject* object, CNetObject::NetObjectID id)
+void CNetObjectList::AddWithID(CNetObject* object, NetObjectID id)
 {
 	while (id >= GetCurrentIDSlotCeiling())
 	{
@@ -15,9 +15,9 @@ void CNetObjectList::AddWithID(CNetObject* object, CNetObject::NetObjectID id)
 	_objects[id] = object;
 }
 
-CNetObject::NetObjectID CNetObjectList::Add(CNetObject* object)
+NetObjectID CNetObjectList::Add(CNetObject* object)
 {
-	CNetObject::NetObjectID assignedID;
+	NetObjectID assignedID;
 	if (TryGetFreeSlot(assignedID))
 	{
 		AddWithID(object, assignedID);
@@ -32,23 +32,23 @@ CNetObject::NetObjectID CNetObjectList::Add(CNetObject* object)
 	return assignedID;
 }
 
-void CNetObjectList::Remove(CNetObject::NetObjectID id)
+void CNetObjectList::Remove(NetObjectID id)
 {
 	_objects[id] = nullptr;
 	_freeIDs.push_back(id);
 }
 
-CNetObject* CNetObjectList::Get(CNetObject::NetObjectID id)
+CNetObject* CNetObjectList::Get(NetObjectID id)
 {
 	return _objects[id];
 }
 
-bool CNetObjectList::IsIDValid(CNetObject::NetObjectID id) const
+bool CNetObjectList::IsIDValid(NetObjectID id) const
 {
 	return _objects[id] != nullptr;
 }
 
-bool CNetObjectList::TryGetFreeSlot(CNetObject::NetObjectID& outID)
+bool CNetObjectList::TryGetFreeSlot(NetObjectID& outID)
 {
 	if (_freeIDs.size() == 0) return false;
 
@@ -59,18 +59,18 @@ bool CNetObjectList::TryGetFreeSlot(CNetObject::NetObjectID& outID)
 
 void CNetObjectList::IncreaseIDSlotCount()
 {
-	const CNetObject::NetObjectID oldCeil = static_cast<CNetObject::NetObjectID>(_objects.size());
-	const CNetObject::NetObjectID newCeil = oldCeil + 32;
+	const NetObjectID oldCeil = static_cast<NetObjectID>(_objects.size());
+	const NetObjectID newCeil = oldCeil + 32;
 
 	_objects.resize(newCeil);
-	for (CNetObject::NetObjectID idSlot = oldCeil; idSlot < newCeil; ++idSlot)
+	for (NetObjectID idSlot = oldCeil; idSlot < newCeil; ++idSlot)
 	{
 		_objects[idSlot] = nullptr;
 		_freeIDs.push_back(idSlot);
 	}
 }
 
-CNetObject::NetObjectID CNetObjectList::GetCurrentIDSlotCeiling() const
+NetObjectID CNetObjectList::GetCurrentIDSlotCeiling() const
 {
-	return _objects.size();
+	return static_cast<NetObjectID>(_objects.size());
 }

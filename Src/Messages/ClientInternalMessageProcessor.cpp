@@ -6,7 +6,7 @@
 #include "GurgelNet/Serialization/INetSerializer.h"
 #include "Src/Messages/ObjectMessageTypes.h"
 
-void ProcessIDRecieve(CClientLayer& layer, INetMessageReader& reader, INetMessageQueue& msgQueue)
+void ProcessIDRecieve(CClientLayer& layer, INetMessageReader& reader)
 {
 	uint8_t assignedID;
 	reader.Read(assignedID);
@@ -18,7 +18,7 @@ void ProcessIDRecieve(CClientLayer& layer, INetMessageReader& reader, INetMessag
 	layer.TryGetCallbackPtr(ENetLayerCallback_ClientApproveRequestWrite, &clientApprovalWriteFPtr);
 	confirmAndRequestApproval.F_clientWriteApproveRequest = ((FNetWrite)clientApprovalWriteFPtr);
 
-	msgQueue.Send(confirmAndRequestApproval, ClientID_Server, true); // Send confirmation
+	layer.Send(confirmAndRequestApproval, ClientID_Server, true); // Send confirmation
 }
 
 void ProcessLateJoinSync(INetMessageReader& reader, CClientLayer& layer)
@@ -67,7 +67,7 @@ void CClientInternalMessageProcessor::Process(const SNetMessageHeader& header, I
 {
 	switch (header.subTypeID)
 	{
-	case EInternalMsg_ServerToClient_ID: ProcessIDRecieve(_layer, reader, netLayer.MessageQueue()); break;
+	case EInternalMsg_ServerToClient_ID: ProcessIDRecieve(_layer, reader); break;
 	case EInternalMsg_ServerToClient_LateJoinSync: ProcessLateJoinSync(reader, _layer); break;
 	case EInternalMsg_ServerToClient_NotifyFinalized: _layer.ConnectionFinalized(); break;
 

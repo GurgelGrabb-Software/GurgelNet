@@ -10,8 +10,8 @@
 
 struct CInternalMsg_Object_ClientRequestSpawn : public INetMessage
 {
-	CNetObject::NetTypeID ObjectTypeID;
-	CNetObject::NetObjectID PendingID;
+	NetTypeID ObjectTypeID;
+	NetObjectID PendingID;
 	CNetObject* object;
 	
 	uint8_t CategoryID() const override { return ENetMsgCategory_Internal; }
@@ -33,8 +33,8 @@ struct CInternalMsg_Object_ClientRequestSpawn : public INetMessage
 
 struct CInternalMsg_Object_Spawn : public INetMessage
 {
-	CNetObject::NetTypeID ObjectTypeID;
-	CNetObject::NetObjectID ObjectID;
+	NetTypeID ObjectTypeID;
+	NetObjectID ObjectID;
 	CNetObject* object;
 
 	uint8_t CategoryID() const override { return ENetMsgCategory_Internal; }
@@ -44,7 +44,7 @@ struct CInternalMsg_Object_Spawn : public INetMessage
 	{
 		serializer.Write(ObjectTypeID);
 		serializer.Write(ObjectID);
-		object->DoSpawnWrite(serializer);
+		object->WriteSpawnData(serializer);
 	}
 
 	void Deserialize(INetMessageReader& serializer) override
@@ -56,8 +56,8 @@ struct CInternalMsg_Object_Spawn : public INetMessage
 
 struct CInternalMsg_Object_ServerConfirmSpawn : public INetMessage
 {
-	CNetObject::NetObjectID PendingID;
-	CNetObject::NetObjectID ConfirmedID;
+	NetObjectID PendingID;
+	NetObjectID ConfirmedID;
 
 	uint8_t CategoryID() const override { return ENetMsgCategory_Internal; }
 	uint8_t SubTypeID() const override { return EInternalMsg_Object_ServerConfirmSpawn; }

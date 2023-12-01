@@ -18,8 +18,8 @@ public:
 	void Start() override;
 	void Shutdown() override;
 
-	void Recieve() override;
-	void Send() override;
+	void RecieveMessages() override;
+	void SendQueuedMessages() override;
 
 	virtual void Send(const INetMessage& message, bool reliable = false) override;
 	virtual void Send(const INetMessage& message, ClientID targetMask, bool reliable = false) override;

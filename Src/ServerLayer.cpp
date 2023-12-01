@@ -62,7 +62,7 @@ void CServerLayer::Shutdown()
 	_pollGroup = 0;
 }
 
-void CServerLayer::Recieve()
+void CServerLayer::RecieveMessages()
 {
 	SteamNetworkingMessage_t* msg;
 
@@ -85,7 +85,7 @@ void CServerLayer::Recieve()
 	}
 }
 
-void CServerLayer::Send()
+void CServerLayer::SendQueuedMessages()
 {
 	while (_messageQueue.QueuedSend() > 0)
 	{
