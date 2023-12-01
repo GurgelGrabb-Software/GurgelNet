@@ -181,6 +181,7 @@
     <ClInclude Include="Src\ServerLayer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Core\LayerSettings.cpp" />
     <ClCompile Include="Src\Objects\NetObject.cpp" />
     <ClCompile Include="Src\BaseNetLayer.cpp" />
     <ClCompile Include="Src\ClientLayer.cpp" />

@@ -5,6 +5,8 @@
 
 struct SNetLayerSettings
 {
+	SNetLayerSettings();
+
 	/// <summary>
 	/// Server: Unused
 	/// Client: IP to connect to. If empty, attempt connection to localhost
