@@ -36,7 +36,7 @@ void ProcessObjectSpawnRequest(const SNetMessageHeader& header, INetMessageReade
 	madeObject->ReadSpawnData(reader);
 
 	// With this object created, we can now spawn it on the server
-	layer.SpawnNetworkObject(*madeObject);
+	layer.ProcessSpawnRequest(*madeObject, header.senderID, spawnRequestMsg.PendingID);
 }
 
 CServerInternalMessageProcessor::CServerInternalMessageProcessor(CServerLayer& layer)
