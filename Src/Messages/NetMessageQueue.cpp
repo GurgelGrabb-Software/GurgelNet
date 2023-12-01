@@ -13,7 +13,7 @@ void CNetMessageQueue::Send(const INetMessage& customMessage, bool reliable)
 	Send(std::move(msg), reliable);
 }
 
-void CNetMessageQueue::Send(const INetMessage& customMessage, uint8_t targetMask, bool reliable)
+void CNetMessageQueue::Send(const INetMessage& customMessage, ClientID targetMask, bool reliable)
 {
 	CNetMessageWriter writer;
 	writer.Write(customMessage);
@@ -30,7 +30,7 @@ void CNetMessageQueue::Send(SNetMessage&& packagedMessage, bool reliable)
 	_sendQueue.emplace(std::move(packagedMessage));
 }
 
-void CNetMessageQueue::Send(SNetMessage&& packagedMessage, uint8_t targetMask, bool reliable)
+void CNetMessageQueue::Send(SNetMessage&& packagedMessage, ClientID targetMask, bool reliable)
 {
 	packagedMessage.SetSender(GetLocalID());
 	packagedMessage.SetTarget(targetMask);
@@ -67,12 +67,12 @@ SNetMessage CNetMessageQueue::NextQueuedRecieved()
 	return msg;
 }
 
-void CNetMessageQueue::AssignLocalID(uint8_t id)
+void CNetMessageQueue::AssignLocalID(ClientID id)
 {
 	_localID = id;
 }
 
-uint8_t CNetMessageQueue::GetLocalID() const
+ClientID CNetMessageQueue::GetLocalID() const
 {
 	return _localID;
 }

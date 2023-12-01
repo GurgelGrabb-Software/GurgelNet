@@ -10,7 +10,7 @@
 // ------------------------------------------------------------
 
 #pragma once
-#include <cstdint>
+#include "GurgelNet/Core/NetTypes.h"
 
 class INetMessage;
 
@@ -31,5 +31,5 @@ public:
 	/// <param name="customMessage">The message to send</param>
 	/// <param name="targetMast">Bitmask of targets to send to</param>
 	/// <param name="reliable">Should this message be reliable?</param>
-	virtual void Send(const INetMessage& customMessage, uint8_t targetMask, bool reliable) = 0;
+	virtual void Send(const INetMessage& customMessage, ClientID targetMask, bool reliable) = 0;
 };

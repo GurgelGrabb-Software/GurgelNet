@@ -51,7 +51,7 @@ void GurgelNet_Init(SNetLibSetting* pSettings, int nSettings)
 	}
 }
 
-INetLayer* GurgelNet_GetLayer(NetLayer_h handle)
+INetLayer* GurgelNet_GetLayer(HNetLayer handle)
 {
 	return s_layerPtrs[handle];
 }
@@ -91,9 +91,11 @@ void GurgelNet_Shutdown()
 			l = nullptr;
 		}
 	}
+
+	s_numLayers = 1;
 }
 
-bool GurgelNet_CreateClient(const char* ip, unsigned short port, NetLayer_h& outHandle)
+bool GurgelNet_CreateClient(const char* ip, unsigned short port, HNetLayer& outHandle)
 {
 	outHandle = 0;
 
@@ -109,7 +111,7 @@ bool GurgelNet_CreateClient(const char* ip, unsigned short port, NetLayer_h& out
 	return true;
 }
 
-bool GurgelNet_CreateServer(unsigned short port, NetLayer_h& outHandle)
+bool GurgelNet_CreateServer(unsigned short port, HNetLayer& outHandle)
 {
 	outHandle = 0;
 
@@ -125,7 +127,7 @@ bool GurgelNet_CreateServer(unsigned short port, NetLayer_h& outHandle)
 	return true;
 }
 
-bool GurgelNet_CreateHost(unsigned short port, NetLayer_h& outClientHandle, NetLayer_h& outServerHandle)
+bool GurgelNet_CreateHost(unsigned short port, HNetLayer& outClientHandle, HNetLayer& outServerHandle)
 {
 	bool result = true;
 	result &= GurgelNet_CreateServer(port, outServerHandle);

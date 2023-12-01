@@ -1,6 +1,6 @@
 #pragma once
 #include "GurgelNet/NetLib.h"
-#include <cstdint>
+#include "GurgelNet/Core/NetTypes.h"
 
 struct SNetMessageHeader;
 class INetMessageWriter;
@@ -17,10 +17,13 @@ public:
 	operator bool() const;
 
 	bool UseDefaultTarget() const;
-	bool ShouldSendTo(uint8_t id) const;
 
-	void SetSender(uint8_t senderID);
-	void SetTarget(uint8_t targetMask);
+	uint8_t GetCategory() const;
+	ClientID GetSenderID() const;
+	ClientID GetTargetMask() const;
+
+	void SetSender(ClientID senderID);
+	void SetTarget(ClientID targetMask);
 
 	void Package(INetMessageWriter& writer, uint8_t primaryTypeID, uint8_t userData = 0u);
 	void Release();

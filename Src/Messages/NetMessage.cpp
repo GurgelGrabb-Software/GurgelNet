@@ -46,17 +46,27 @@ bool SNetMessage::UseDefaultTarget() const
 	return ExtractHeader().targetID == 0;
 }
 
-bool SNetMessage::ShouldSendTo(uint8_t id) const
+uint8_t SNetMessage::GetCategory() const
 {
-	return (ExtractHeader().targetID & id) != 0;
+	return ExtractHeader().categoryID;
 }
 
-void SNetMessage::SetSender(uint8_t senderID)
+ClientID SNetMessage::GetSenderID() const
+{
+	return ExtractHeader().senderID;
+}
+
+ClientID SNetMessage::GetTargetMask() const
+{
+	return ExtractHeader().targetID;
+}
+
+void SNetMessage::SetSender(ClientID senderID)
 {
 	ExtractHeader().senderID = senderID;
 }
 
-void SNetMessage::SetTarget(uint8_t targetMask)
+void SNetMessage::SetTarget(ClientID targetMask)
 {
 	ExtractHeader().targetID = targetMask;
 }

@@ -5,14 +5,18 @@
 #include "GurgelNet/Messages/NetMessageTypes.h"
 #include "Src/Core/Logging.h"
 
-CNetLayerBase::CNetLayerBase()
+CNetLayerBase::CNetLayerBase(INetMessageProcessor* internalProcessor)
 	: _messageQueue()
 	, _interfacePtr(nullptr)
 	, _localID(0)
 	, _currentState(EConnectState_Inactive)
 	, _messageProcessors()
-	, _internalProcessor(*this)
+	, _internalProcessor(internalProcessor)
 {
+	for (size_t i = 0; i < ENetLayerCallback_Count; ++i)
+	{
+		_layerCallbackPtrs[i] = nullptr;
+	}
 }
 
 CNetLayerBase::~CNetLayerBase()
@@ -27,6 +31,12 @@ CNetLayerBase::~CNetLayerBase()
 		delete processorPtr;
 	}
 	_messageProcessors.clear();
+
+	if (_internalProcessor)
+	{
+		delete _internalProcessor;
+		_internalProcessor = nullptr;
+	}
 }
 
 EConnectState CNetLayerBase::CurrentState() const
@@ -34,7 +44,7 @@ EConnectState CNetLayerBase::CurrentState() const
 	return _currentState;
 }
 
-uint8_t CNetLayerBase::GetNetID() const
+ClientID CNetLayerBase::GetNetID() const
 {
 	return _localID;
 }
@@ -43,10 +53,20 @@ void CNetLayerBase::RegisterProcessor(INetMessageProcessor* processor)
 {
 	if (processor->ProcessedMessageCategory() == ENetMsgCategory_Internal)
 	{
-		NET_LOG(ENetLogLevel_Error, "Tried registering a message processor of category 0. This category is reserved for internal messages only.");
+		NET_LOG(ENetLogLevel_Error, "|NET LAYER| Tried registering a message processor of category 0. This category is reserved for internal messages only.");
 		return;
 	}
 	_messageProcessors.push_back(processor);
+}
+
+void CNetLayerBase::SetLayerCallback(ENetLayerCallback t, void* fPtr)
+{
+	_layerCallbackPtrs[t] = fPtr;
+}
+
+INetMessageQueue& CNetLayerBase::MessageQueue()
+{
+	return _messageQueue;
 }
 
 void CNetLayerBase::Start()
@@ -74,7 +94,7 @@ void CNetLayerBase::Tick()
 
 		if (header.categoryID == ENetMsgCategory_Internal)
 		{
-			_internalProcessor.Process(header, reader, _messageQueue);
+			_internalProcessor->Process(header, reader, *this);
 		}
 		else
 		{
@@ -82,7 +102,7 @@ void CNetLayerBase::Tick()
 			{
 				if (processorPtr->ProcessedMessageCategory() == header.categoryID)
 				{
-					processorPtr->Process(header, reader, _messageQueue);
+					processorPtr->Process(header, reader, *this);
 					break;
 				}
 			}
@@ -92,10 +112,11 @@ void CNetLayerBase::Tick()
 	Send();
 }
 
-void CNetLayerBase::AssignNetID(uint8_t id)
+void CNetLayerBase::AssignNetID(ClientID id)
 {
-	NET_LOG(ENetLogLevel_Verbose, "| NET LAYER | Local ID assigned: {}", id);
+	NET_LOG(ENetLogLevel_Message, "|NET LAYER| Local ID assigned: {}", id);
 	_localID = id;
+	_messageQueue.AssignLocalID(id);
 }
 
 void CNetLayerBase::ChangeState(EConnectState newState)
@@ -107,4 +128,11 @@ void CNetLayerBase::ChangeState(EConnectState newState)
 	{
 		Shutdown();
 	}
+}
+
+bool CNetLayerBase::TryGetCallbackPtr(ENetLayerCallback callbackType, void** outRawPtr)
+{
+	void* callback = _layerCallbackPtrs[callbackType];
+	*outRawPtr = callback;
+	return callback != nullptr;
 }

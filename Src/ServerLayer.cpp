@@ -1,6 +1,7 @@
 #include "ServerLayer.h"
 #include "Src/Messages/InternalMessageTypes.h"
 #include "Src/Core/Logging.h"
+#include "Src/Messages/ServerInternalMessageProcessor.h"
 
 CServerLayer* CServerLayer::s_instancePtr = nullptr;
 
@@ -24,21 +25,20 @@ void ServerConnectCallback(SteamNetConnectionStatusChangedCallback_t* info)
 }
 
 CServerLayer::CServerLayer(unsigned short port)
-	: _port(port)
+	: CNetLayerBase(new CServerInternalMessageProcessor(*this))
+	, _port(port)
 	, _connection(0u)
 	, _pollGroup(0u)
 {
-	// Server ID is always 1, remaining IDs are reserved for clients
-	_freeClientIDs = _freeClientIDs & ~(1);
-	AssignNetID(1);
-	_messageQueue.AssignLocalID(1);
+	_freeClientIDs = ClientID_AllClients;
+	AssignNetID(ClientID_Server);
 
 	s_instancePtr = this;
 }
 
 void CServerLayer::Start()
 {
-	NET_LOG(ENetLogLevel_Verbose, "Starting Server");
+	NET_LOG(ENetLogLevel_Verbose, "|SERVER| Starting");
 
 	CNetLayerBase::Start();
 
@@ -69,8 +69,8 @@ void CServerLayer::Recieve()
 	{
 		SNetMessage received = SNetMessage(msg->m_pData, msg->m_cbSize);
 
-		const bool shouldRecieve = received.ShouldSendTo(1);
-		const bool shouldForward = received.ShouldSendTo(0xFF ^ 1);
+		const bool shouldRecieve = ClientMask_Contains(received.GetTargetMask(), ClientID_Server);
+		const bool shouldForward = ClientMask_Contains(received.GetTargetMask(), ClientID_AllClients);
 
 		if (shouldForward)
 		{
@@ -92,7 +92,7 @@ void CServerLayer::Send()
 		int sendFlag = k_nSteamNetworkingSend_Unreliable;
 		if (msg.reliable) sendFlag = k_nSteamNetworkingSend_Reliable;
 
-		if (msg.UseDefaultTarget()) msg.SetTarget(0xFF); // Default target for server is all clients
+		if (msg.UseDefaultTarget()) msg.SetTarget(ClientID_AllClients);
 
 		SendMessage(msg, sendFlag);
 	}
@@ -106,18 +106,18 @@ void CServerLayer::Connecting(unsigned int connectionID)
 	}
 	else
 	{
-		NET_LOG(ENetLogLevel_Verbose, "| SERVER | New client connecting ({}), attempting to establish connection", connectionID);
+		NET_LOG(ENetLogLevel_Verbose, "|SERVER| New client connecting ({}), attempting to establish connection", connectionID);
 
 		const uint8_t foundID = FindFreeClientID();
 		if (foundID != 0)
 		{
-			NET_LOG(ENetLogLevel_Verbose, "| SERVER | Available client ID found: {}. Assigning and accepting.", foundID);
+			NET_LOG(ENetLogLevel_Verbose, "|SERVER| Available client ID found: {}. Assigning and accepting.", foundID);
 			AcceptClientConnection(foundID, connectionID);
 			_interfacePtr->SetConnectionPollGroup(connectionID, _pollGroup);
 		}
 		else
 		{
-			NET_LOG(ENetLogLevel_Warning, "| SERVER | Denying connection, server is at capacity.");
+			NET_LOG(ENetLogLevel_Warning, "|SERVER| Denying connection, server is at capacity.");
 			CloseClientConnection(connectionID);
 		}
 	}
@@ -132,7 +132,7 @@ void CServerLayer::Connected(unsigned int connectionID)
 	else
 	{
 		auto it = std::find_if(_clientHandles.begin(), _clientHandles.end(), [&](const auto& ch) { return ch.connectionID == connectionID; });
-		NET_LOG(ENetLogLevel_Verbose, "| SERVER | Connection established with client '{}', passing on assigned client ID '{}'", connectionID, it->clientID);
+		NET_LOG(ENetLogLevel_Verbose, "|SERVER| Connection established with client '{}', passing on assigned client ID '{}'", connectionID, it->clientID);
 		_messageQueue.Send(SAssignedIDMsg(it->clientID), it->clientID, true);
 	}
 }
@@ -149,15 +149,57 @@ void CServerLayer::Disconnected(unsigned int connectionID)
 	}
 }
 
+void CServerLayer::ApproveClientConnection(uint8_t clientID, bool approved)
+{
+	if (!approved)
+	{
+		auto it = std::find_if(_clientHandles.begin(), _clientHandles.end(), [clientID](const SClientHandle& h) { return h.clientID == clientID; });
+		NET_LOG(ENetLogLevel_Message, "|SERVER| Client with ID {} was not approved for connection. Terminating connection.", clientID);
+		CloseClientConnection(it->connectionID);
+		return;
+	}
+
+	void* lateSyncFuncPtr = nullptr;
+	if (TryGetCallbackPtr(ENetLayerCallback_ServerSyncLateClient, &lateSyncFuncPtr))
+	{
+		// We need to do a late sync before connection is established
+		CInternalMsg_Server_LateJoinSync syncMsg;
+		syncMsg.serverWrite = (FNetWrite)lateSyncFuncPtr;
+		_messageQueue.Send(syncMsg, clientID, true);
+	}
+	else
+	{
+		FinalizeApprovedClientConnection(clientID);
+	}
+}
+
 void CServerLayer::SendMessage(const SNetMessage& message, int sendFlag)
 {
 	for (const auto& clientHandle : _clientHandles)
 	{
-		if (message.ShouldSendTo(clientHandle.clientID))
+		const bool clientIsTarget = ClientMask_Contains(message.GetTargetMask(), clientHandle.clientID);
+		const bool clientIsFinalized = clientHandle.finalized;
+		const bool messageIsInternal = message.GetCategory() == ENetMsgCategory_Internal;
+
+		if (clientIsTarget && ( clientIsFinalized || messageIsInternal ))
 		{
 			_interfacePtr->SendMessageToConnection(clientHandle.connectionID, message.pData, (uint32)message.nBytes, sendFlag, nullptr);
 		}
 	}
+}
+
+void CServerLayer::FinalizeApprovedClientConnection(uint8_t clientID)
+{
+	auto it = std::find_if(_clientHandles.begin(), _clientHandles.end(), [clientID](const auto& h) { return h.clientID == clientID; });
+	it->finalized = true;
+
+	void* connectedCallback = nullptr;
+	if (TryGetCallbackPtr(ENetLayerCallback_ClientConnect, &connectedCallback))
+	{
+		((FClientConnection)connectedCallback)(clientID);
+	}
+
+	_messageQueue.Send(SHeaderOnlyMsg(EInternalMsg_ServerToClient_NotifyFinalized), clientID, true);
 }
 
 void CServerLayer::AcceptClientConnection(uint8_t id, unsigned int connectionID)
@@ -175,15 +217,22 @@ void CServerLayer::CloseClientConnection(unsigned int connectionID)
 		clientID = it->clientID;
 	}
 
-	if (clientID != 0) FreeClientID(clientID);
+	NET_LOG(ENetLogLevel_Verbose, "|SERVER| ClientID {} (connection ID {}) disconnecting.", clientID, connectionID);
+
+
 	_interfacePtr->CloseConnection(connectionID, 0, "", false);
+
+	if (clientID != 0) 
+	{
+		FreeClientID(clientID);
+	}
 }
 
-uint8_t CServerLayer::FindFreeClientID() const
+ClientID CServerLayer::FindFreeClientID() const
 {
 	for (size_t i = 1; i < 8; ++i)
 	{
-		const uint8_t checkID = 1 << i;
+		const ClientID checkID = 1 << i;
 		if ((_freeClientIDs & checkID) != 0)
 		{
 			return checkID;
@@ -193,18 +242,18 @@ uint8_t CServerLayer::FindFreeClientID() const
 	return 0;
 }
 
-void CServerLayer::FreeClientID(uint8_t id)
+void CServerLayer::FreeClientID(ClientID id)
 {
 	auto it = std::find_if(_clientHandles.begin(), _clientHandles.end(), [&](const SClientHandle& h) { return h.clientID == id; });
 	if (it != _clientHandles.end())
 	{
 		_clientHandles.erase(it);
 	}
-	_freeClientIDs = _freeClientIDs | id;
+	_freeClientIDs = ClientMask_Add(_freeClientIDs, id);
 }
 
-void CServerLayer::ReserveClientID(uint8_t id, unsigned int conID)
+void CServerLayer::ReserveClientID(ClientID id, unsigned int conID)
 {
-	_freeClientIDs = _freeClientIDs & ~(id);
-	_clientHandles.push_back(SClientHandle{ .connectionID = conID, .clientID = id });
+	_freeClientIDs = ClientMask_Remove(_freeClientIDs, id);
+	_clientHandles.push_back(SClientHandle{ .connectionID = conID, .clientID = id, .finalized = false });
 }

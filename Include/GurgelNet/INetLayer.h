@@ -11,15 +11,25 @@
 #pragma once
 #include "GurgelNet/NetLib.h"
 #include "GurgelNet/ConnectState.h"
+#include "GurgelNet/LayerCallbacks.h"
+#include "GurgelNet/Core/NetTypes.h"
 
 #include <cstdint>
 
 class INetMessageProcessor;
+class INetMessageQueue;
 
 class NETWORK_API INetLayer
 {
 public:
 	virtual ~INetLayer() = default;
+
+	/// <summary>
+	/// Register a callback with this layer
+	/// </summary>
+	/// <param name="t">The ENetLayerCallback type</param>
+	/// <param name="fPtr">Function pointer to invoke on this event</param>
+	virtual void SetLayerCallback(ENetLayerCallback t, void* fPtr) = 0;
 
 	/// <summary>
 	/// Get the current state of this Layer
@@ -31,11 +41,17 @@ public:
 	/// Get the ID of this Layer
 	/// </summary>
 	/// <returns>1 if server, 0 if inactive, > 1 if connected as client (id assigned by server)</returns>
-	virtual uint8_t GetNetID() const = 0;
+	virtual ClientID GetNetID() const = 0;
 
 	/// <summary>
 	/// Register a processor for handling custom message categories
 	/// </summary>
 	/// <param name="processor">Pointer to the processor you wish to register. The NetLayer assumes ownership of this pointer.</param>
 	virtual void RegisterProcessor(INetMessageProcessor* processor) = 0;
+
+	/// <summary>
+	/// Get the message queue belonging to this layer
+	/// </summary>
+	/// <returns>Reference to the INetMessageQueue</returns>
+	virtual INetMessageQueue& MessageQueue() = 0;
 };

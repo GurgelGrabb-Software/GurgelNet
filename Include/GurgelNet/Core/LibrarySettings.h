@@ -9,11 +9,11 @@
 
 enum NETWORK_API ENetLibSetting
 {
-	ENetLibSetting_None			= 0x00,		// No setting (used for defaulting, does nothing when passed in)
+	ENetLibSetting_None			= 0x00,				// No setting (used for defaulting, does nothing when passed in)
 
-	ENetLibSetting_Callback_Log	= 0x01,		// Callback to recieve logging output from the library ( void(ENetLogLevel level, const char* message) ) 
+	ENetLibSetting_Callback_Log	= 0x01,				// Callback to recieve logging output from the library ( void(ENetLogLevel level, const char* message) ) 
 
-	ENetLibSetting_Multithread,				// Run all net layers on separate threads
+	ENetLibSetting_Multithread,						// Run all net layers on separate threads
 };
 
 struct NETWORK_API SNetLibSetting

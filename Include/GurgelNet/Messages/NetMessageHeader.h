@@ -8,6 +8,7 @@
 
 #pragma once
 #include "GurgelNet/NetLib.h"
+#include "GurgelNet/Core/NetTypes.h"
 
 #include <cstdint>
 
@@ -15,10 +16,10 @@ struct NETWORK_API SNetMessageHeader
 {
 	// ID of the original sender. 
 	// Messages between clients are routed through the server. In this instance, the senderID will remain that of the sending client
-	uint8_t senderID;		
+	ClientID senderID;		
 
 	// ID or mask of IDs for target receivers
-	uint8_t targetID;		
+	ClientID targetID;
 
 	// The "primary type" of the message
 	// This ID determines the processor used to process this message

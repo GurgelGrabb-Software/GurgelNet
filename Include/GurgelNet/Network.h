@@ -10,8 +10,7 @@
 #include "GurgelNet/INetLayer.h"
 #include "GurgelNet/Core/LibrarySettings.h"
 #include "GurgelNet/Core/NetLogging.h"
-
-using NetLayer_h = size_t;
+#include "GurgelNet/Core/NetTypes.h"
 
 extern "C"
 {
@@ -42,7 +41,7 @@ extern "C"
 	/// </summary>
 	/// <param name="handle">The handle to the network layer to get</param>
 	/// <returns>INetLayer* to the layer of given handle, or nullptr if handle is invalid</returns>
-	NETWORK_API INetLayer* GurgelNet_GetLayer(NetLayer_h handle);
+	NETWORK_API INetLayer* GurgelNet_GetLayer(HNetLayer handle);
 
 	/// <summary>
 	/// Create a client that will try to connect to the given server data on start
@@ -51,7 +50,7 @@ extern "C"
 	/// <param name="port">Port of the server</param>
 	/// <param name="outHandle">Handle to the client layer</param>
 	/// <returns>true on sucess, otherwise false</returns>
-	NETWORK_API bool GurgelNet_CreateClient(const char* ip, unsigned short port, NetLayer_h& outHandle);
+	NETWORK_API bool GurgelNet_CreateClient(const char* ip, unsigned short port, HNetLayer& outHandle);
 
 	/// <summary>
 	/// Create a server that will start listening on the local port on start
@@ -59,7 +58,7 @@ extern "C"
 	/// <param name="port">Port to listen on</param>
 	/// <param name="outHandle">Handle to the server layer</param>
 	/// <returns>true on sucess, otherwise false</returns>
-	NETWORK_API bool GurgelNet_CreateServer(unsigned short port, NetLayer_h& outHandle);
+	NETWORK_API bool GurgelNet_CreateServer(unsigned short port, HNetLayer& outHandle);
 
 	/// <summary>
 	/// Utility to create a server and a client that connects to localhost
@@ -68,6 +67,6 @@ extern "C"
 	/// <param name="outClientHandle">Handle to the created client layer</param>
 	/// <param name="outServerHandle">Handle to the created server layer</param>
 	/// <returns>true on success, otherwise false</returns>
-	NETWORK_API bool GurgelNet_CreateHost(unsigned short port, NetLayer_h& outClientHandle, NetLayer_h& outServerHandle);
+	NETWORK_API bool GurgelNet_CreateHost(unsigned short port, HNetLayer& outClientHandle, HNetLayer& outServerHandle);
 }
 

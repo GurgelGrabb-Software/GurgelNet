@@ -1,5 +1,6 @@
 #pragma once
 #include "Src/BaseNetLayer.h"
+#include "GurgelNet/LayerCallbacks.h"
 
 #include <string>
 
@@ -17,9 +18,12 @@ public:
 	void Connecting();
 	void Connected();
 	void Disconnected();
+	void ConnectionFinalized();
 
 	static CClientLayer* s_instancePtr;
 private:
+	void NotifyClientConnection(ClientID id);
+
 	std::string _ip;
 	unsigned short _port;
 

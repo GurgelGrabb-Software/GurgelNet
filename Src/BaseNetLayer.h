@@ -1,7 +1,7 @@
 #pragma once
 #include "GurgelNet/INetLayer.h"
 #include "Src/Messages/NetMessageQueue.h"
-#include "Src/Messages/InternalMessageProcessor.h"
+#include "Src/Messages/ClientInternalMessageProcessor.h"
 
 #include <steam/steamnetworkingsockets.h>
 #include <steam/isteamnetworkingutils.h>
@@ -12,20 +12,24 @@
 class CNetLayerBase : public INetLayer
 {
 public:
-	CNetLayerBase();
+	CNetLayerBase(INetMessageProcessor* internalProcessor);
 	virtual ~CNetLayerBase() override;
 
 	EConnectState CurrentState() const override;
-	
-	void AssignNetID(uint8_t id);
-	uint8_t GetNetID() const override;
 
 	void RegisterProcessor(INetMessageProcessor* processor) override final;
+	void SetLayerCallback(ENetLayerCallback t, void* fPtr) override final;
+	
+	INetMessageQueue& MessageQueue() override;
+
+	void AssignNetID(ClientID id);
+	ClientID GetNetID() const override;
 
 	virtual void Start();
 	virtual void Shutdown();
-
 	void Tick();
+
+	bool TryGetCallbackPtr(ENetLayerCallback callbackType, void** outRawPtr);
 protected:
 	void ChangeState(EConnectState newState);
 
@@ -35,9 +39,14 @@ protected:
 	CNetMessageQueue _messageQueue;
 	ISteamNetworkingSockets* _interfacePtr;
 
+protected:
+	 INetMessageProcessor* _internalProcessor;
+
 private:
-	uint8_t _localID;
+	ClientID _localID;
 	EConnectState _currentState = EConnectState_Inactive;
+	
 	std::vector<INetMessageProcessor*> _messageProcessors;
-	CInternalMessageProcessor _internalProcessor;
+	void* _layerCallbackPtrs[ENetLayerCallback_Count];
+	
 };
