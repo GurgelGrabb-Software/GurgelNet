@@ -97,10 +97,10 @@ void GurgelNet_Shutdown()
 
 void AssignLayerSettings(CNetLayerBase& layer, const SNetLayerSettings& settings)
 {
-	for (auto& callback : settings.layerCallbacks)
+	for (int i = 0; i < ENetLayerCallback_Count; ++i)
 	{
-		if (callback.callbackPtr == nullptr) continue;
-		layer.SetLayerCallback(callback.callbackType, callback.callbackPtr);
+		if (settings.layerCallbacks[i] == nullptr) continue;
+		layer.SetLayerCallback((ENetLayerCallback)i, settings.layerCallbacks[i]);
 	}
 
 	layer.RegisterObjectFactory(*settings.objectFactoryPtr);
