@@ -131,7 +131,7 @@ void CServerLayer::ProcessSpawnRequest(CNetObject& requestedSpawn, ClientID requ
 	_messageQueue.Send(confirmMsg, requestClient, true);
 
 	// Send spawn message to all but the requesting client
-	SendObjectSpawnMessage(requestedSpawn, ClientMask_Remove(ClientID_AllClients | ClientID_Server, requestClient));
+	SendObjectSpawnMessage(requestedSpawn, ClientMask_Remove(ClientID_AllClients, requestClient));
 }
 
 void CServerLayer::Connecting(unsigned int connectionID)
