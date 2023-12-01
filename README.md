@@ -1,4 +1,5 @@
-# GurgelNet
+# GurgelNet 
+## A networking library
 
 GurgelNet is a simple networking library built on top of [Valve's GameNetworkingSockets](https://github.com/ValveSoftware/GameNetworkingSockets/)
 
