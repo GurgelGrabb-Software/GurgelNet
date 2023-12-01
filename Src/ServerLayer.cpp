@@ -122,6 +122,8 @@ void CServerLayer::SpawnNetworkObject(CNetObject& spawn)
 void CServerLayer::ProcessSpawnRequest(CNetObject& requestedSpawn, ClientID requestClient, NetObjectID pendingID)
 {
 	const auto id = _netObjectList.Add(&requestedSpawn);
+	requestedSpawn.SetNetObjectID(id);
+	requestedSpawn.MarkAsServer();
 	requestedSpawn.OnNetworkSpawn();
 	
 	// Confirm the spawn
