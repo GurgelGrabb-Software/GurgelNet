@@ -81,7 +81,19 @@
     <ClInclude Include="Src\Messages\InternalMessageTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Messages\InternalMessageProcessor.h">
+    <ClInclude Include="Src\Messages\ClientInternalMessageProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Messages\ServerInternalMessageProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\GurgelNet\LayerCallbacks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\GurgelNet\Serializables\NetString.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\GurgelNet\Core\NetTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -116,7 +128,13 @@
     <ClCompile Include="Src\ServerLayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Messages\InternalMessageProcessor.cpp">
+    <ClCompile Include="Src\Messages\ClientInternalMessageProcessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Messages\ServerInternalMessageProcessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Serializables\NetString.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -71,14 +71,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(ProjectDir)Build\</OutDir>
-    <IntDir>$(ProjectDir)Build\Intermediate\$(ProjectName)$(ProjectConfiguration)\</IntDir>
-    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <OutDir>$(ProjectDir)GurgelNet\Lib\</OutDir>
+    <IntDir>$(ProjectDirr)Build\Intermediate\$(ProjectName)$(ProjectConfiguration)\</IntDir>
+    <TargetName>GurgelNet_$(Configuration)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(ProjectDir)Build\</OutDir>
+    <OutDir>$(ProjectDir)GurgelNet\Lib\</OutDir>
     <IntDir>$(ProjectDir)Build\Intermediate\$(ProjectName)$(ProjectConfiguration)\</IntDir>
-    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <TargetName>GurgelNet_$(Configuration)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -150,7 +150,9 @@
     <ClInclude Include="Include\GurgelNet\ConnectState.h" />
     <ClInclude Include="Include\GurgelNet\Core\LibrarySettings.h" />
     <ClInclude Include="Include\GurgelNet\Core\NetLogging.h" />
+    <ClInclude Include="Include\GurgelNet\Core\NetTypes.h" />
     <ClInclude Include="Include\GurgelNet\INetLayer.h" />
+    <ClInclude Include="Include\GurgelNet\LayerCallbacks.h" />
     <ClInclude Include="Include\GurgelNet\Messages\INetMessage.h" />
     <ClInclude Include="Include\GurgelNet\Messages\INetMessageQueue.h" />
     <ClInclude Include="Include\GurgelNet\Messages\INetMessageProcessor.h" />
@@ -158,15 +160,17 @@
     <ClInclude Include="Include\GurgelNet\Messages\NetMessageHeader.h" />
     <ClInclude Include="Include\GurgelNet\NetLib.h" />
     <ClInclude Include="Include\GurgelNet\Network.h" />
+    <ClInclude Include="Include\GurgelNet\Serializables\NetString.h" />
     <ClInclude Include="Include\GurgelNet\Serialization\INetSerializable.h" />
     <ClInclude Include="Include\GurgelNet\Serialization\INetSerializer.h" />
     <ClInclude Include="Src\BaseNetLayer.h" />
     <ClInclude Include="Src\ClientLayer.h" />
     <ClInclude Include="Src\Core\Logging.h" />
-    <ClInclude Include="Src\Messages\InternalMessageProcessor.h" />
+    <ClInclude Include="Src\Messages\ClientInternalMessageProcessor.h" />
     <ClInclude Include="Src\Messages\InternalMessageTypes.h" />
     <ClInclude Include="Src\Messages\NetMessage.h" />
     <ClInclude Include="Src\Messages\NetMessageQueue.h" />
+    <ClInclude Include="Src\Messages\ServerInternalMessageProcessor.h" />
     <ClInclude Include="Src\Serialization\NetMessageReader.h" />
     <ClInclude Include="Src\Serialization\NetMessageWriter.h" />
     <ClInclude Include="Src\ServerLayer.h" />
@@ -176,10 +180,12 @@
     <ClCompile Include="Src\ClientLayer.cpp" />
     <ClCompile Include="Src\Core\LibrarySettings.cpp" />
     <ClCompile Include="Src\Core\Logging.cpp" />
-    <ClCompile Include="Src\Messages\InternalMessageProcessor.cpp" />
+    <ClCompile Include="Src\Messages\ClientInternalMessageProcessor.cpp" />
     <ClCompile Include="Src\Messages\NetMessage.cpp" />
     <ClCompile Include="Src\Messages\NetMessageQueue.cpp" />
+    <ClCompile Include="Src\Messages\ServerInternalMessageProcessor.cpp" />
     <ClCompile Include="Src\Network.cpp" />
+    <ClCompile Include="Src\Serializables\NetString.cpp" />
     <ClCompile Include="Src\Serialization\NetMessageReader.cpp" />
     <ClCompile Include="Src\Serialization\NetMessageWriter.cpp" />
     <ClCompile Include="Src\ServerLayer.cpp" />

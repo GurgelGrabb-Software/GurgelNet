@@ -8,7 +8,7 @@
 #include <steam/steamnetworkingsockets.h>
 #include <steam/isteamnetworkingutils.h>
 
-#pragma comment(lib, "GameNetworkingSockets_debug")
+#pragma comment(lib, "GameNetworkingSockets")
 
 static CNetLayerBase* s_layerPtrs[3]; 
 static size_t s_numLayers;

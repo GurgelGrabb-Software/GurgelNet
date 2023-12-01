@@ -1,2 +1,14 @@
 .vs/*
-Build/Intermediate/*
+
+# Ignore the Build/ dir as this contains intermediate files
+Build/*
+
+# Ignore the directory where we set up releases
+ReleasePackages/*
+
+# Ignore user local vs files
+*.user
+*.filters
+
+# Ignore all GurgelNet_ library files (built by project) but keep the dependency libs
+GurgelNet/Lib/GurgelNet_*
