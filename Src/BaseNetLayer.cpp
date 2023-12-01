@@ -10,6 +10,7 @@ CNetLayerBase::CNetLayerBase(INetMessageProcessor* internalProcessor)
 	, _interfacePtr(nullptr)
 	, _localID(0)
 	, _currentState(EConnectState_Inactive)
+	, _objectFactory(nullptr)
 	, _messageProcessors()
 	, _internalProcessor(internalProcessor)
 {
@@ -118,6 +119,8 @@ void CNetLayerBase::Tick()
 			}
 		}
 	}
+
+	RunNetVarSync();
 
 	SendQueuedMessages();
 }

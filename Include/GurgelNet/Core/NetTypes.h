@@ -54,10 +54,12 @@ constexpr static ClientID ClientMask_Add(ClientID m, ClientID a) { return m | a;
 // Check if the mask m contains the ID c
 constexpr static bool ClientMask_Contains(ClientID m, ClientID c) { return (m & c) > 0; }
 
-
 // ------------------------------------------------------------
 // HNetLayer
 // Handle to a network layer
 // ------------------------------------------------------------
 using HNetLayer = size_t;
 constexpr static HNetLayer HNetLayer_Invalid	= 0;
+
+// Do you REALLY need more than 255 network variables for a single object?
+using NetVarID = uint8_t;

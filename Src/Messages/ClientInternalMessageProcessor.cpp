@@ -5,6 +5,7 @@
 #include "GurgelNet/Messages/NetMessageHeader.h"
 #include "GurgelNet/Serialization/INetSerializer.h"
 #include "Src/Messages/ObjectMessageTypes.h"
+#include "Src/Messages/NetVarMessages.h"
 
 void ProcessIDRecieve(CClientLayer& layer, INetMessageReader& reader)
 {
@@ -53,6 +54,15 @@ void ProcessObjectSpawn(INetMessageReader& reader, CClientLayer& layer)
 	layer.ProcessObjectSpawn(*made, spawnMsg.ObjectID);
 }
 
+void ProcessNetVarSync(INetMessageReader& reader, CClientLayer& layer)
+{
+	CInternalMsg_NetVarSync netVarMsg;
+	reader.Read(netVarMsg);
+
+	CNetworkVariable* var = layer.GetNetVar(netVarMsg.ObjectID, netVarMsg.VarID);
+	var->Deserialize(reader);
+}
+
 CClientInternalMessageProcessor::CClientInternalMessageProcessor(CClientLayer& layer)
 	: _layer(layer)
 {
@@ -73,6 +83,8 @@ void CClientInternalMessageProcessor::Process(const SNetMessageHeader& header, I
 
 	case EInternalMsg_Object_ServerConfirmSpawn: ProcessObjectSpawnConfirmation(reader, _layer); break;
 	case EInternalMsg_Object_Spawn: ProcessObjectSpawn(reader, _layer); break;
+
+	case EInternalMsg_NetVarSync: ProcessNetVarSync(reader, _layer); break;
 		break;
 	}
 }

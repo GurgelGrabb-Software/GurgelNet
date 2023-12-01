@@ -1,4 +1,6 @@
 #include "NetObjectList.h"
+#include "GurgelNet/Messages/INetMessageQueue.h"
+#include "GurgelNet/Objects/NetworkVariable.h"
 
 CNetObjectList::CNetObjectList()
 {
@@ -12,7 +14,7 @@ void CNetObjectList::AddWithID(CNetObject* object, NetObjectID id)
 		IncreaseIDSlotCount();
 	}
 
-	_objects[id] = object;
+	_objects[id].objectPtr = object;
 }
 
 NetObjectID CNetObjectList::Add(CNetObject* object)
@@ -34,18 +36,42 @@ NetObjectID CNetObjectList::Add(CNetObject* object)
 
 void CNetObjectList::Remove(NetObjectID id)
 {
-	_objects[id] = nullptr;
+	_objects[id].objectPtr = nullptr;
 	_freeIDs.push_back(id);
 }
 
 CNetObject* CNetObjectList::Get(NetObjectID id)
 {
-	return _objects[id];
+	return _objects[id].objectPtr;
 }
 
 bool CNetObjectList::IsIDValid(NetObjectID id) const
 {
-	return _objects[id] != nullptr;
+	return _objects[id].objectPtr != nullptr;
+}
+
+void CNetObjectList::RegisterVariable(NetObjectID id, CNetworkVariable& var)
+{
+	_objects[id].variables.push_back(&var);
+}
+
+CNetworkVariable* CNetObjectList::GetNetVar(NetObjectID objectID, NetVarID varID)
+{
+	return _objects[objectID].variables[varID];
+}
+
+void CNetObjectList::SyncNetworkVariables(INetMessageQueue& messageQueue)
+{
+	for (auto& objectHandle : _objects)
+	{
+		for (auto& variable : objectHandle.variables)
+		{
+			if (variable->ShouldSync())
+			{
+				
+			}
+		}
+	}
 }
 
 bool CNetObjectList::TryGetFreeSlot(NetObjectID& outID)
@@ -65,7 +91,7 @@ void CNetObjectList::IncreaseIDSlotCount()
 	_objects.resize(newCeil);
 	for (NetObjectID idSlot = oldCeil; idSlot < newCeil; ++idSlot)
 	{
-		_objects[idSlot] = nullptr;
+		_objects[idSlot].objectPtr = nullptr;
 		_freeIDs.push_back(idSlot);
 	}
 }

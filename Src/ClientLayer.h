@@ -12,13 +12,15 @@ public:
 
 	virtual void Start() override;
 	virtual void Shutdown() override;
+	void RunNetVarSync() override;
+
+	CNetworkVariable* GetNetVar(NetObjectID objectID, NetVarID varID);
 
 	void RecieveMessages() override;
 	void SendQueuedMessages() override;
 	
 	void Send(const INetMessage& message, bool reliable = false) override;
 	void Send(const INetMessage& message, ClientID targetMask, bool reliable = false) override;
-
 
 	void SpawnNetworkObject(CNetObject& spawn) override;
 	void ProcessObjectSpawn(CNetObject& spawned, NetObjectID objID);

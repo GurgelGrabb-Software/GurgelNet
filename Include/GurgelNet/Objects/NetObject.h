@@ -4,6 +4,8 @@
 
 class INetMessageWriter;
 class INetMessageReader;
+class CNetworkVariable;
+class INetObjectInitializer;
 
 class NETWORK_API CNetObject
 {
@@ -13,13 +15,12 @@ public:
 	bool IsClient() const;
 	bool IsServer() const;
 
-
 	// Should return the NetTypeID usable by the registered INetObjectFactory
 	virtual NetTypeID GetNetTypeID() const = 0;
 
 	// Callback that will be called when the object is spawned
 	// Note that for objects spawned on a client, this will be invoked only when the server has confirmed the spawn
-	virtual void OnNetworkSpawn() = 0;
+	virtual void OnNetworkSpawn(INetObjectInitializer& initializer) = 0;
 
 	// Callback that will be called when this network object is either manually despawned or the net library is shutting down
 	virtual void OnNetworkDespawn() = 0;
@@ -32,7 +33,6 @@ public:
 
 public:
 	virtual ~CNetObject() = default;
-	
 	NetObjectID GetNetObjectID() const;
 
 private:

@@ -40,6 +40,7 @@ protected:
 
 	virtual void RecieveMessages() = 0;
 	virtual void SendQueuedMessages() = 0;
+	virtual void RunNetVarSync() = 0;
 
 	CNetMessageQueue _messageQueue;
 	ISteamNetworkingSockets* _interfacePtr;

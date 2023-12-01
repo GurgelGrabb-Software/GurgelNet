@@ -2,6 +2,7 @@
 
 #include "Src/Messages/ClientInternalMessageProcessor.h"
 #include "Src/Messages/ObjectMessageTypes.h"
+#include "Src/Objects/NetObjectInitializer.h"
 
 #include <steam/steamnetworkingsockets.h>
 #include <steam/isteamnetworkingutils.h>
@@ -60,6 +61,16 @@ void CClientLayer::Shutdown()
 	_connection = 0u;
 }
 
+void CClientLayer::RunNetVarSync()
+{
+	_activeObjectList.SyncNetworkVariables(_messageQueue);
+}
+
+CNetworkVariable* CClientLayer::GetNetVar(NetObjectID objectID, NetVarID varID)
+{
+	return _activeObjectList.GetNetVar(objectID, varID);
+}
+
 void CClientLayer::RecieveMessages()
 {
 	SteamNetworkingMessage_t* msg;
@@ -116,7 +127,9 @@ void CClientLayer::ProcessObjectSpawn(CNetObject& spawned, NetObjectID objID)
 	_activeObjectList.AddWithID(&spawned, objID);
 	spawned.SetNetObjectID(objID);
 	spawned.MarkAsClient();
-	spawned.OnNetworkSpawn();
+
+	CNetObjectInitializer initializer(objID, _activeObjectList);
+	spawned.OnNetworkSpawn(initializer);
 }
 
 void CClientLayer::ConfirmNetworkObjectSpawn(NetObjectID pendingID, NetObjectID confirmedID)
@@ -126,7 +139,9 @@ void CClientLayer::ConfirmNetworkObjectSpawn(NetObjectID pendingID, NetObjectID 
 	_activeObjectList.AddWithID(object, confirmedID);
 	object->SetNetObjectID(confirmedID);
 	object->MarkAsClient();
-	object->OnNetworkSpawn(); // The object is only really spawned at this point 
+
+	CNetObjectInitializer initializer(confirmedID, _activeObjectList);
+	object->OnNetworkSpawn(initializer); // The object is only really spawned at this point 
 }
 
 void CClientLayer::Connecting()

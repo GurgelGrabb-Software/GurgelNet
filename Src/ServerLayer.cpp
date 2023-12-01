@@ -3,6 +3,7 @@
 #include "Src/Core/Logging.h"
 #include "Src/Messages/ServerInternalMessageProcessor.h"
 #include "Src/Messages/ObjectMessageTypes.h"
+#include "Src/Objects/NetObjectInitializer.h"
 
 CServerLayer* CServerLayer::s_instancePtr = nullptr;
 
@@ -109,12 +110,24 @@ void CServerLayer::Send(const INetMessage& message, ClientID targetMask, bool re
 	_messageQueue.Send(message, targetMask, reliable);
 }
 
+void CServerLayer::RunNetVarSync()
+{
+	_netObjectList.SyncNetworkVariables(_messageQueue);
+}
+
+CNetworkVariable* CServerLayer::GetNetVar(NetObjectID objectID, NetVarID varID)
+{
+	return _netObjectList.GetNetVar( objectID, varID );
+}
+
 void CServerLayer::SpawnNetworkObject(CNetObject& spawn)
 {
 	const auto id = _netObjectList.Add(&spawn);
 	spawn.SetNetObjectID(id);
 	spawn.MarkAsServer();
-	spawn.OnNetworkSpawn();
+
+	CNetObjectInitializer initializer(id, _netObjectList);
+	spawn.OnNetworkSpawn(initializer);
 
 	SendObjectSpawnMessage(spawn, ClientID_AllClients);
 }
@@ -124,7 +137,9 @@ void CServerLayer::ProcessSpawnRequest(CNetObject& requestedSpawn, ClientID requ
 	const auto id = _netObjectList.Add(&requestedSpawn);
 	requestedSpawn.SetNetObjectID(id);
 	requestedSpawn.MarkAsServer();
-	requestedSpawn.OnNetworkSpawn();
+
+	CNetObjectInitializer initializer(id, _netObjectList);
+	requestedSpawn.OnNetworkSpawn(initializer);
 	
 	// Confirm the spawn
 	CInternalMsg_Object_ServerConfirmSpawn confirmMsg;

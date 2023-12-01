@@ -24,6 +24,9 @@ public:
 	virtual void Send(const INetMessage& message, bool reliable = false) override;
 	virtual void Send(const INetMessage& message, ClientID targetMask, bool reliable = false) override;
 
+	void RunNetVarSync() override;
+	CNetworkVariable* GetNetVar(NetObjectID objectID, NetVarID varID);
+
 	void SpawnNetworkObject(CNetObject& spawn) override;
 	void ProcessSpawnRequest(CNetObject& requestedSpawn, ClientID requestClient, NetObjectID pendingID);
 
