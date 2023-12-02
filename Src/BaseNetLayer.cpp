@@ -10,6 +10,7 @@ CNetLayerBase::CNetLayerBase(INetMessageProcessor* internalProcessor)
 	, _interfacePtr(nullptr)
 	, _localID(0)
 	, _currentState(EConnectState_Inactive)
+	, _objectFactory(nullptr)
 	, _messageProcessors()
 	, _internalProcessor(internalProcessor)
 {
@@ -69,6 +70,16 @@ INetMessageQueue& CNetLayerBase::MessageQueue()
 	return _messageQueue;
 }
 
+INetObjectFactory& CNetLayerBase::GetObjectFactory()
+{
+	return *_objectFactory;
+}
+
+void CNetLayerBase::RegisterObjectFactory(INetObjectFactory& factory)
+{
+	_objectFactory = &factory;
+}
+
 void CNetLayerBase::Start()
 {
 	_interfacePtr = SteamNetworkingSockets();
@@ -80,7 +91,7 @@ void CNetLayerBase::Shutdown()
 
 void CNetLayerBase::Tick()
 {
-	Recieve();
+	RecieveMessages();
 
 	while (_messageQueue.QueuedRecieved() > 0)
 	{
@@ -109,7 +120,9 @@ void CNetLayerBase::Tick()
 		}
 	}
 
-	Send();
+	RunNetVarSync();
+
+	SendQueuedMessages();
 }
 
 void CNetLayerBase::AssignNetID(ClientID id)

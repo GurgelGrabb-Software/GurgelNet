@@ -1,6 +1,8 @@
 #include "ClientLayer.h"
 
 #include "Src/Messages/ClientInternalMessageProcessor.h"
+#include "Src/Messages/ObjectMessageTypes.h"
+#include "Src/Objects/NetObjectInitializer.h"
 
 #include <steam/steamnetworkingsockets.h>
 #include <steam/isteamnetworkingutils.h>
@@ -59,7 +61,17 @@ void CClientLayer::Shutdown()
 	_connection = 0u;
 }
 
-void CClientLayer::Recieve()
+void CClientLayer::RunNetVarSync()
+{
+	_activeObjectList.SyncNetworkVariables(_messageQueue);
+}
+
+CNetworkVariable* CClientLayer::GetNetVar(NetObjectID objectID, NetVarID varID)
+{
+	return _activeObjectList.GetNetVar(objectID, varID);
+}
+
+void CClientLayer::RecieveMessages()
 {
 	SteamNetworkingMessage_t* msg;
 	while (_interfacePtr->ReceiveMessagesOnConnection(_connection, &msg, 1) > 0)
@@ -70,7 +82,7 @@ void CClientLayer::Recieve()
 	}
 }
 
-void CClientLayer::Send()
+void CClientLayer::SendQueuedMessages()
 {
 	while (_messageQueue.QueuedSend() > 0)
 	{
@@ -83,6 +95,53 @@ void CClientLayer::Send()
 
 		_interfacePtr->SendMessageToConnection(_connection, msg.pData, (uint32)msg.nBytes, sendFlag, nullptr);
 	}
+}
+
+void CClientLayer::Send(const INetMessage& message, bool reliable)
+{
+	_messageQueue.Send(message, ClientID_Server, reliable);
+}
+
+void CClientLayer::Send(const INetMessage& message, ClientID targetMask, bool reliable)
+{
+	_messageQueue.Send(message, targetMask, reliable);
+}
+
+void CClientLayer::SpawnNetworkObject(CNetObject& spawn)
+{
+	// This is a client so push this object as pending and then request server to allocate an actual ID for it
+	const auto assignedPendingID = _pendingObjectList.Add(&spawn);
+	spawn.SetNetObjectID(assignedPendingID);
+
+	// Send the spawn request
+	CInternalMsg_Object_ClientRequestSpawn objectSpawnRequest;
+	objectSpawnRequest.ObjectTypeID = spawn.GetNetTypeID();
+	objectSpawnRequest.PendingID = assignedPendingID;
+	objectSpawnRequest.object = &spawn;
+
+	_messageQueue.Send(objectSpawnRequest, true);
+}
+
+void CClientLayer::ProcessObjectSpawn(CNetObject& spawned, NetObjectID objID)
+{
+	_activeObjectList.AddWithID(&spawned, objID);
+	spawned.SetNetObjectID(objID);
+	spawned.MarkAsClient();
+
+	CNetObjectInitializer initializer(objID, _activeObjectList);
+	spawned.OnNetworkSpawn(initializer);
+}
+
+void CClientLayer::ConfirmNetworkObjectSpawn(NetObjectID pendingID, NetObjectID confirmedID)
+{
+	CNetObject* object = _pendingObjectList.Get(pendingID);
+	_pendingObjectList.Remove(pendingID);
+	_activeObjectList.AddWithID(object, confirmedID);
+	object->SetNetObjectID(confirmedID);
+	object->MarkAsClient();
+
+	CNetObjectInitializer initializer(confirmedID, _activeObjectList);
+	object->OnNetworkSpawn(initializer); // The object is only really spawned at this point 
 }
 
 void CClientLayer::Connecting()

@@ -9,6 +9,21 @@
 #include <cstdint>
 
 // ------------------------------------------------------------
+// NetTypeID
+// ID used to identify types to spawn via network.
+// These should be processable by registered INetObjectFactory
+// ------------------------------------------------------------
+using NetTypeID = uint32_t;
+constexpr static NetTypeID NetTypeID_Unset = 0xFFFFFFFF;
+
+// ------------------------------------------------------------
+// NetObjectID
+// ID for net objects
+// ------------------------------------------------------------
+using NetObjectID = uint16_t;
+constexpr static NetObjectID NetObjectID_Unset = 0xFFFF;
+
+// ------------------------------------------------------------
 // ClientID
 // Used to identify clients
 // To allow identifying the server, it also has a ClientID
@@ -39,10 +54,12 @@ constexpr static ClientID ClientMask_Add(ClientID m, ClientID a) { return m | a;
 // Check if the mask m contains the ID c
 constexpr static bool ClientMask_Contains(ClientID m, ClientID c) { return (m & c) > 0; }
 
-
 // ------------------------------------------------------------
 // HNetLayer
 // Handle to a network layer
 // ------------------------------------------------------------
 using HNetLayer = size_t;
 constexpr static HNetLayer HNetLayer_Invalid	= 0;
+
+// Do you REALLY need more than 255 network variables for a single object?
+using NetVarID = uint8_t;

@@ -1,5 +1,6 @@
 #pragma once
 #include "Src/BaseNetLayer.h"
+#include "Src/Objects/NetObjectList.h"
 #include <vector>
 
 struct SClientHandle
@@ -17,8 +18,17 @@ public:
 	void Start() override;
 	void Shutdown() override;
 
-	void Recieve() override;
-	void Send() override;
+	void RecieveMessages() override;
+	void SendQueuedMessages() override;
+
+	virtual void Send(const INetMessage& message, bool reliable = false) override;
+	virtual void Send(const INetMessage& message, ClientID targetMask, bool reliable = false) override;
+
+	void RunNetVarSync() override;
+	CNetworkVariable* GetNetVar(NetObjectID objectID, NetVarID varID);
+
+	void SpawnNetworkObject(CNetObject& spawn) override;
+	void ProcessSpawnRequest(CNetObject& requestedSpawn, ClientID requestClient, NetObjectID pendingID);
 
 	void Connecting(unsigned int connectionID);
 	void Connected(unsigned int connectionID);
@@ -29,8 +39,9 @@ public:
 
 	static CServerLayer* s_instancePtr;
 private:
+	void SendObjectSpawnMessage(CNetObject& forObject, ClientID targetsMask);
+
 	void SendMessage(const SNetMessage& message, int sendFlag);
-	
 
 	void AcceptClientConnection(uint8_t id, unsigned int connectionID);
 	void CloseClientConnection(unsigned int connectionID);
@@ -42,6 +53,8 @@ private:
 	void ReserveClientID(ClientID id, unsigned int connectionID);
 	
 	std::vector<SClientHandle> _clientHandles;
+
+	CNetObjectList _netObjectList;
 
 	unsigned short _port;
 

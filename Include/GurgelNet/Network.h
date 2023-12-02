@@ -11,6 +11,7 @@
 #include "GurgelNet/Core/LibrarySettings.h"
 #include "GurgelNet/Core/NetLogging.h"
 #include "GurgelNet/Core/NetTypes.h"
+#include "GurgelNet/Core/LayerSettings.h"
 
 extern "C"
 {
@@ -50,7 +51,7 @@ extern "C"
 	/// <param name="port">Port of the server</param>
 	/// <param name="outHandle">Handle to the client layer</param>
 	/// <returns>true on sucess, otherwise false</returns>
-	NETWORK_API bool GurgelNet_CreateClient(const char* ip, unsigned short port, HNetLayer& outHandle);
+	NETWORK_API bool GurgelNet_CreateClient(const SNetLayerSettings& clientSettings, HNetLayer& outHandle);
 
 	/// <summary>
 	/// Create a server that will start listening on the local port on start
@@ -58,7 +59,7 @@ extern "C"
 	/// <param name="port">Port to listen on</param>
 	/// <param name="outHandle">Handle to the server layer</param>
 	/// <returns>true on sucess, otherwise false</returns>
-	NETWORK_API bool GurgelNet_CreateServer(unsigned short port, HNetLayer& outHandle);
+	NETWORK_API bool GurgelNet_CreateServer(const SNetLayerSettings& serverSettings, HNetLayer& outHandle);
 
 	/// <summary>
 	/// Utility to create a server and a client that connects to localhost
@@ -67,6 +68,6 @@ extern "C"
 	/// <param name="outClientHandle">Handle to the created client layer</param>
 	/// <param name="outServerHandle">Handle to the created server layer</param>
 	/// <returns>true on success, otherwise false</returns>
-	NETWORK_API bool GurgelNet_CreateHost(unsigned short port, HNetLayer& outClientHandle, HNetLayer& outServerHandle);
+	NETWORK_API bool GurgelNet_CreateHost(const SNetLayerSettings& serverSettings, const SNetLayerSettings& clientSettings, HNetLayer& outClientHandle, HNetLayer& outServerHandle);
 }
 

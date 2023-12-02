@@ -1,6 +1,7 @@
 #pragma once
 #include "Src/BaseNetLayer.h"
 #include "GurgelNet/LayerCallbacks.h"
+#include "Src/Objects/NetObjectList.h"
 
 #include <string>
 
@@ -11,9 +12,19 @@ public:
 
 	virtual void Start() override;
 	virtual void Shutdown() override;
+	void RunNetVarSync() override;
 
-	void Recieve() override;
-	void Send() override;
+	CNetworkVariable* GetNetVar(NetObjectID objectID, NetVarID varID);
+
+	void RecieveMessages() override;
+	void SendQueuedMessages() override;
+	
+	void Send(const INetMessage& message, bool reliable = false) override;
+	void Send(const INetMessage& message, ClientID targetMask, bool reliable = false) override;
+
+	void SpawnNetworkObject(CNetObject& spawn) override;
+	void ProcessObjectSpawn(CNetObject& spawned, NetObjectID objID);
+	void ConfirmNetworkObjectSpawn(NetObjectID pendingID, NetObjectID confirmedID);
 
 	void Connecting();
 	void Connected();
@@ -26,6 +37,9 @@ private:
 
 	std::string _ip;
 	unsigned short _port;
+
+	CNetObjectList _pendingObjectList;
+	CNetObjectList _activeObjectList;
 
 	unsigned int _connection;
 	

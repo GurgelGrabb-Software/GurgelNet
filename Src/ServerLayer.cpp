@@ -2,6 +2,8 @@
 #include "Src/Messages/InternalMessageTypes.h"
 #include "Src/Core/Logging.h"
 #include "Src/Messages/ServerInternalMessageProcessor.h"
+#include "Src/Messages/ObjectMessageTypes.h"
+#include "Src/Objects/NetObjectInitializer.h"
 
 CServerLayer* CServerLayer::s_instancePtr = nullptr;
 
@@ -61,7 +63,7 @@ void CServerLayer::Shutdown()
 	_pollGroup = 0;
 }
 
-void CServerLayer::Recieve()
+void CServerLayer::RecieveMessages()
 {
 	SteamNetworkingMessage_t* msg;
 
@@ -84,7 +86,7 @@ void CServerLayer::Recieve()
 	}
 }
 
-void CServerLayer::Send()
+void CServerLayer::SendQueuedMessages()
 {
 	while (_messageQueue.QueuedSend() > 0)
 	{
@@ -96,6 +98,57 @@ void CServerLayer::Send()
 
 		SendMessage(msg, sendFlag);
 	}
+}
+
+void CServerLayer::Send(const INetMessage& message, bool reliable)
+{
+	_messageQueue.Send(message, ClientID_AllClients, reliable);
+}
+
+void CServerLayer::Send(const INetMessage& message, ClientID targetMask, bool reliable)
+{
+	_messageQueue.Send(message, targetMask, reliable);
+}
+
+void CServerLayer::RunNetVarSync()
+{
+	_netObjectList.SyncNetworkVariables(_messageQueue);
+}
+
+CNetworkVariable* CServerLayer::GetNetVar(NetObjectID objectID, NetVarID varID)
+{
+	return _netObjectList.GetNetVar( objectID, varID );
+}
+
+void CServerLayer::SpawnNetworkObject(CNetObject& spawn)
+{
+	const auto id = _netObjectList.Add(&spawn);
+	spawn.SetNetObjectID(id);
+	spawn.MarkAsServer();
+
+	CNetObjectInitializer initializer(id, _netObjectList);
+	spawn.OnNetworkSpawn(initializer);
+
+	SendObjectSpawnMessage(spawn, ClientID_AllClients);
+}
+
+void CServerLayer::ProcessSpawnRequest(CNetObject& requestedSpawn, ClientID requestClient, NetObjectID pendingID)
+{
+	const auto id = _netObjectList.Add(&requestedSpawn);
+	requestedSpawn.SetNetObjectID(id);
+	requestedSpawn.MarkAsServer();
+
+	CNetObjectInitializer initializer(id, _netObjectList);
+	requestedSpawn.OnNetworkSpawn(initializer);
+	
+	// Confirm the spawn
+	CInternalMsg_Object_ServerConfirmSpawn confirmMsg;
+	confirmMsg.PendingID = pendingID;
+	confirmMsg.ConfirmedID = id;
+	_messageQueue.Send(confirmMsg, requestClient, true);
+
+	// Send spawn message to all but the requesting client
+	SendObjectSpawnMessage(requestedSpawn, ClientMask_Remove(ClientID_AllClients, requestClient));
 }
 
 void CServerLayer::Connecting(unsigned int connectionID)
@@ -171,6 +224,16 @@ void CServerLayer::ApproveClientConnection(uint8_t clientID, bool approved)
 	{
 		FinalizeApprovedClientConnection(clientID);
 	}
+}
+
+void CServerLayer::SendObjectSpawnMessage(CNetObject& forObject, ClientID targetsMask)
+{
+	CInternalMsg_Object_Spawn spawnMsg;
+	spawnMsg.ObjectTypeID = forObject.GetNetTypeID();
+	spawnMsg.ObjectID = forObject.GetNetObjectID();
+	spawnMsg.object = &forObject;
+
+	_messageQueue.Send(spawnMsg, targetsMask, true);
 }
 
 void CServerLayer::SendMessage(const SNetMessage& message, int sendFlag)
