@@ -42,7 +42,7 @@
     <ClInclude Include="Include\GurgelNet\Messages\NetMessageHeader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Messages\NetMessage.h">
+    <ClInclude Include="Src\Include\Messaging\NetMessage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Src\Serialization\NetMessageWriter.h">
@@ -60,16 +60,7 @@
     <ClInclude Include="Include\GurgelNet\Messages\INetMessageQueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Messages\NetMessageQueue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\ClientLayer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\ServerLayer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\BaseNetLayer.h">
+    <ClInclude Include="Src\Include\Messaging\NetMessageQueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Include\GurgelNet\ConnectState.h">
@@ -126,6 +117,54 @@
     <ClInclude Include="Src\Messages\NetVarMessages.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Include\NetLayers\NetLayerShared.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\NetLayers\NetLayerCallbackStore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\NetLayers\NetLayerContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\NetLayers\NetLayerNetworkHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\NetLayers\Server\ServerLayerConnectionsHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\NetLayers\Server\ServerLayerConnections.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\NetLayerMessages\BaseNetLayerMessages.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\NetLayerMessages\NetLayerMessageTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\NetLayerMessages\ConnectionMessages.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\NetLayers\Server\NetLayerServer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\NetLayers\Server\ServerLayerNetworkHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\NetLayers\Client\NetLayerClient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\NetLayers\Client\ClientLayerNetworkHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\NetLayerMessages\ClientConnectionMessageProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\NetLayers\Client\ClientLayerConnectionHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\NetLayerMessages\ServerConnectionMessageProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Network.cpp">
@@ -143,19 +182,10 @@
     <ClCompile Include="Src\Serialization\NetMessageReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Messages\NetMessage.cpp">
+    <ClCompile Include="Src\Source\Messaging\NetMessage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Messages\NetMessageQueue.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\ClientLayer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\BaseNetLayer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\ServerLayer.cpp">
+    <ClCompile Include="Src\Source\Messaging\NetMessageQueue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Src\Messages\ClientInternalMessageProcessor.cpp">
@@ -180,6 +210,39 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Src\Objects\NetObjectInitializer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\NetLayers\NetLayerCallbackStore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\NetLayers\Server\ServerLayerConnections.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\NetLayers\Server\ServerLayerConnectionsHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\NetLayers\NetLayerShared.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\NetLayers\Server\NetLayerServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\NetLayers\Server\ServerLayerNetworkHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\NetLayers\NetLayerNetworkHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\NetLayers\Client\NetLayerClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\NetLayers\Client\ClientLayerNetworkHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\NetLayerMessages\ClientConnectionMessageProcessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\NetLayers\Client\ClientLayerConnectionHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

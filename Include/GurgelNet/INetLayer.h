@@ -57,21 +57,10 @@ public:
 	// ----------------------------------------------------------------------
 
 	/// <summary>
-	/// Send a network message through this Network Layer to the default target
-	/// On server: ClientID_AllClients
-	/// On cliend: ClientID_Server
+	/// Get the message queue used to send messages from this layer
 	/// </summary>
-	/// <param name="message">The message to send</param>
-	/// <param name="reliable">True if this message should be reliable</param>
-	virtual void Send(const INetMessage& message, bool reliable = false) = 0;
-
-	/// <summary>
-	/// Send a network message through this Network Layer to the specified targets
-	/// </summary>
-	/// <param name="message">The message to send</param>
-	/// <param name="targetMask">ClientID mask to send the message to</param>
-	/// <param name="reliable">True if this message should be reliable</param>
-	virtual void Send(const INetMessage& message, ClientID targetMask, bool reliable = false) = 0;
+	/// <returns>Reference to the message queue</returns>
+	virtual INetMessageQueue& MessageQueue() = 0;
 
 	/// <summary>
 	/// Spawn an object on the network.

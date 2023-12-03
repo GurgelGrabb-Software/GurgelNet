@@ -1,4 +1,4 @@
-#include "NetMessageQueue.h"
+#include "Src/Include/Messaging/NetMessageQueue.h"
 #include "GurgelNet/Serialization/INetSerializable.h"
 #include "GurgelNet/Messages/INetMessage.h"
 #include "Src/Serialization/NetMessageWriter.h"

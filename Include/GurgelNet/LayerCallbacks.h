@@ -12,6 +12,7 @@
 #include "GurgelNet/Core/NetTypes.h"
 #include "GurgelNet/Serialization/INetSerializer.h"
 
+typedef void(*FBasicCallback)();
 typedef void(*FClientConnection)(ClientID);
 typedef void(*FNetWrite)(INetMessageWriter&);
 typedef void(*FNetRead)(INetMessageReader&);
@@ -20,6 +21,9 @@ typedef bool(*FApproveClient)(INetMessageReader&);
 
 enum ENetLayerCallback
 {
+	ENetLayerCallback_LocalConnected,				// The layer is connected and ready to use. The layer may be unsafe to use before this has been called.
+	ENetLayerCallback_LocalDisconnected,			// The layer has disconnected and is now inactive.
+
 	ENetLayerCallback_ClientConnect,				// A new client connected [void(ClientID)] 
 	ENetLayerCallback_ClientDisconnect,				// A client disconnected [void(ClientID)] 
 

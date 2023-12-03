@@ -1,9 +1,11 @@
-#include "Src/Messages/NetMessage.h"
+#include "Src/Include/Messaging/NetMessage.h"
 #include "GurgelNet/Serialization/INetSerializer.h"
 #include "GurgelNet/Messages/NetMessageHeader.h"
 
 #include <cstring>
 #include <new>
+
+// ------------------------------------------------------------
 
 SNetMessage::SNetMessage()
 	: pData(nullptr)
@@ -11,6 +13,8 @@ SNetMessage::SNetMessage()
 	, reliable(false)
 {
 }
+
+// ------------------------------------------------------------
 
 SNetMessage::SNetMessage(void* rPtr, size_t s)
 	: pData(nullptr)
@@ -22,6 +26,8 @@ SNetMessage::SNetMessage(void* rPtr, size_t s)
 	memcpy_s(pData, nBytes, rPtr, nBytes);
 }
 
+// ------------------------------------------------------------
+
 SNetMessage::SNetMessage(SNetMessage&& o) noexcept
 	: pData(o.pData)
 	, nBytes(o.nBytes)
@@ -31,45 +37,63 @@ SNetMessage::SNetMessage(SNetMessage&& o) noexcept
 	o.nBytes = 0u;
 }
 
+// ------------------------------------------------------------
+
 SNetMessage::~SNetMessage()
 {
 	Release();
 }
+
+// ------------------------------------------------------------
 
 SNetMessage::operator bool() const
 {
 	return pData != nullptr;
 }
 
+// ------------------------------------------------------------
+
 bool SNetMessage::UseDefaultTarget() const
 {
 	return ExtractHeader().targetID == 0;
 }
+
+// ------------------------------------------------------------
 
 uint8_t SNetMessage::GetCategory() const
 {
 	return ExtractHeader().categoryID;
 }
 
+// ------------------------------------------------------------
+
 ClientID SNetMessage::GetSenderID() const
 {
 	return ExtractHeader().senderID;
 }
+
+// ------------------------------------------------------------
 
 ClientID SNetMessage::GetTargetMask() const
 {
 	return ExtractHeader().targetID;
 }
 
+// ------------------------------------------------------------
+
 void SNetMessage::SetSender(ClientID senderID)
 {
 	ExtractHeader().senderID = senderID;
 }
 
+// ------------------------------------------------------------
+
 void SNetMessage::SetTarget(ClientID targetMask)
 {
 	ExtractHeader().targetID = targetMask;
 }
+
+// ------------------------------------------------------------
 
 void SNetMessage::Package(INetMessageWriter& writer, uint8_t primaryTypeID, uint8_t userData)
 {
@@ -89,6 +113,8 @@ void SNetMessage::Package(INetMessageWriter& writer, uint8_t primaryTypeID, uint
 	writer.Pack(&byteArray[headerSize]);
 }
 
+// ------------------------------------------------------------
+
 void SNetMessage::Release()
 {
 	if (pData)
@@ -97,12 +123,20 @@ void SNetMessage::Release()
 	}
 }
 
+// ------------------------------------------------------------
+
 SNetMessageHeader& SNetMessage::ExtractHeader()
 {
 	return *(SNetMessageHeader*)(pData);
 }
 
+// ------------------------------------------------------------
+
 const SNetMessageHeader& SNetMessage::ExtractHeader() const
 {
 	return *(SNetMessageHeader*)(pData);
 }
+
+// ------------------------------------------------------------
+// ------------------------------------------------------------
+// ------------------------------------------------------------

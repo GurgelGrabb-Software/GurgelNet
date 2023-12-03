@@ -1,16 +1,16 @@
 #include "GurgelNet/Network.h"
 
 #include "Src/Core/Logging.h"
-#include "Src/BaseNetLayer.h"
-#include "Src/ClientLayer.h"
-#include "Src/ServerLayer.h"
+#include "Src/Include/NetLayers/NetLayerShared.h"
+#include "Src/Include/NetLayers/Client/NetLayerClient.h"
+#include "Src/Include/NetLayers/Server/NetLayerServer.h"
 
 #include <steam/steamnetworkingsockets.h>
 #include <steam/isteamnetworkingutils.h>
 
 #pragma comment(lib, "GameNetworkingSockets")
 
-static CNetLayerBase* s_layerPtrs[3]; 
+static CNetLayerShared* s_layerPtrs[3]; 
 static size_t s_numLayers;
 
 
@@ -58,7 +58,7 @@ INetLayer* GurgelNet_GetLayer(HNetLayer handle)
 
 void GurgelNet_Start()
 {
-	for (CNetLayerBase* l : s_layerPtrs)
+	for (CNetLayerShared* l : s_layerPtrs)
 	{
 		if (l != nullptr)
 		{
@@ -74,7 +74,7 @@ void GurgelNet_Tick()
 	{
 		if (s_layerPtrs[i])
 		{
-			s_layerPtrs[i]->Tick();
+			s_layerPtrs[i]->Update();
 		}
 	}
 }
@@ -83,7 +83,7 @@ void GurgelNet_Shutdown()
 {
 	GameNetworkingSockets_Kill();
 
-	for (CNetLayerBase* l : s_layerPtrs)
+	for (CNetLayerShared* l : s_layerPtrs)
 	{
 		if (l != nullptr)
 		{
@@ -95,18 +95,13 @@ void GurgelNet_Shutdown()
 	s_numLayers = 1;
 }
 
-void AssignLayerSettings(CNetLayerBase& layer, const SNetLayerSettings& settings)
+void AssignLayerSettings(CNetLayerShared& layer, SNetLayerSettings& settings)
 {
-	for (int i = 0; i < ENetLayerCallback_Count; ++i)
-	{
-		if (settings.layerCallbacks[i] == nullptr) continue;
-		layer.SetLayerCallback((ENetLayerCallback)i, settings.layerCallbacks[i]);
-	}
-
-	layer.RegisterObjectFactory(*settings.objectFactoryPtr);
+	layer.Initialize(settings);
+	layer.SetObjectFactory(settings.objectFactoryPtr);
 }
 
-bool GurgelNet_CreateClient(const SNetLayerSettings& clientSettings, HNetLayer& outHandle)
+bool GurgelNet_CreateClient(SNetLayerSettings& clientSettings, HNetLayer& outHandle)
 {
 	outHandle = 0;
 
@@ -116,7 +111,7 @@ bool GurgelNet_CreateClient(const SNetLayerSettings& clientSettings, HNetLayer& 
 		return false;
 	}
 
-	s_layerPtrs[s_numLayers] = new CClientLayer(clientSettings.ip, clientSettings.port);
+	s_layerPtrs[s_numLayers] = new CNetLayerClient();
 	AssignLayerSettings(*s_layerPtrs[s_numLayers], clientSettings);
 	outHandle = s_numLayers;
 	s_numLayers++;
@@ -124,7 +119,7 @@ bool GurgelNet_CreateClient(const SNetLayerSettings& clientSettings, HNetLayer& 
 	return true;
 }
 
-bool GurgelNet_CreateServer(const SNetLayerSettings& serverSettings, HNetLayer& outHandle)
+bool GurgelNet_CreateServer(SNetLayerSettings& serverSettings, HNetLayer& outHandle)
 {
 	outHandle = 0;
 
@@ -134,14 +129,14 @@ bool GurgelNet_CreateServer(const SNetLayerSettings& serverSettings, HNetLayer& 
 		return false;
 	}
 
-	s_layerPtrs[s_numLayers] = new CServerLayer(serverSettings.port);
+	s_layerPtrs[s_numLayers] = new CNetLayerServer();
 	AssignLayerSettings(*s_layerPtrs[s_numLayers], serverSettings);
 	outHandle = s_numLayers;
 	s_numLayers++;
 	return true;
 }
 
-bool GurgelNet_CreateHost(const SNetLayerSettings& serverSettings, const SNetLayerSettings& clientSettings, HNetLayer& outClientHandle, HNetLayer& outServerHandle)
+bool GurgelNet_CreateHost(SNetLayerSettings& serverSettings, SNetLayerSettings& clientSettings, HNetLayer& outClientHandle, HNetLayer& outServerHandle)
 {
 	bool result = true;
 	result &= GurgelNet_CreateServer(serverSettings, outServerHandle);

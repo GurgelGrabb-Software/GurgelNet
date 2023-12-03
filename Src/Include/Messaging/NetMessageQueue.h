@@ -1,6 +1,6 @@
 #pragma once
 #include "GurgelNet/Messages/INetMessageQueue.h"
-#include "Src/Messages/NetMessage.h"
+#include "Src/Include/Messaging/NetMessage.h"
 #include "GurgelNet/Core/NetTypes.h"
 #include <queue>
 

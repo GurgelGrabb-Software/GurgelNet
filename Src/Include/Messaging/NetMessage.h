@@ -2,10 +2,14 @@
 #include "GurgelNet/NetLib.h"
 #include "GurgelNet/Core/NetTypes.h"
 
+// ------------------------------------------------------------
+
 struct SNetMessageHeader;
 class INetMessageWriter;
 
-struct NETWORK_API SNetMessage
+// ------------------------------------------------------------
+
+struct SNetMessage
 {
 public:
 	SNetMessage();
@@ -36,3 +40,7 @@ private:
 	SNetMessageHeader& ExtractHeader();
 	const SNetMessageHeader& ExtractHeader() const;
 };
+
+// ------------------------------------------------------------
+// ------------------------------------------------------------
+// ------------------------------------------------------------
