@@ -74,6 +74,13 @@ CServerLayerConnectionsHandler& CNetLayerServer::ConnectionsHandler()
 
 // ------------------------------------------------------------
 
+CServerObjectHandler& CNetLayerServer::ObjectHandler()
+{
+	return _objectHandler;
+}
+
+// ------------------------------------------------------------
+
 void CNetLayerServer::ConnectCallback(SteamNetConnectionStatusChangedCallback_t* info)
 {
 	switch (info->m_info.m_eState)
