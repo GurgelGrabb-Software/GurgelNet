@@ -2,10 +2,11 @@
 #include "GurgelNet/NetLib.h"
 #include "GurgelNet/Core/NetTypes.h"
 
+#include "GurgelNet/Objects/INetObjectInitializer.h"
+
 class INetMessageWriter;
 class INetMessageReader;
 class CNetworkVariable;
-class INetObjectInitializer;
 
 class NETWORK_API CNetObject
 {
@@ -19,7 +20,7 @@ public:
 
 	// Callback that will be called when the object is spawned
 	// Note that for objects spawned on a client, this will be invoked only when the server has confirmed the spawn
-	virtual void OnNetworkSpawn(INetObjectInitializer& initializer) = 0;
+	virtual void OnNetworkSpawn(INetObjectInitializer& initializer);
 
 	// Callback that will be called when this network object is either manually despawned or the net library is shutting down
 	virtual void OnNetworkDespawn() = 0;
@@ -35,11 +36,8 @@ public:
 	NetObjectID GetNetObjectID() const;
 
 private:
-	void MarkAsServer();
-	void MarkAsClient();
 	void SetNetObjectID(NetObjectID id);
 
 	NetObjectID _objectID = NetObjectID_Unset;
 	bool _isServer = false;
-	bool _isClient = false;
 };

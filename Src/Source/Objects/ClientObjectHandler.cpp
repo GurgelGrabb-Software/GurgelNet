@@ -44,7 +44,7 @@ void CClientObjectHandler::ObjectSpawnConfirmed(CObjectMsg_SpawnConfirm& confirm
 	SNetObjectHandle& activeHandle = _activeObjects.GetObject(confirmMsg.confirmedID);
 
 	// Run spawn
-	CNetObjectInitializer initializer(activeHandle);
+	CNetObjectInitializer initializer(activeHandle, false);
 	activeHandle.objectPtr->OnNetworkSpawn(initializer);
 }
 
@@ -64,7 +64,7 @@ void CClientObjectHandler::ProcessObjectSpawn(CObjectMsg_Spawn& spawnMsg)
 	spawnMsg.ReadPreSpawnData(activeHandle);
 
 	// Run the spawn
-	CNetObjectInitializer initializer(activeHandle);
+	CNetObjectInitializer initializer(activeHandle, false);
 	object->OnNetworkSpawn(initializer);
 
 	// Read post spawn data (initial net var values)
@@ -97,7 +97,7 @@ void CClientObjectHandler::ProcessLateJoinPayload(CLateJoinPayload& payload)
 		SNetObjectHandle& spawnedHandle = _activeObjects.GetObject(currentObjectPayload.objectID);
 		payload.PreSpawnRead(objPtr);
 
-		CNetObjectInitializer initializer(spawnedHandle);
+		CNetObjectInitializer initializer(spawnedHandle, false);
 		objPtr->OnNetworkSpawn(initializer);
 
 		payload.PostSpawnRead(spawnedHandle);
