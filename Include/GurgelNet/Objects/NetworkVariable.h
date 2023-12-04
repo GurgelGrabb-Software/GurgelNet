@@ -51,12 +51,23 @@ public:
 	TNetworkVariable(const T& v) : CNetworkVariable(), _value(v) {}
 	TNetworkVariable(const T& v, float syncRate) : CNetworkVariable(syncRate), _value(v) {}
 
+	void BindOnValueChanged(std::function<void(const T&, const T&)> func) { _onValChange = func; }
+
 	bool SyncReliable() const override { return TReliable; }
 	void Serialize(INetMessageWriter& serializer) const override { serializer.Write(_value); }
-	void Deserialize(INetMessageReader& serializer) override { serializer.Read(_value); }
+	void Deserialize(INetMessageReader& serializer) override 
+	{ 
+		const T oldVal = _value;
+		serializer.Read(_value);
+		if (_onValChange)
+		{
+			_onValChange(oldVal, _value);
+		}
+	}
 
 	void operator=(const T& rhs) { _value = rhs; _dirty = true; }
 	const T& Value() const { return _value; }
 private:
 	T _value;
+	std::function<void(const T&, const T&)> _onValChange;
 };
