@@ -45,10 +45,10 @@
     <ClInclude Include="Src\Include\Messaging\NetMessage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Serialization\NetMessageWriter.h">
+    <ClInclude Include="Src\Include\Serialization\NetMessageWriter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Serialization\NetMessageReader.h">
+    <ClInclude Include="Src\Include\Serialization\NetMessageReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Include\GurgelNet\Messages\INetMessageProcessor.h">
@@ -69,15 +69,6 @@
     <ClInclude Include="Include\GurgelNet\Messages\INetMessage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Messages\InternalMessageTypes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Messages\ClientInternalMessageProcessor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Messages\ServerInternalMessageProcessor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Include\GurgelNet\LayerCallbacks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -90,13 +81,7 @@
     <ClInclude Include="Include\GurgelNet\Objects\NetObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Objects\NetObjectList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Include\GurgelNet\Objects\INetObjectFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Messages\ObjectMessageTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Include\GurgelNet\Core\LayerSettings.h">
@@ -105,16 +90,10 @@
     <ClInclude Include="Include\GurgelNet\Objects\NetworkVariable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Objects\NetworkVariableStore.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Include\GurgelNet\Objects\INetObjectInitializer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Objects\NetObjectInitializer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Messages\NetVarMessages.h">
+    <ClInclude Include="Src\Include\Objects\NetObjectInitializer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Src\Include\NetLayers\NetLayerShared.h">
@@ -165,6 +144,36 @@
     <ClInclude Include="Src\Include\NetLayerMessages\ServerConnectionMessageProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Include\Objects\NetObjectList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\Objects\NetVarList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\Objects\NetObjectHandle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\NetLayerMessages\ObjectMessages.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\Objects\ClientObjectHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\Objects\SharedObjectHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\Objects\ServerObjectHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\NetLayerMessages\ClientObjectMessageProcessors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\NetLayerMessages\ServerObjectMessageProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\NetLayerMessages\LateJoinPayload.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Network.cpp">
@@ -176,10 +185,10 @@
     <ClCompile Include="Src\Core\Logging.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Serialization\NetMessageWriter.cpp">
+    <ClCompile Include="Src\Source\Serialization\NetMessageWriter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Serialization\NetMessageReader.cpp">
+    <ClCompile Include="Src\Source\Serialization\NetMessageReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Src\Source\Messaging\NetMessage.cpp">
@@ -188,28 +197,19 @@
     <ClCompile Include="Src\Source\Messaging\NetMessageQueue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Messages\ClientInternalMessageProcessor.cpp">
+    <ClCompile Include="Src\Source\Serializable\NetString.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Messages\ServerInternalMessageProcessor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Serializables\NetString.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Objects\NetObjectList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Objects\NetObject.cpp">
+    <ClCompile Include="Src\Source\Objects\NetObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Src\Core\LayerSettings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Objects\NetworkVariable.cpp">
+    <ClCompile Include="Src\Source\Objects\NetworkVariable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Objects\NetObjectInitializer.cpp">
+    <ClCompile Include="Src\Source\Objects\NetObjectInitializer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Src\Source\NetLayers\NetLayerCallbackStore.cpp">
@@ -243,6 +243,30 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Src\Source\NetLayers\Client\ClientLayerConnectionHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\NetLayerMessages\ServerConnectionMessageProcessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\Objects\NetObjectList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\Objects\NetVarList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\Objects\ClientObjectHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\Objects\ServerObjectHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\Objects\SharedObjectHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\NetLayerMessages\ClientObjectMessageProcessors.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\NetLayerMessages\ServerObjectMessageProcessor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

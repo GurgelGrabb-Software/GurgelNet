@@ -3,6 +3,7 @@
 
 #include "Src/Include/NetLayers/Server/ServerLayerConnectionsHandler.h"
 #include "Src/Include/NetLayers/Server/ServerLayerNetworkHandler.h"
+#include "Src/Include/Objects/ServerObjectHandler.h"
 
 struct SteamNetConnectionStatusChangedCallback_t;
 
@@ -14,6 +15,9 @@ public:
 	void Start() override;
 	void Shutdown() override;
 
+	CServerLayerConnectionsHandler& ConnectionsHandler();
+	CServerObjectHandler& ObjectHandler();
+
 private:
 	static CNetLayerServer* s_instance;
 	static void ServerConnectionCallback(SteamNetConnectionStatusChangedCallback_t* callbackInfo) { s_instance->ConnectCallback(callbackInfo); }
@@ -21,4 +25,5 @@ private:
 
 	CServerLayerConnectionsHandler _connectionsHandler;
 	CServerLayerNetworkHandler _netHandler;
+	CServerObjectHandler _objectHandler;
 };

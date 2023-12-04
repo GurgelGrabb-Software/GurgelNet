@@ -98,7 +98,6 @@ void GurgelNet_Shutdown()
 void AssignLayerSettings(CNetLayerShared& layer, SNetLayerSettings& settings)
 {
 	layer.Initialize(settings);
-	layer.SetObjectFactory(settings.objectFactoryPtr);
 }
 
 bool GurgelNet_CreateClient(SNetLayerSettings& clientSettings, HNetLayer& outHandle)

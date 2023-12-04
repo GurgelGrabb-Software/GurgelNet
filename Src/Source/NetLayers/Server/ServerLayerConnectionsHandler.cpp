@@ -5,13 +5,17 @@
 
 #include "Src/Include/NetLayerMessages/ConnectionMessages.h"
 
+#include "Src/Include/NetLayers/Server/NetLayerServer.h"
+#include "Src/Include/Objects/ServerObjectHandler.h"
+
 #include "GurgelNet/Messages/INetMessageQueue.h"
 #include "GurgelNet/LayerCallbacks.h"
 
 // ------------------------------------------------------------
 
-CServerLayerConnectionsHandler::CServerLayerConnectionsHandler(SNetLayerContext& netContext)
-	: _netContext(netContext)
+CServerLayerConnectionsHandler::CServerLayerConnectionsHandler(CNetLayerServer& serverLayer, SNetLayerContext& netContext)
+	: _serverLayer(serverLayer)
+	, _netContext(netContext)
 	, _connections(netContext)
 {
 }
@@ -62,19 +66,10 @@ void CServerLayerConnectionsHandler::RunClientApproval(ClientID clientID, INetMe
 		return;
 	}
 
-	// If there is a late join sync process, run it now
-	if (lateJoinDataWriteFunction)
-	{
-		// Send the late join function
-		CConnectMsg_LateJoin msg;
-		msg.lateJoinWrite = lateJoinDataWriteFunction;
-		_netContext.layer.msgQueuePtr->Send(msg, clientID, true);
-	}
-	else
-	{
-		// The late join is immediately complete if there is no late join process
-		LateJoinCompleted(clientID);
-	}
+	CConnectMsg_LateJoin msg;
+	msg.lateJoinWrite = lateJoinDataWriteFunction;
+	_serverLayer.ObjectHandler().WriteLateJoinPayload(msg.lateJoinPayload);
+	_netContext.layer.msgQueuePtr->Send(msg, clientID, true);
 }
 
 // ------------------------------------------------------------

@@ -11,9 +11,10 @@ CNetLayerClient* CNetLayerClient::s_instance = nullptr;
 // ------------------------------------------------------------
 
 CNetLayerClient::CNetLayerClient()
-	: CNetLayerShared(_netHandler)
+	: CNetLayerShared(_netHandler, _objectHandler)
 	, _netHandler(_netContext)
 	, _connectionHandler(*this, _netContext)
+	, _objectHandler(_netContext)
 {
 	s_instance = this;
 }
@@ -55,10 +56,21 @@ void CNetLayerClient::Shutdown()
 	ChangeState(EConnectState_Inactive);
 }
 
+// ------------------------------------------------------------
+
 CClientLayerConnectionHandler& CNetLayerClient::ConnectionHandler()
 {
 	return _connectionHandler;
 }
+
+// ------------------------------------------------------------
+
+CClientObjectHandler& CNetLayerClient::ObjectHandler()
+{
+	return _objectHandler;
+}
+
+// ------------------------------------------------------------
 
 void CNetLayerClient::ChangeClientState(EConnectState state)
 {

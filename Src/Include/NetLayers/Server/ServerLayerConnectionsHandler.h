@@ -2,11 +2,13 @@
 #include "Src/Include/NetLayers/Server/ServerLayerConnections.h"
 
 class INetMessageReader;
+class CNetLayerServer;
+class CServerObjectHandler;
 
 class CServerLayerConnectionsHandler
 {
 public:
-	CServerLayerConnectionsHandler(SNetLayerContext& netContext);
+	CServerLayerConnectionsHandler(CNetLayerServer& serverLayer, SNetLayerContext& netContext);
 
 	void IncomingConnection(unsigned int hConnection);
 	void EstablishedConnection(unsigned int hConnection);
@@ -17,6 +19,7 @@ public:
 
 	const SServerLayerConnections& GetConnections() const;
 private:
+	CNetLayerServer& _serverLayer;
 	SNetLayerContext& _netContext;
 	SServerLayerConnections _connections;
 };

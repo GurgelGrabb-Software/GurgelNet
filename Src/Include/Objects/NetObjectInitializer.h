@@ -2,14 +2,13 @@
 #include "GurgelNet/Core/NetTypes.h"
 #include "GurgelNet/Objects/INetObjectInitializer.h"
 
-class CNetObjectList;
+struct SNetObjectHandle;
 
 class CNetObjectInitializer : public INetObjectInitializer
 {
 public:
-	CNetObjectInitializer(NetObjectID ownerObjectID, CNetObjectList& objectList);
+	CNetObjectInitializer(SNetObjectHandle& handle);
 	void RegisterNetVar(CNetworkVariable& regVar) override;
 private:
-	NetObjectID _objectID;
-	CNetObjectList& _objectList;
+	SNetObjectHandle& _objectHandle;
 };

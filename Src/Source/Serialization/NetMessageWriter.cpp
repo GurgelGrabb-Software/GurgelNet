@@ -1,4 +1,5 @@
-#include "NetMessageWriter.h"
+#include "Src/Include/Serialization/NetMessageWriter.h"
+
 #include "GurgelNet/Serialization/INetSerializable.h"
 
 CNetMessageWriter::CNetMessageWriter()

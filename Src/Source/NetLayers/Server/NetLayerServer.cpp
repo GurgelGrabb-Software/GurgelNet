@@ -1,23 +1,35 @@
 #include "Src/Include/NetLayers/Server/NetLayerServer.h"
 
+#include "Src/Include/NetLayerMessages/ServerConnectionMessageProcessor.h"
+
 #include <steam/steamnetworkingsockets.h>
 #include <steam/isteamnetworkingutils.h>
 
+// ------------------------------------------------------------
+
 CNetLayerServer* CNetLayerServer::s_instance = nullptr;
 
+// ------------------------------------------------------------
+
 CNetLayerServer::CNetLayerServer()
-	: CNetLayerShared(_netHandler)
-	, _connectionsHandler(_netContext)
+	: CNetLayerShared(_netHandler, _objectHandler)
+	, _connectionsHandler(*this, _netContext)
 	, _netHandler(_connectionsHandler, _netContext)
+	, _objectHandler(_netContext)
 {
 	s_instance = this;
 	_netContext.layer.layerNetworkID = ClientID_Server;
 }
 
+// ------------------------------------------------------------
+
 void CNetLayerServer::Start()
 {
 	// Start up the backend
 	auto interfacePtr = _netContext.backend.interfacePtr;
+
+	CServerConnectMessageProcessor* connectProcessor = new CServerConnectMessageProcessor(*this, _netContext);
+	_netHandler.AddProcessor(*connectProcessor);
 
 	SteamNetworkingIPAddr connectionIP;
 	connectionIP.Clear();
@@ -36,6 +48,8 @@ void CNetLayerServer::Start()
 	ChangeState(EConnectState_Connected);
 }
 
+// ------------------------------------------------------------
+
 void CNetLayerServer::Shutdown()
 {
 	if (CurrentState() != EConnectState_Inactive)
@@ -50,6 +64,15 @@ void CNetLayerServer::Shutdown()
 
 	ChangeState(EConnectState_Inactive);
 }
+
+// ------------------------------------------------------------
+
+CServerLayerConnectionsHandler& CNetLayerServer::ConnectionsHandler()
+{
+	return _connectionsHandler;
+}
+
+// ------------------------------------------------------------
 
 void CNetLayerServer::ConnectCallback(SteamNetConnectionStatusChangedCallback_t* info)
 {
@@ -67,3 +90,7 @@ void CNetLayerServer::ConnectCallback(SteamNetConnectionStatusChangedCallback_t*
 		break;
 	}
 }
+
+// ------------------------------------------------------------
+// ------------------------------------------------------------
+// ------------------------------------------------------------

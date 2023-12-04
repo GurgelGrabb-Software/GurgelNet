@@ -1,14 +1,27 @@
 #include "GurgelNet/Objects/NetworkVariable.h"
 
 CNetworkVariable::CNetworkVariable()
-	: _lastSync()
+	: _netVarID(NetVarID_Unset)
+	, _ownerMask(ClientID_Server) // Default to server ownership always
+	, _lastSync()
 	, _syncRate(0.0f)
 	, _dirty(false)
 {
 }
 
-CNetworkVariable::CNetworkVariable(float syncRate)
-	: _lastSync()
+CNetworkVariable::CNetworkVariable(ClientID ownerMask)
+	: _netVarID(NetVarID_Unset)
+	, _ownerMask(ownerMask)
+	, _lastSync()
+	, _syncRate(0.0f)
+	, _dirty(false)
+{
+}
+
+CNetworkVariable::CNetworkVariable(ClientID ownerMask, float syncRate)
+	: _netVarID(NetVarID_Unset)
+	, _ownerMask(ownerMask)
+	, _lastSync()
 	, _syncRate(syncRate)
 	, _dirty(false)
 {
@@ -36,6 +49,11 @@ void CNetworkVariable::MarkSynced()
 {
 	_lastSync = std::chrono::high_resolution_clock::now();
 	_dirty = false;
+}
+
+bool CNetworkVariable::IsOwner(ClientID id) const
+{
+	return ClientMask_Contains(_ownerMask, id);
 }
 
 NetVarID CNetworkVariable::GetVariableID() const

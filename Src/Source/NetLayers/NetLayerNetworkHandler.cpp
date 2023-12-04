@@ -6,7 +6,7 @@
 #include "Src/Include/Messaging/NetMessageQueue.h"
 #include "Src/Include/Messaging/NetMessage.h"
 
-#include "Src/Serialization/NetMessageReader.h"
+#include "Src/Include/Serialization/NetMessageReader.h"
 
 // ------------------------------------------------------------
 

@@ -63,3 +63,4 @@ constexpr static HNetLayer HNetLayer_Invalid	= 0;
 
 // Do you REALLY need more than 255 network variables for a single object?
 using NetVarID = uint8_t;
+constexpr static NetVarID NetVarID_Unset		= 0xFF;

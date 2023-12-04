@@ -1,28 +1,27 @@
 #pragma once
+
 #include "GurgelNet/Messages/INetMessageProcessor.h"
 
 // ------------------------------------------------------------
 
-class CNetLayerClient;
-struct SNetLayerContext;
+class CClientObjectHandler;
 
 // ------------------------------------------------------------
 
-class CClientConnectMessageProcessor : public INetMessageProcessor
+class CClientObjectMessageProcessor : public INetMessageProcessor
 {
 public:
-	CClientConnectMessageProcessor(CNetLayerClient& clientLayer, SNetLayerContext& context);
+	CClientObjectMessageProcessor(CClientObjectHandler& objectHandler);
 
 	uint8_t ProcessedMessageCategory() const override;
 	void Process(const SNetMessageHeader& header, INetMessageReader& reader, INetLayer& netLayer) override;
 
 private:
-	void ProcessClientIDAssigned(INetMessageReader& reader);
-	void ProcessLateJoinSync(INetMessageReader& reader);
-	void ProcessConnectionFinalized(INetMessageReader& reader);
+	void ProcessObjectSpawnConfirm( INetMessageReader& reader );
+	void ProcessObjectSpawn(INetMessageReader& reader);
+	void ProcessNetVarSync(INetMessageReader& reader);
 
-	CNetLayerClient& _clientLayer;
-	SNetLayerContext& _netContext;
+	CClientObjectHandler& _objectHandler;
 };
 
 // ------------------------------------------------------------

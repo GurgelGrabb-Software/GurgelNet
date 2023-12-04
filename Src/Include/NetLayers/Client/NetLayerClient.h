@@ -3,6 +3,7 @@
 
 #include "Src/Include/NetLayers/Client/ClientLayerConnectionHandler.h"
 #include "Src/Include/NetLayers/Client/ClientLayerNetworkHandler.h"
+#include "Src/Include/Objects/ClientObjectHandler.h"
 
 // ------------------------------------------------------------
 
@@ -19,6 +20,8 @@ public:
 	void Shutdown() override;
 
 	CClientLayerConnectionHandler& ConnectionHandler();
+	CClientObjectHandler& ObjectHandler();
+
 	void ChangeClientState(EConnectState state);
 
 private:
@@ -28,6 +31,7 @@ private:
 
 	CClientLayerNetworkHandler _netHandler;
 	CClientLayerConnectionHandler _connectionHandler;
+	CClientObjectHandler _objectHandler;
 };
 
 // ------------------------------------------------------------

@@ -7,6 +7,7 @@
 #include "Src/Include/Messaging/NetMessageQueue.h"
 #include "Src/Include/NetLayers/NetLayerCallbackStore.h"
 #include "Src/Include/NetLayers/NetLayerContext.h"
+#include "Src/Include/Objects/SharedObjectHandler.h"
 
 #include "Src/Include/NetLayers/NetLayerNetworkHandler.h"
 
@@ -17,7 +18,7 @@ class CNetLayerShared : public INetLayer
 {
 public:
 
-	CNetLayerShared(CNetLayerNetworkHandler& netHandler);
+	CNetLayerShared(CNetLayerNetworkHandler& netHandler, CSharedObjectHandler& objectHandler);
 	virtual ~CNetLayerShared() = default;
 
 	// ------------------------------------------------------------
@@ -28,7 +29,7 @@ public:
 	void RegisterProcessor(INetMessageProcessor* processor) override;
 	INetMessageQueue& MessageQueue() override;
 
-	virtual void SpawnNetworkObject(CNetObject& spawn) {};
+	virtual void SpawnNetworkObject(CNetObject& spawn);
 
 	// ------------------------------------------------------------
 	// Execution Flow
@@ -36,8 +37,6 @@ public:
 
 	virtual void Initialize(SNetLayerSettings& settings);
 	virtual void Deinitialize();
-
-	void SetObjectFactory(INetObjectFactory* factory);
 
 	virtual void Start() = 0;
 	virtual void Shutdown() = 0;
@@ -57,6 +56,7 @@ private:
 	CNetMessageQueue _messageQueue;
 	CNetLayerCallbackStore _callbackStore;
 	CNetLayerNetworkHandler& _netHandler;
+	CSharedObjectHandler& _objectHandler;
 
 	EConnectState _state;
 };

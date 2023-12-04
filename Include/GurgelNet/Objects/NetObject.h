@@ -9,8 +9,7 @@ class INetObjectInitializer;
 
 class NETWORK_API CNetObject
 {
-	friend class CServerLayer;
-	friend class CClientLayer;
+	friend class CNetObjectList;
 public:
 	bool IsClient() const;
 	bool IsServer() const;

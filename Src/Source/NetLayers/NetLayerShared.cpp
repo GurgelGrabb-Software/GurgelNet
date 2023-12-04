@@ -7,13 +7,14 @@
 
 // ------------------------------------------------------------
 
-CNetLayerShared::CNetLayerShared(CNetLayerNetworkHandler& netHandler)
+CNetLayerShared::CNetLayerShared(CNetLayerNetworkHandler& netHandler, CSharedObjectHandler& objectHandler)
 	: _ip("")
 	, _port(0)
 	, _netContext()
 	, _messageQueue()
 	, _callbackStore()
 	, _netHandler(netHandler)
+	, _objectHandler(objectHandler)
 	, _state(EConnectState_Inactive)
 {
 	_netContext.layer.callbackStorePtr = &_callbackStore;
@@ -50,6 +51,13 @@ INetMessageQueue& CNetLayerShared::MessageQueue()
 
 // ------------------------------------------------------------
 
+void CNetLayerShared::SpawnNetworkObject(CNetObject& spawn)
+{
+	_objectHandler.SpawnObject(spawn);
+}
+
+// ------------------------------------------------------------
+
 void CNetLayerShared::Initialize(SNetLayerSettings& settings)
 {
 	// Store IP and Port for later startup
@@ -61,6 +69,8 @@ void CNetLayerShared::Initialize(SNetLayerSettings& settings)
 
 	// Bind the interface of the net context
 	_netContext.backend.interfacePtr = SteamNetworkingSockets();
+
+	_objectHandler.AssignObjectFactory(settings.objectFactoryPtr);
 }
 
 // ------------------------------------------------------------
@@ -76,6 +86,7 @@ void CNetLayerShared::Update()
 	_netHandler.RecievePending(_messageQueue);
 
 	_netHandler.ProcessRecieved(_messageQueue, *this);
+	_objectHandler.RunNetObjectUpdate();
 
 	_netHandler.SendPending(_messageQueue);
 }

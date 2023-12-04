@@ -32,13 +32,16 @@ void CClientLayerConnectionHandler::RecieveAssignedID(ClientID assignedID)
 
 void CClientLayerConnectionHandler::RecieveLateJoinData(INetMessageReader& lateJoinReader)
 {
-	if (FNetRead lateJoinReadF = _netContext.layer.callbackStorePtr->GetCallbackAs<FNetRead>(ENetLayerCallback_ClientLateJoinSync))
-	{
-		lateJoinReadF(lateJoinReader);
-	}
+	FNetRead lateJoinReadF = _netContext.layer.callbackStorePtr->GetCallbackAs<FNetRead>(ENetLayerCallback_ClientLateJoinSync);
+
+	CConnectMsg_LateJoin lateJoinMsg;
+	lateJoinMsg.lateJoinRead = lateJoinReadF;
+	lateJoinReader.Read(lateJoinMsg);
+
+	_clientLayer.ObjectHandler().ProcessLateJoinPayload(lateJoinMsg.lateJoinPayload);
 
 	// Send the confirmation of having joined
-	_netContext.layer.msgQueuePtr->Send(CConnectMsg_LatJoinConfirm(), ClientID_Server, true);
+	_netContext.layer.msgQueuePtr->Send(CConnectMsg_LateJoinConfirm(), ClientID_Server, true);
 }
 
 void CClientLayerConnectionHandler::RecieveConnectionConfirmation()
