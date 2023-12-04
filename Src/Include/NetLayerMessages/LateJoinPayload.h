@@ -22,7 +22,7 @@ struct SLateJoinObjectPayload : public INetSerializable
 	void Deserialize(INetMessageReader& serializer) override
 	{
 		serializer.Read(objectID);
-		serializer.Read(objectID);
+		serializer.Read(objectTypeID);
 	}
 
 	SNetObjectHandle* objHandlePtr;
