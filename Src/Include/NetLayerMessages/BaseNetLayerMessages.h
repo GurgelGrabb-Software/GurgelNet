@@ -21,4 +21,4 @@ template<EConnectMsg TConnectMsgType>
 using TConnectMsg = TNetLayerMsg_Base<ENetMsgCategory_Connection, TConnectMsgType>;
 
 template<EObjectMsg TObjMsgType>
-using TObjectMsg = TNetLayerMsg_Base<ENetMsgCategory_Connection, TObjMsgType>;
+using TObjectMsg = TNetLayerMsg_Base<ENetMsgCategory_Object, TObjMsgType>;
