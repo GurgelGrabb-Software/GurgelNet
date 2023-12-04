@@ -47,9 +47,10 @@ class TNetworkVariable : public CNetworkVariable
 {
 public:
 	TNetworkVariable() : CNetworkVariable() {}
-	TNetworkVariable(float syncRate) : CNetworkVariable(syncRate) {}
-	TNetworkVariable(const T& v) : CNetworkVariable(), _value(v) {}
-	TNetworkVariable(const T& v, float syncRate) : CNetworkVariable(syncRate), _value(v) {}
+	TNetworkVariable(ClientID ownerMask) : CNetworkVariable(ownerMask) {}
+	TNetworkVariable(ClientID ownerMask, float syncRate) : CNetworkVariable(ownerMask, syncRate) {}
+	TNetworkVariable(const T& v, ClientID ownerMask = ClientID_Server) : CNetworkVariable(ownerMask), _value(v) {}
+	TNetworkVariable(const T& v, float syncRate, ClientID ownerMask = ClientID_Server) : CNetworkVariable(ownerMask, syncRate), _value(v) {}
 
 	void BindOnValueChanged(std::function<void(const T&, const T&)> func) { _onValChange = func; }
 
