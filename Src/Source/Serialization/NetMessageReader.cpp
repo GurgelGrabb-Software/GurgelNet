@@ -1,5 +1,5 @@
-#include "NetMessageReader.h"
-#include "Src/Messages/NetMessage.h"
+#include "Src/Include/Serialization/NetMessageReader.h"
+#include "Src/Include/Messaging/NetMessage.h"
 #include "GurgelNet/Serialization/INetSerializable.h"
 
 #include <cstring>

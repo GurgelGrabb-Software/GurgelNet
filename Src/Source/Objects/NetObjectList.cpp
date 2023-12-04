@@ -84,7 +84,7 @@ void CNetObjectList::IncreaseSize(NetObjectID reserveID)
 	{
 		if (slotIdx != reserveID)
 		{
-			_freeIDs.push(slotIdx);
+			_freeIDs.push((NetObjectID)slotIdx);
 		}
 	}
 }

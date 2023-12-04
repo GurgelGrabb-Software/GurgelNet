@@ -85,7 +85,7 @@ void CServerLayerNetworkHandler::TrySendToConnection(SNetMessage& msg, int sendF
 
 	if (connectionTargeted && connectionTargetable)
 	{
-		_netContext.backend.interfacePtr->SendMessageToConnection(connection.hConnection, msg.pData, msg.nBytes, sendFlag, nullptr);
+		_netContext.backend.interfacePtr->SendMessageToConnection(connection.hConnection, msg.pData, (uint32)msg.nBytes, sendFlag, nullptr);
 	}
 }
 
