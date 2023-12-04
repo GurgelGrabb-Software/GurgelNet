@@ -40,4 +40,5 @@ private:
 
 	NetObjectID _objectID = NetObjectID_Unset;
 	bool _isServer = false;
+	bool _isClient = false;
 };

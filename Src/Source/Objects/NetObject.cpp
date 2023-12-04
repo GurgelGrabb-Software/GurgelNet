@@ -13,7 +13,7 @@ NetObjectID CNetObject::GetNetObjectID() const
 
 bool CNetObject::IsClient() const
 {
-	return !_isServer;
+	return _isClient;
 }
 
 bool CNetObject::IsServer() const
@@ -24,4 +24,5 @@ bool CNetObject::IsServer() const
 void CNetObject::OnNetworkSpawn(INetObjectInitializer& initializer)
 {
 	_isServer = initializer.IsServer();
+	_isClient = !_isServer;
 }
