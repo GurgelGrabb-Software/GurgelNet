@@ -40,6 +40,6 @@ void CSharedObjectHandler::UpdateNetVar(NetObjectID objectID, CNetworkVariable& 
 		syncMsg.objectID = objectID;
 		syncMsg.varPtr = &var;
 
-		_netContext.layer.msgQueuePtr->Send(syncMsg, ClientID_AllClients, true);
+		_netContext.layer.msgQueuePtr->Send(syncMsg, ClientID_AllExcept(_netContext.layer.layerNetworkID), true);
 	}
 }
