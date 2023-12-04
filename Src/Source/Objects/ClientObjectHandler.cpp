@@ -100,6 +100,7 @@ void CClientObjectHandler::ProcessLateJoinPayload(CLateJoinPayload& payload)
 		payload.DeserializeNextObject(currentObjectPayload);
 
 		CNetObject* objPtr = ObjectFactory()->MakeObject(currentObjectPayload.objectTypeID);
+		ObjectFactory()->PreSpawn(*objPtr);
 		_activeObjects.InsertWithID(objPtr, currentObjectPayload.objectID);
 
 		SNetObjectHandle& spawnedHandle = _activeObjects.GetObject(currentObjectPayload.objectID);
@@ -109,6 +110,8 @@ void CClientObjectHandler::ProcessLateJoinPayload(CLateJoinPayload& payload)
 		objPtr->OnNetworkSpawn(initializer);
 
 		payload.PostSpawnRead(spawnedHandle);
+
+		ObjectFactory()->PostSpawn(*objPtr);
 	}
 }
 
