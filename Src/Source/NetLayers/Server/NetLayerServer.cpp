@@ -1,6 +1,7 @@
 #include "Src/Include/NetLayers/Server/NetLayerServer.h"
 
 #include "Src/Include/NetLayerMessages/ServerConnectionMessageProcessor.h"
+#include "Src/Include/NetLayerMessages/ServerObjectMessageProcessor.h"
 
 #include <steam/steamnetworkingsockets.h>
 #include <steam/isteamnetworkingutils.h>
@@ -30,6 +31,9 @@ void CNetLayerServer::Start()
 
 	CServerConnectMessageProcessor* connectProcessor = new CServerConnectMessageProcessor(*this, _netContext);
 	_netHandler.AddProcessor(*connectProcessor);
+
+	CServerObjectMessageProcessor* objectProcessor = new CServerObjectMessageProcessor(_objectHandler);
+	_netHandler.AddProcessor(*objectProcessor);
 
 	SteamNetworkingIPAddr connectionIP;
 	connectionIP.Clear();
