@@ -21,8 +21,12 @@ void CServerObjectHandler::SpawnObject(CNetObject& object)
 	NetObjectID assignedID = _objects.Insert(&object);
 	SNetObjectHandle& objHandle = _objects.GetObject(assignedID);
 
+	ObjectFactory()->PreSpawn(object);
+
 	CNetObjectInitializer initializer(objHandle, true);
 	object.OnNetworkSpawn(initializer);
+
+	ObjectFactory()->PostSpawn(object);
 
 	CObjectMsg_Spawn spawnMsg;
 	spawnMsg.objectHandle = &objHandle;
@@ -37,10 +41,13 @@ void CServerObjectHandler::ProcessObjectSpawnRequest(ClientID requestingClient, 
 	NetObjectID assignedID = _objects.Insert(objectPtr);
 	SNetObjectHandle& objHandle = _objects.GetObject(assignedID);
 
+	ObjectFactory()->PreSpawn(*objectPtr);
 	requestMsg.ReadPreSpawnData(objHandle);
 
 	CNetObjectInitializer initializer(objHandle, true);
 	objectPtr->OnNetworkSpawn(initializer);
+
+	ObjectFactory()->PostSpawn(*objectPtr);
 
 	CObjectMsg_SpawnConfirm confirmMsg;
 	confirmMsg.pendingID = requestMsg.pendingSpawnID;

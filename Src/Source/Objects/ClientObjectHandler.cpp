@@ -26,6 +26,8 @@ void CClientObjectHandler::SpawnObject(CNetObject& object)
 	spawnRequestMsg.objectHandle = &_pendingObjects.GetObject(pendingID);
 
 	_netContext.layer.msgQueuePtr->Send(spawnRequestMsg, ClientID_Server, true);
+
+	ObjectFactory()->PreSpawn(object);
 }
 
 // ------------------------------------------------------------
@@ -46,6 +48,8 @@ void CClientObjectHandler::ObjectSpawnConfirmed(CObjectMsg_SpawnConfirm& confirm
 	// Run spawn
 	CNetObjectInitializer initializer(activeHandle, false);
 	activeHandle.objectPtr->OnNetworkSpawn(initializer);
+
+	ObjectFactory()->PostSpawn(*objectPtr);
 }
 
 // ------------------------------------------------------------
@@ -59,6 +63,8 @@ void CClientObjectHandler::ProcessObjectSpawn(CObjectMsg_Spawn& spawnMsg)
 	CNetObject* const object = ObjectFactory()->MakeObject(objectTypeID);
 	_activeObjects.InsertWithID(object, objectID);
 
+	ObjectFactory()->PreSpawn(*object);
+
 	// Read the object data (initialization data)
 	SNetObjectHandle& activeHandle = _activeObjects.GetObject(objectID);
 	spawnMsg.ReadPreSpawnData(activeHandle);
@@ -69,6 +75,8 @@ void CClientObjectHandler::ProcessObjectSpawn(CObjectMsg_Spawn& spawnMsg)
 
 	// Read post spawn data (initial net var values)
 	spawnMsg.ReadPostSpawnData(activeHandle);
+
+	ObjectFactory()->PostSpawn(*object);
 }
 
 // ------------------------------------------------------------
