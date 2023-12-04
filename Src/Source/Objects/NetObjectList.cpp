@@ -61,7 +61,8 @@ void CNetObjectList::ForEach(std::function<void(SNetObjectHandle&)> forEach)
 {
 	for (auto& handle : _objects)
 	{
-		forEach(handle);
+		if(handle.objectPtr != nullptr)
+			forEach(handle);
 	}
 }
 
