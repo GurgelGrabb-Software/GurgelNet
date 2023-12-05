@@ -31,5 +31,5 @@ void CNetObjectInitializer::RegisterNetVar(CNetworkVariable& regVar)
 		regVar.SetOwner(_ownerMask);
 	}
 
-	_objectHandle.netVariables.RegisterVariable(regVar, ClientMask_Contains(_ownerMask, _localNetID));
+	_objectHandle.netVariables.RegisterVariable(regVar, ClientMask_Contains(regVar.GetOwnerMask(), _localNetID));
 }
