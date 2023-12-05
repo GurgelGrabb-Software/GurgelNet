@@ -41,5 +41,7 @@ void CSharedObjectHandler::UpdateNetVar(NetObjectID objectID, CNetworkVariable& 
 		syncMsg.varPtr = &var;
 
 		_netContext.layer.msgQueuePtr->Send(syncMsg, ClientID_AllExcept(_netContext.layer.layerNetworkID), true);
+
+		var.MarkSynced();
 	}
 }
