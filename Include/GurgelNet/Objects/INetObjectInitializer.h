@@ -1,6 +1,21 @@
+// GurgelNet - 2023
+// ------------------------------------------------------------
+// INetObjectInitializer.h
+// ------------------------------------------------------------
+// Interface that will be passed to Network Object 
+// OnNetworkSpawn
+// 
+// Allows you to initialize all your network data when the net-
+// layer has been set up for the given object
+// ------------------------------------------------------------
+
 #pragma once
 
+// ------------------------------------------------------------
+
 class CNetworkVariable;
+
+// ------------------------------------------------------------
 
 class INetObjectInitializer
 {
@@ -10,3 +25,7 @@ public:
 	virtual ClientID GetOwnerMask() const = 0;
 	virtual void RegisterNetVar(CNetworkVariable& regVar) = 0;
 };
+
+// ------------------------------------------------------------
+// ------------------------------------------------------------
+// ------------------------------------------------------------

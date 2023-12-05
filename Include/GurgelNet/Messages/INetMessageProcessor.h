@@ -10,11 +10,16 @@
 // ------------------------------------------------------------
 
 #pragma once
+
 #include <cstdint>
+
+// ------------------------------------------------------------
 
 struct SNetMessageHeader;
 class INetMessageReader;
 class INetLayer;
+
+// ------------------------------------------------------------
 
 class INetMessageProcessor
 {
@@ -34,5 +39,8 @@ public:
 	/// <param name="reader">Reader initialised with the message (header already read)</param>
 	/// <param name="messageQueue">Message queue provided in case a response is to be sent</param>
 	virtual void Process(const SNetMessageHeader& header, INetMessageReader& reader, INetLayer& netLayer) = 0;
-	
 };
+
+// ------------------------------------------------------------
+// ------------------------------------------------------------
+// ------------------------------------------------------------

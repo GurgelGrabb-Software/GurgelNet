@@ -22,17 +22,17 @@
 
 #include <cstdint>
 
+// ------------------------------------------------------------
+
 class INetMessageProcessor;
 class INetMessageQueue;
+
+// ------------------------------------------------------------
 
 class NETWORK_API INetLayer
 {
 public:
 	virtual ~INetLayer() = default;
-
-	// ----------------------------------------------------------------------
-	// Information Getters
-	// ----------------------------------------------------------------------
 
 	/// <summary>
 	/// Get the current state of this Layer
@@ -52,10 +52,6 @@ public:
 	/// <param name="processor">Pointer to the processor you wish to register. The NetLayer assumes ownership of this pointer.</param>
 	virtual void RegisterProcessor(INetMessageProcessor* processor) = 0;
 
-	// ----------------------------------------------------------------------
-	// Networking
-	// ----------------------------------------------------------------------
-
 	/// <summary>
 	/// Get the message queue used to send messages from this layer
 	/// </summary>
@@ -69,3 +65,7 @@ public:
 	/// <param name="owner">The owner of this object (defaults to server)</param>
 	virtual void SpawnNetworkObject(CNetObject& spawn, ENetObjectOwner owner = ENetObjectOwner::Server) = 0;
 };
+
+// ------------------------------------------------------------
+// ------------------------------------------------------------
+// ------------------------------------------------------------

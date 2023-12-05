@@ -9,8 +9,11 @@
 // ------------------------------------------------------------
 
 #pragma once
+
 #include "GurgelNet/Serialization/INetSerializable.h"
 #include <cstdint>
+
+// ------------------------------------------------------------
 
 class INetMessage : public INetSerializable
 {
@@ -18,3 +21,7 @@ public:
 	virtual uint8_t CategoryID() const = 0;
 	virtual uint8_t SubTypeID() const = 0;
 };
+
+// ------------------------------------------------------------
+// ------------------------------------------------------------
+// ------------------------------------------------------------

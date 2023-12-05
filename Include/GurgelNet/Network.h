@@ -6,12 +6,15 @@
 // ------------------------------------------------------------
 
 #pragma once
+
 #include "GurgelNet/NetLib.h"
 #include "GurgelNet/INetLayer.h"
 #include "GurgelNet/Core/LibrarySettings.h"
 #include "GurgelNet/Core/NetLogging.h"
 #include "GurgelNet/Core/NetTypes.h"
 #include "GurgelNet/Core/LayerSettings.h"
+
+// ------------------------------------------------------------
 
 extern "C"
 {
@@ -71,3 +74,6 @@ extern "C"
 	NETWORK_API bool GurgelNet_CreateHost(SNetLayerSettings& serverSettings, SNetLayerSettings& clientSettings, HNetLayer& outClientHandle, HNetLayer& outServerHandle);
 }
 
+// ------------------------------------------------------------
+// ------------------------------------------------------------
+// ------------------------------------------------------------

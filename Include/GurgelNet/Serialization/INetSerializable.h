@@ -10,9 +10,13 @@
 
 #pragma once
 
+// ------------------------------------------------------------
+
 class INetMessageSerializer;
 class INetMessageReader;
 class INetMessageWriter;
+
+// ------------------------------------------------------------
 
 class INetSerializable
 {
@@ -30,3 +34,6 @@ public:
 	virtual void Deserialize(INetMessageReader& serializer) = 0;
 };
 
+// ------------------------------------------------------------
+// ------------------------------------------------------------
+// ------------------------------------------------------------

@@ -1,4 +1,15 @@
+// GurgelNet - 2023
+// ------------------------------------------------------------
+// NetworkVariable.h
+// ------------------------------------------------------------
+// Variables that are owned by and synced via the network layer
+// 
+// TNetworkVariable<T, reliable> is provided as a highly 
+// recommended convenience
+// ------------------------------------------------------------
+
 #pragma once
+
 #include "GurgelNet/NetLib.h"
 #include "GurgelNet/Core/NetTypes.h"
 #include "GurgelNet/Serialization/INetSerializable.h"
@@ -7,9 +18,15 @@
 #include <functional>
 #include <chrono>
 
+// ------------------------------------------------------------
+
 class CNetObject;
 
-class CNetworkVariable : public INetSerializable
+// ------------------------------------------------------------
+// Core Type
+// ------------------------------------------------------------
+
+class NETWORK_API CNetworkVariable : public INetSerializable
 {
 public:
 	CNetworkVariable();
@@ -45,7 +62,9 @@ protected:
 	bool _dirty;
 };
 
+// ------------------------------------------------------------
 // Template utility
+// ------------------------------------------------------------
 
 template<typename T, bool TReliable = false>
 class TNetworkVariable : public CNetworkVariable
@@ -77,3 +96,7 @@ private:
 	T _value;
 	std::function<void(const T&, const T&)> _onValChange;
 };
+
+// ------------------------------------------------------------
+// ------------------------------------------------------------
+// ------------------------------------------------------------

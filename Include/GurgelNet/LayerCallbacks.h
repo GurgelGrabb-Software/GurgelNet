@@ -9,8 +9,11 @@
 // ------------------------------------------------------------
 
 #pragma once
+
 #include "GurgelNet/Core/NetTypes.h"
 #include "GurgelNet/Serialization/INetSerializer.h"
+
+// ------------------------------------------------------------
 
 typedef void(*FBasicCallback)();
 typedef void(*FClientConnection)(ClientID);
@@ -18,6 +21,7 @@ typedef void(*FNetWrite)(INetMessageWriter&);
 typedef void(*FNetRead)(INetMessageReader&);
 typedef bool(*FApproveClient)(INetMessageReader&);
 
+// ------------------------------------------------------------
 
 enum ENetLayerCallback
 {
@@ -35,3 +39,7 @@ enum ENetLayerCallback
 
 	ENetLayerCallback_Count,
 };
+
+// ------------------------------------------------------------
+// ------------------------------------------------------------
+// ------------------------------------------------------------

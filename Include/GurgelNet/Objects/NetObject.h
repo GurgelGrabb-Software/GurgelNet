@@ -1,12 +1,25 @@
+// GurgelNet - 2023
+// ------------------------------------------------------------
+// NetObject.h
+// ------------------------------------------------------------
+// Base class to use for your own object types to allow them
+// to integrate with GurgelNet
+// ------------------------------------------------------------
+
 #pragma once
+
 #include "GurgelNet/NetLib.h"
 #include "GurgelNet/Core/NetTypes.h"
 
 #include "GurgelNet/Objects/INetObjectInitializer.h"
 
+// ------------------------------------------------------------
+
 class INetMessageWriter;
 class INetMessageReader;
 class CNetworkVariable;
+
+// ------------------------------------------------------------
 
 class NETWORK_API CNetObject
 {
@@ -46,3 +59,7 @@ private:
 	bool _isServer = false;
 	bool _isClient = false;
 };
+
+// ------------------------------------------------------------
+// ------------------------------------------------------------
+// ------------------------------------------------------------

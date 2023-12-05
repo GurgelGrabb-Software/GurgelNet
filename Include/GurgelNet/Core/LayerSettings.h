@@ -1,4 +1,11 @@
+// GurgelNet - 2023
+// ------------------------------------------------------------
+// LayerSettings.h 
+// ------------------------------------------------------------
+// ------------------------------------------------------------
+
 #pragma once
+
 #include <string>
 #include "GurgelNet/LayerCallbacks.h"
 #include "GurgelNet/Objects/INetObjectFactory.h"

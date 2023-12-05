@@ -7,6 +7,8 @@
 
 #pragma once
 
+// ------------------------------------------------------------
+
 enum EConnectState
 {
 	EConnectState_Inactive,				// Not yet started
@@ -14,3 +16,7 @@ enum EConnectState
 	EConnectState_FinalizingConnection,	// Connection established but still in handshake phase
 	EConnectState_Connected,			// Connected to the networking
 };
+
+// ------------------------------------------------------------
+// ------------------------------------------------------------
+// ------------------------------------------------------------

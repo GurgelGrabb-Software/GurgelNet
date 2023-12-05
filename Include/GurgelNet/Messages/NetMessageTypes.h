@@ -6,8 +6,11 @@
 // ------------------------------------------------------------
 
 #pragma once
+
 #include "GurgelNet/NetLib.h"
 #include <cstdint>
+
+// ------------------------------------------------------------
 
 enum ENetMsgCategory : uint8_t
 {
@@ -16,3 +19,7 @@ enum ENetMsgCategory : uint8_t
 
 	ENetMsgCategory_Custom,			// This should be your start when creating custom message types
 };
+
+// ------------------------------------------------------------
+// ------------------------------------------------------------
+// ------------------------------------------------------------

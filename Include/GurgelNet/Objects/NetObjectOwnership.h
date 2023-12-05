@@ -9,8 +9,11 @@
 // ------------------------------------------------------------
 
 #pragma once
+
 #include <cstdint>
 #include "GurgelNet/Core/NetTypes.h"
+
+// ------------------------------------------------------------
 
 enum class ENetObjectOwner : uint8_t
 {
@@ -19,6 +22,8 @@ enum class ENetObjectOwner : uint8_t
 	Clients,	// Anyone but server may write to network variables, Object will remain alive until server shutdown or manual despawn
 	Shared,		// Anyone may write to network variables, Object will remain alive until server shutdown or manual despawn
 };
+
+// ------------------------------------------------------------
 
 static ClientID NetObjectOwnerMask(ENetObjectOwner ownerEnum, ClientID localID)
 {
@@ -31,3 +36,7 @@ static ClientID NetObjectOwnerMask(ENetObjectOwner ownerEnum, ClientID localID)
 	}
 	return ClientID_None;
 }
+
+// ------------------------------------------------------------
+// ------------------------------------------------------------
+// ------------------------------------------------------------

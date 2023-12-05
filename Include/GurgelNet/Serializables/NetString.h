@@ -1,7 +1,18 @@
+// GurgelNet - 2023
+// ------------------------------------------------------------
+// NetString.h 
+// ------------------------------------------------------------
+// GurgelNet type to allow serializing strings of arbitrary 
+// length
+// ------------------------------------------------------------
+
 #pragma once
+
 #include "GurgelNet/NetLib.h"
 #include "GurgelNet/Serialization/INetSerializable.h"
 #include <string>
+
+// ------------------------------------------------------------
 
 class NETWORK_API CNetString : public INetSerializable
 {
@@ -26,3 +37,7 @@ private:
 	unsigned short _length;
 	char* _characterArray;
 };
+
+// ------------------------------------------------------------
+// ------------------------------------------------------------
+// ------------------------------------------------------------
