@@ -5,6 +5,8 @@
 #include "Src/Include/Objects/NetObjectList.h"
 #include "Src/Include/NetLayerMessages/ObjectMessages.h"
 
+#include <map>
+
 // ------------------------------------------------------------
 
 class CLateJoinPayload;
@@ -16,7 +18,7 @@ class CServerObjectHandler : public CSharedObjectHandler
 public:
 	CServerObjectHandler(SNetLayerContext& netContext);
 
-	void SpawnObject(CNetObject& object) override;
+	void SpawnObject(CNetObject& object, ENetObjectOwner owner) override;
 
 	void ProcessObjectSpawnRequest(ClientID requestingClient, CObjectMsg_SpawnRequest& requestMsg);
 	void ProcessNetVarSync(CObjectMsg_NetVarSync& syncMsg);
@@ -27,6 +29,7 @@ public:
 
 private:
 	CNetObjectList _objects;
+	std::map<ClientID, std::vector<NetObjectID>> _clientOwnedObjectIDs;
 };
 
 // ------------------------------------------------------------

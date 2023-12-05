@@ -15,6 +15,7 @@ struct SLateJoinObjectPayload : public INetSerializable
 	{
 		serializer.Write(objHandlePtr->objectPtr->GetNetObjectID());
 		serializer.Write(objHandlePtr->objectPtr->GetNetTypeID());
+		serializer.Write(objHandlePtr->objectPtr->GetOwnerMask());
 		objHandlePtr->objectPtr->WriteSpawnData(serializer);
 		objHandlePtr->netVariables.WriteNetVarStates(serializer);
 	}
@@ -23,11 +24,13 @@ struct SLateJoinObjectPayload : public INetSerializable
 	{
 		serializer.Read(objectID);
 		serializer.Read(objectTypeID);
+		serializer.Read(ownerMask);
 	}
 
-	SNetObjectHandle* objHandlePtr;
-	NetObjectID objectID;
-	NetTypeID objectTypeID;
+	SNetObjectHandle* objHandlePtr = nullptr;
+	NetObjectID objectID = NetObjectID_Unset;
+	NetTypeID objectTypeID = NetTypeID_Unset;
+	ClientID ownerMask = ClientID_None;
 };
 
 class CLateJoinPayload : public INetSerializable
@@ -74,7 +77,7 @@ public:
 	}
 
 private:
-	INetMessageReader* _reader;
+	INetMessageReader* _reader = nullptr;
 	std::vector<SLateJoinObjectPayload> allObjects;
 
 };

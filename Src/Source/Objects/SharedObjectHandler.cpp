@@ -33,7 +33,7 @@ void CSharedObjectHandler::UpdateNetObject(SNetObjectHandle& handle)
 
 void CSharedObjectHandler::UpdateNetVar(NetObjectID objectID, CNetworkVariable& var)
 {
-	if (var.IsOwner(_netContext.layer.layerNetworkID) &&
+	if (var.IsOwner() &&
 		var.ShouldSync())
 	{
 		CObjectMsg_NetVarSync syncMsg;

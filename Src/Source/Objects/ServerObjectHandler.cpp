@@ -16,14 +16,14 @@ CServerObjectHandler::CServerObjectHandler(SNetLayerContext& netContext)
 
 // ------------------------------------------------------------
 
-void CServerObjectHandler::SpawnObject(CNetObject& object)
+void CServerObjectHandler::SpawnObject(CNetObject& object, ENetObjectOwner owner)
 {
 	NetObjectID assignedID = _objects.Insert(&object);
 	SNetObjectHandle& objHandle = _objects.GetObject(assignedID);
 
 	ObjectFactory()->PreSpawn(object);
 
-	CNetObjectInitializer initializer(objHandle, true);
+	CNetObjectInitializer initializer(ClientID_Server, objHandle, NetObjectOwnerMask(owner, ClientID_Server));
 	object.OnNetworkSpawn(initializer);
 
 	ObjectFactory()->PostSpawn(object);
@@ -44,10 +44,16 @@ void CServerObjectHandler::ProcessObjectSpawnRequest(ClientID requestingClient, 
 	ObjectFactory()->PreSpawn(*objectPtr);
 	requestMsg.ReadPreSpawnData(objHandle);
 
-	CNetObjectInitializer initializer(objHandle, true);
+	CNetObjectInitializer initializer(ClientID_Server, objHandle, requestMsg.ownerID);
 	objectPtr->OnNetworkSpawn(initializer);
 
 	ObjectFactory()->PostSpawn(*objectPtr);
+
+	// Add this as an object owned by this specific client in the case that its owned by the requesting client
+	if (requestMsg.ownerID != ClientID_Server && requestMsg.ownerID != ClientID_AllClients && requestMsg.ownerID != ClientID_All)
+	{
+		_clientOwnedObjectIDs[requestingClient].push_back(assignedID);
+	}
 
 	CObjectMsg_SpawnConfirm confirmMsg;
 	confirmMsg.pendingID = requestMsg.pendingSpawnID;

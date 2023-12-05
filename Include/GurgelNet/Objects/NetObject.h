@@ -35,10 +35,14 @@ public:
 	virtual ~CNetObject() = default;
 	NetObjectID GetNetObjectID() const;
 
+	ClientID GetOwnerMask() const;
+	bool IsOwner(ClientID id) const;
+
 private:
 	void SetNetObjectID(NetObjectID id);
 
 	NetObjectID _objectID = NetObjectID_Unset;
+	ClientID _objectOwnerMask;
 	bool _isServer = false;
 	bool _isClient = false;
 };

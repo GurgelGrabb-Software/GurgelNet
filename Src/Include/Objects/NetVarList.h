@@ -17,7 +17,7 @@ public:
 	CNetworkVariable* GetVariable(NetVarID id);
 	const CNetworkVariable* GetVariable(NetVarID id) const;
 
-	void RegisterVariable(CNetworkVariable& var);
+	void RegisterVariable(CNetworkVariable& var, bool asOwner);
 
 	void WriteNetVarStates(INetMessageWriter& serializer);
 	void ReadNetVarStates(INetMessageReader& serializer);

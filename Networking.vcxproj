@@ -164,6 +164,7 @@
     <ClInclude Include="Include\GurgelNet\Objects\INetObjectFactory.h" />
     <ClInclude Include="Include\GurgelNet\Objects\INetObjectInitializer.h" />
     <ClInclude Include="Include\GurgelNet\Objects\NetObject.h" />
+    <ClInclude Include="Include\GurgelNet\Objects\NetObjectOwnership.h" />
     <ClInclude Include="Include\GurgelNet\Objects\NetworkVariable.h" />
     <ClInclude Include="Include\GurgelNet\Serializables\NetString.h" />
     <ClInclude Include="Include\GurgelNet\Serialization\INetSerializable.h" />

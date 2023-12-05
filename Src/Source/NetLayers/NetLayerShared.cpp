@@ -51,9 +51,9 @@ INetMessageQueue& CNetLayerShared::MessageQueue()
 
 // ------------------------------------------------------------
 
-void CNetLayerShared::SpawnNetworkObject(CNetObject& spawn)
+void CNetLayerShared::SpawnNetworkObject(CNetObject& spawn, ENetObjectOwner owner)
 {
-	_objectHandler.SpawnObject(spawn);
+	_objectHandler.SpawnObject(spawn, owner);
 }
 
 // ------------------------------------------------------------

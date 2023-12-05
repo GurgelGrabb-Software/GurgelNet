@@ -5,6 +5,8 @@
 #include "Src/Include/Objects/NetObjectList.h"
 #include "Src/Include/NetLayerMessages/ObjectMessages.h"
 
+#include "GurgelNet/Objects/NetObjectOwnership.h"
+
 class CLateJoinPayload;
 
 class CClientObjectHandler : public CSharedObjectHandler
@@ -12,7 +14,7 @@ class CClientObjectHandler : public CSharedObjectHandler
 public:
 	CClientObjectHandler(SNetLayerContext& netContext);
 
-	void SpawnObject(CNetObject& object) override;
+	void SpawnObject(CNetObject& object, ENetObjectOwner owner) override;
 	
 	void ObjectSpawnConfirmed(CObjectMsg_SpawnConfirm& confirmMsg);
 	void ProcessObjectSpawn(CObjectMsg_Spawn& spawnMsg);

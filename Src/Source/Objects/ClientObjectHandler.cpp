@@ -18,12 +18,13 @@ CClientObjectHandler::CClientObjectHandler(SNetLayerContext& netContext)
 
 // ------------------------------------------------------------
 
-void CClientObjectHandler::SpawnObject(CNetObject& object)
+void CClientObjectHandler::SpawnObject(CNetObject& object, ENetObjectOwner owner)
 {
 	NetObjectID pendingID = _pendingObjects.Insert(&object);
 
 	CObjectMsg_SpawnRequest spawnRequestMsg;
 	spawnRequestMsg.objectHandle = &_pendingObjects.GetObject(pendingID);
+	spawnRequestMsg.ownerID = NetObjectOwnerMask(owner, _netContext.layer.layerNetworkID);
 
 	_netContext.layer.msgQueuePtr->Send(spawnRequestMsg, ClientID_Server, true);
 
@@ -46,7 +47,7 @@ void CClientObjectHandler::ObjectSpawnConfirmed(CObjectMsg_SpawnConfirm& confirm
 	SNetObjectHandle& activeHandle = _activeObjects.GetObject(confirmMsg.confirmedID);
 
 	// Run spawn
-	CNetObjectInitializer initializer(activeHandle, false);
+	CNetObjectInitializer initializer(_netContext.layer.layerNetworkID, activeHandle, confirmMsg.ownerMask);
 	activeHandle.objectPtr->OnNetworkSpawn(initializer);
 
 	ObjectFactory()->PostSpawn(*objectPtr);
@@ -70,7 +71,7 @@ void CClientObjectHandler::ProcessObjectSpawn(CObjectMsg_Spawn& spawnMsg)
 	spawnMsg.ReadPreSpawnData(activeHandle);
 
 	// Run the spawn
-	CNetObjectInitializer initializer(activeHandle, false);
+	CNetObjectInitializer initializer(_netContext.layer.layerNetworkID, activeHandle, spawnMsg.ownerID);
 	object->OnNetworkSpawn(initializer);
 
 	// Read post spawn data (initial net var values)
@@ -106,7 +107,7 @@ void CClientObjectHandler::ProcessLateJoinPayload(CLateJoinPayload& payload)
 		SNetObjectHandle& spawnedHandle = _activeObjects.GetObject(currentObjectPayload.objectID);
 		payload.PreSpawnRead(objPtr);
 
-		CNetObjectInitializer initializer(spawnedHandle, false);
+		CNetObjectInitializer initializer(_netContext.layer.layerNetworkID, spawnedHandle, currentObjectPayload.ownerMask);
 		objPtr->OnNetworkSpawn(initializer);
 
 		payload.PostSpawnRead(spawnedHandle);

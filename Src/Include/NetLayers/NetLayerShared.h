@@ -29,7 +29,7 @@ public:
 	void RegisterProcessor(INetMessageProcessor* processor) override;
 	INetMessageQueue& MessageQueue() override;
 
-	virtual void SpawnNetworkObject(CNetObject& spawn);
+	virtual void SpawnNetworkObject(CNetObject& spawn, ENetObjectOwner owner);
 
 	// ------------------------------------------------------------
 	// Execution Flow

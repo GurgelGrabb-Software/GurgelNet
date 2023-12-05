@@ -17,21 +17,26 @@ public:
 	CNetworkVariable(ClientID ownerMask, float syncRate);
 	virtual ~CNetworkVariable() = default;
 	
-	void Initialize(NetVarID id);
+	void Initialize(NetVarID id, bool asOwner);
 	bool IsDirty() const;
 	bool ShouldSync() const;
 	virtual bool SyncReliable() const = 0;
 	void MarkSynced();
 
-	bool IsOwner(ClientID id) const;
+	void SetOwner(ClientID ownerMask);
+	ClientID GetOwnerMask() const;
+	bool IsOwner() const;
 	NetVarID GetVariableID() const;
 
 	virtual void Serialize(INetMessageWriter& serializer) const override;
 	virtual void Deserialize(INetMessageReader& serializer) override;
+protected:
+	bool TryWrite();
 
 private:
 	NetVarID _netVarID;
 	ClientID _ownerMask;
+	bool _isOwner;
 
 	std::chrono::high_resolution_clock::time_point _lastSync;
 	float _syncRate;
@@ -48,9 +53,9 @@ class TNetworkVariable : public CNetworkVariable
 public:
 	TNetworkVariable() : CNetworkVariable() {}
 	TNetworkVariable(ClientID ownerMask) : CNetworkVariable(ownerMask) {}
-	TNetworkVariable(ClientID ownerMask, float syncRate) : CNetworkVariable(ownerMask, syncRate) {}
-	TNetworkVariable(const T& v, ClientID ownerMask = ClientID_Server) : CNetworkVariable(ownerMask), _value(v) {}
-	TNetworkVariable(const T& v, float syncRate, ClientID ownerMask = ClientID_Server) : CNetworkVariable(ownerMask, syncRate), _value(v) {}
+	TNetworkVariable(float syncRate, ClientID ownerMask = ClientID_None) : CNetworkVariable(ownerMask, syncRate) {}
+	TNetworkVariable(const T& v, ClientID ownerMask = ClientID_None) : CNetworkVariable(ownerMask), _value(v) {}
+	TNetworkVariable(const T& v, float syncRate, ClientID ownerMask = ClientID_None) : CNetworkVariable(ownerMask, syncRate), _value(v) {}
 
 	void BindOnValueChanged(std::function<void(const T&, const T&)> func) { _onValChange = func; }
 
@@ -66,7 +71,7 @@ public:
 		}
 	}
 
-	void operator=(const T& rhs) { _value = rhs; _dirty = true; }
+	void operator=(const T& rhs) { if (TryWrite()) { _value = rhs; _dirty = true; } }
 	const T& Value() const { return _value; }
 private:
 	T _value;

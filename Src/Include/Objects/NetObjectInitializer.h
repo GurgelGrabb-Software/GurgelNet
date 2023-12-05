@@ -7,12 +7,17 @@ struct SNetObjectHandle;
 class CNetObjectInitializer : public INetObjectInitializer
 {
 public:
-	CNetObjectInitializer(SNetObjectHandle& handle, bool isServer);
+	CNetObjectInitializer(ClientID localID, SNetObjectHandle& handle, ClientID ownerMask);
 
-	bool IsServer() const override { return _isServer; }
+	bool IsServer() const override;
+	ClientID GetLocalNetID() const override;
+	ClientID GetOwnerMask() const override;
+
 
 	void RegisterNetVar(CNetworkVariable& regVar) override;
 private:
 	SNetObjectHandle& _objectHandle;
+	ClientID _localNetID;
+	ClientID _ownerMask;
 	bool _isServer;
 };

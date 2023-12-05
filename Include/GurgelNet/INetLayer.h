@@ -16,7 +16,7 @@
 #include "GurgelNet/Core/NetTypes.h"
 
 #include "GurgelNet/Objects/NetObject.h"
-#include "GurgelNet/Objects/INetObjectFactory.h"
+#include "GurgelNet/Objects/NetObjectOwnership.h"
 
 #include "GurgelNet/Messages/INetMessage.h"
 
@@ -63,8 +63,9 @@ public:
 	virtual INetMessageQueue& MessageQueue() = 0;
 
 	/// <summary>
-	/// Spawn an object on the network.
+	/// Spawn the provided object on the network
 	/// </summary>
 	/// <param name="spawn">The object to spawn</param>
-	virtual void SpawnNetworkObject(CNetObject& spawn) = 0;
+	/// <param name="owner">The owner of this object (defaults to server)</param>
+	virtual void SpawnNetworkObject(CNetObject& spawn, ENetObjectOwner owner = ENetObjectOwner::Server) = 0;
 };

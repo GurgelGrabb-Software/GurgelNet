@@ -34,11 +34,11 @@ const CNetworkVariable* CNetVarList::GetVariable(NetVarID id) const
 	return _variables[id];
 }
 
-void CNetVarList::RegisterVariable(CNetworkVariable& var)
+void CNetVarList::RegisterVariable(CNetworkVariable& var, bool asOwner)
 {
 	const NetVarID id = (NetVarID)_variables.size();
 	_variables.push_back(&var);
-	var.Initialize(id);
+	var.Initialize(id, asOwner);
 }
 
 void CNetVarList::WriteNetVarStates(INetMessageWriter& serializer)
