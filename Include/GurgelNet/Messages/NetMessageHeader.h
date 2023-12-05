@@ -7,10 +7,13 @@
 // ------------------------------------------------------------
 
 #pragma once
+
 #include "GurgelNet/NetLib.h"
 #include "GurgelNet/Core/NetTypes.h"
 
 #include <cstdint>
+
+// ------------------------------------------------------------
 
 struct NETWORK_API SNetMessageHeader
 {
@@ -30,3 +33,7 @@ struct NETWORK_API SNetMessageHeader
 	// This can be used by the processor to make additional decisions on how to process the message
 	uint8_t subTypeID;
 };
+
+// ------------------------------------------------------------
+// ------------------------------------------------------------
+// ------------------------------------------------------------

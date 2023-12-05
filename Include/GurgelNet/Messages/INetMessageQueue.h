@@ -10,9 +10,14 @@
 // ------------------------------------------------------------
 
 #pragma once
+
 #include "GurgelNet/Core/NetTypes.h"
 
+// ------------------------------------------------------------
+
 class INetMessage;
+
+// ------------------------------------------------------------
 
 class INetMessageQueue
 {
@@ -33,3 +38,7 @@ public:
 	/// <param name="reliable">Should this message be reliable?</param>
 	virtual void Send(const INetMessage& customMessage, ClientID targetMask, bool reliable) = 0;
 };
+
+// ------------------------------------------------------------
+// ------------------------------------------------------------
+// ------------------------------------------------------------
