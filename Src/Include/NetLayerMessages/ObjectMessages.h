@@ -127,3 +127,33 @@ public:
 private:
 	INetMessageReader* _reader;
 };
+
+class CObjectMsg_NetFuncCall : public TObjectMsg<EObjectMsg_NetFuncCall>
+{
+public:
+	NetObjectID objectID;
+	NetFuncID functionID;
+	INetMessageWriter* customWriter;
+
+	void Serialize(INetMessageWriter& serializer) const override
+	{
+		serializer.Write(objectID);
+		serializer.Write(functionID);
+		serializer.Write(customWriter->RawData(), customWriter->Size());
+	}
+
+	void Deserialize(INetMessageReader& serializer) override
+	{
+		_readerPtr = &serializer;
+		serializer.Read(objectID);
+		serializer.Read(functionID);
+	}
+
+	INetMessageReader& GetReader()
+	{
+		return *_readerPtr;
+	}
+
+private:
+	INetMessageReader* _readerPtr;
+};

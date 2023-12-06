@@ -30,6 +30,7 @@ void CServerObjectMessageProcessor::Process(const SNetMessageHeader& header, INe
 	{
 	case EObjectMsg_SpawnRequest: ProcessSpawnRequest(header, reader); break;
 	case EObjectMsg_NetVarSync: ProcessNetVarSync(reader); break;
+	case EObjectMsg_NetFuncCall: ProcessNetFuncCall(reader); break;
 	}
 }
 
@@ -49,6 +50,15 @@ void CServerObjectMessageProcessor::ProcessNetVarSync(INetMessageReader& reader)
 	CObjectMsg_NetVarSync syncMsg;
 	reader.Read(syncMsg);
 	_objectHandler.ProcessNetVarSync(syncMsg);
+}
+
+// ------------------------------------------------------------
+
+void CServerObjectMessageProcessor::ProcessNetFuncCall(INetMessageReader& reader)
+{
+	CObjectMsg_NetFuncCall funcCall;
+	reader.Read(funcCall);
+	_objectHandler.ProcessNetFuncCall(funcCall);
 }
 
 // ------------------------------------------------------------

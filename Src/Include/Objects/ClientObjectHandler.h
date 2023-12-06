@@ -19,6 +19,7 @@ public:
 	void ObjectSpawnConfirmed(CObjectMsg_SpawnConfirm& confirmMsg);
 	void ProcessObjectSpawn(CObjectMsg_Spawn& spawnMsg);
 	void SyncNetVar(CObjectMsg_NetVarSync& syncMsg);
+	void ProcessNetFuncCall(CObjectMsg_NetFuncCall& callMsg);
 
 	void ProcessLateJoinPayload(CLateJoinPayload& payload);
 

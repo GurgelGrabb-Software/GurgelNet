@@ -7,6 +7,11 @@ CNetMessageWriter::CNetMessageWriter()
 {
 }
 
+void CNetMessageWriter::Reset()
+{
+	_byteBuffer.clear();
+}
+
 void CNetMessageWriter::Serialize(void* ptr, size_t s)
 {
 	Write(ptr, s);
@@ -30,6 +35,11 @@ void CNetMessageWriter::Write(const void* ptr, size_t s)
 void CNetMessageWriter::Write(const INetSerializable& serializable)
 {
 	serializable.Serialize(*this);
+}
+
+const void* CNetMessageWriter::RawData() const
+{
+	return _byteBuffer.data();
 }
 
 size_t CNetMessageWriter::Size() const

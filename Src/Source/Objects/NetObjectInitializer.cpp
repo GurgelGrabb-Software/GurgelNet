@@ -1,12 +1,18 @@
 #include "Src/Include/Objects/NetObjectInitializer.h"
 #include "Src/Include/Objects/NetObjectList.h"
+#include "Src/Include/NetLayers/NetLayerContext.h"
+#include "Src/Include/Objects/NetworkFunctions/NetFuncList.h"
 
-CNetObjectInitializer::CNetObjectInitializer(ClientID localID, SNetObjectHandle& handle, ClientID ownerMask)
-	: _objectHandle(handle)
-	, _localNetID(localID)
+CNetObjectInitializer::CNetObjectInitializer(SNetLayerContext& netContext, SNetObjectHandle& handle, ClientID ownerMask)
+	: _netContext(netContext)
+	, _objectHandle(handle)
 	, _ownerMask(ownerMask)
-	, _isServer(localID == ClientID_Server)
+	, _isServer(netContext.layer.layerNetworkID == ClientID_Server)
 {
+	if (handle.netFuncList == nullptr)
+	{
+		handle.netFuncList = new CNetFuncList(_netContext, _objectHandle.objectPtr->GetNetObjectID());
+	}
 }
 
 bool CNetObjectInitializer::IsServer() const
@@ -16,7 +22,7 @@ bool CNetObjectInitializer::IsServer() const
 
 ClientID CNetObjectInitializer::GetLocalNetID() const
 {
-	return _localNetID;
+	return _netContext.layer.layerNetworkID;
 }
 
 ClientID CNetObjectInitializer::GetOwnerMask() const
@@ -31,5 +37,11 @@ void CNetObjectInitializer::RegisterNetVar(CNetworkVariable& regVar)
 		regVar.SetOwner(_ownerMask);
 	}
 
-	_objectHandle.netVariables.RegisterVariable(regVar, ClientMask_Contains(regVar.GetOwnerMask(), _localNetID));
+	_objectHandle.netVariables.RegisterVariable(regVar, ClientMask_Contains(regVar.GetOwnerMask(), _netContext.layer.layerNetworkID));
 }
+
+void CNetObjectInitializer::RegisterNetFunc(CNetFuncHandle& func)
+{
+	_objectHandle.netFuncList->RegisterFunction(func);
+}
+

@@ -163,8 +163,14 @@
     <ClInclude Include="Include\GurgelNet\Network.h" />
     <ClInclude Include="Include\GurgelNet\Objects\INetObjectFactory.h" />
     <ClInclude Include="Include\GurgelNet\Objects\INetObjectInitializer.h" />
+    <ClInclude Include="Include\GurgelNet\Objects\NetFunctionsInternal\INetFuncCaller.h" />
+    <ClInclude Include="Include\GurgelNet\Objects\NetFunctionsInternal\InternalMacros.h" />
+    <ClInclude Include="Include\GurgelNet\Objects\NetFunctionsInternal\Locality.h" />
+    <ClInclude Include="Include\GurgelNet\Objects\NetFunctionsInternal\NetFunctionHandle.h" />
+    <ClInclude Include="Include\GurgelNet\Objects\NetFunctionsInternal\TemplateHandles.h" />
     <ClInclude Include="Include\GurgelNet\Objects\NetObject.h" />
     <ClInclude Include="Include\GurgelNet\Objects\NetObjectOwnership.h" />
+    <ClInclude Include="Include\GurgelNet\Objects\NetworkFunction.h" />
     <ClInclude Include="Include\GurgelNet\Objects\NetworkVariable.h" />
     <ClInclude Include="Include\GurgelNet\Serializables\NetString.h" />
     <ClInclude Include="Include\GurgelNet\Serialization\INetSerializable.h" />
@@ -191,6 +197,8 @@
     <ClInclude Include="Src\Include\NetLayers\Server\ServerLayerConnectionsHandler.h" />
     <ClInclude Include="Src\Include\NetLayers\Server\ServerLayerNetworkHandler.h" />
     <ClInclude Include="Src\Include\Objects\ClientObjectHandler.h" />
+    <ClInclude Include="Src\Include\Objects\NetworkFunctions\NetFuncCaller.h" />
+    <ClInclude Include="Src\Include\Objects\NetworkFunctions\NetFuncList.h" />
     <ClInclude Include="Src\Include\Objects\NetObjectHandle.h" />
     <ClInclude Include="Src\Include\Objects\NetObjectList.h" />
     <ClInclude Include="Src\Include\Objects\NetVarList.h" />
@@ -204,8 +212,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Core\LayerSettings.cpp" />
+    <ClCompile Include="Src\Source\Objects\NetworkFunctions\NetFuncCaller.cpp" />
+    <ClCompile Include="Src\Source\Objects\NetFuncList.cpp" />
     <ClCompile Include="Src\Source\NetLayerMessages\ServerObjectMessageProcessor.cpp" />
     <ClCompile Include="Src\Source\NetLayerMessages\ClientObjectMessageProcessors.cpp" />
+    <ClCompile Include="Src\Source\Objects\NetworkFunctions\NetFunctionHandle.cpp" />
     <ClCompile Include="Src\Source\Objects\ServerObjectHandler.cpp" />
     <ClCompile Include="Src\Source\Objects\SharedObjectHandler.cpp" />
     <ClCompile Include="Src\Source\Objects\ClientObjectHandler.cpp" />

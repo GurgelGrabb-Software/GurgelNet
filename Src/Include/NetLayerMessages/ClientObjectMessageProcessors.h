@@ -20,6 +20,7 @@ private:
 	void ProcessObjectSpawnConfirm( INetMessageReader& reader );
 	void ProcessObjectSpawn(INetMessageReader& reader);
 	void ProcessNetVarSync(INetMessageReader& reader);
+	void ProcessNetFuncCall(INetMessageReader& reader);
 
 	CClientObjectHandler& _objectHandler;
 };
