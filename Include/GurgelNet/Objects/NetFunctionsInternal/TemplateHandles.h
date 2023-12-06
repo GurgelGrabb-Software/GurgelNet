@@ -55,7 +55,8 @@ public:
 	}
 	void RunInvoke(INetMessageReader& r) override
 	{
-		T1 a = r.Read();
+		T1 a;
+		r.Read(a);
 		_f(a);
 	}
 private:
@@ -85,8 +86,9 @@ public:
 
 	void RunInvoke(INetMessageReader& r) override
 	{
-		T1 a = r.Read();
-		T2 b = r.Read();
+		T1 a; T2 b;
+		r.Read(a);
+		r.Read(b);
 		_f(a, b);
 	}
 private:
@@ -116,9 +118,10 @@ public:
 
 	void RunInvoke(INetMessageReader& r) override
 	{
-		T1 a = r.Read();
-		T2 b = r.Read();
-		T3 c = r.Read();
+		T1 a; T2 b; T3 c;
+		r.Read(a);
+		r.Read(b);
+		r.Read(c);
 		_f(a, b, c);
 	}
 
