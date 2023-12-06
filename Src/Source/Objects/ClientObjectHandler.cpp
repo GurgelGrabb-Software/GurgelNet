@@ -47,7 +47,7 @@ void CClientObjectHandler::ObjectSpawnConfirmed(CObjectMsg_SpawnConfirm& confirm
 	SNetObjectHandle& activeHandle = _activeObjects.GetObject(confirmMsg.confirmedID);
 
 	// Run spawn
-	CNetObjectInitializer initializer(_netContext.layer.layerNetworkID, activeHandle, confirmMsg.ownerMask);
+	CNetObjectInitializer initializer(_netContext, activeHandle, confirmMsg.ownerMask);
 	activeHandle.objectPtr->OnNetworkSpawn(initializer);
 
 	ObjectFactory()->PostSpawn(*objectPtr);
@@ -71,7 +71,7 @@ void CClientObjectHandler::ProcessObjectSpawn(CObjectMsg_Spawn& spawnMsg)
 	spawnMsg.ReadPreSpawnData(activeHandle);
 
 	// Run the spawn
-	CNetObjectInitializer initializer(_netContext.layer.layerNetworkID, activeHandle, spawnMsg.ownerID);
+	CNetObjectInitializer initializer(_netContext, activeHandle, spawnMsg.ownerID);
 	object->OnNetworkSpawn(initializer);
 
 	// Read post spawn data (initial net var values)
@@ -93,6 +93,15 @@ void CClientObjectHandler::SyncNetVar(CObjectMsg_NetVarSync& syncMsg)
 
 // ------------------------------------------------------------
 
+void CClientObjectHandler::ProcessNetFuncCall(CObjectMsg_NetFuncCall& callMsg)
+{
+	const NetObjectID objID = callMsg.objectID;
+	const NetFuncID funcID = callMsg.functionID;
+	_activeObjects.GetObject(objID).netFuncList->InvokeFunction(funcID, callMsg.GetReader());
+}
+
+// ------------------------------------------------------------
+
 void CClientObjectHandler::ProcessLateJoinPayload(CLateJoinPayload& payload)
 {
 	for (NetObjectID i = 0; i < payload.numObjects; ++i)
@@ -107,7 +116,7 @@ void CClientObjectHandler::ProcessLateJoinPayload(CLateJoinPayload& payload)
 		SNetObjectHandle& spawnedHandle = _activeObjects.GetObject(currentObjectPayload.objectID);
 		payload.PreSpawnRead(objPtr);
 
-		CNetObjectInitializer initializer(_netContext.layer.layerNetworkID, spawnedHandle, currentObjectPayload.ownerMask);
+		CNetObjectInitializer initializer(_netContext, spawnedHandle, currentObjectPayload.ownerMask);
 		objPtr->OnNetworkSpawn(initializer);
 
 		payload.PostSpawnRead(spawnedHandle);

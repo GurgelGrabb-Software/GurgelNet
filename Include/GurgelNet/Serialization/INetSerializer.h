@@ -46,6 +46,7 @@ public:
 	virtual void Write(const void* ptr, size_t s) = 0;
 	virtual void Write(const INetSerializable& serializable) = 0;
 
+	virtual const void* RawData() const = 0;
 	virtual size_t Size() const = 0;
 	virtual void Pack(void* target) = 0;
 };
@@ -59,6 +60,14 @@ public:
 	void Read(T& v)
 	{
 		Read(&v, sizeof(T));
+	}
+
+	template<TriviallyCopyable T>
+	T Read()
+	{
+		T temp;
+		Read<T>(temp);
+		return temp;
 	}
 
 	virtual void Read(void* ptr, size_t s) = 0;

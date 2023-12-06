@@ -11,3 +11,21 @@ SNetLayerSettings::SNetLayerSettings()
 		p = nullptr;
 	}
 }
+
+#include <functional>
+
+struct FTest
+{
+	FTest(std::function<void()> f)
+	{
+	}
+};
+
+struct STest
+{
+	void F()
+	{
+	}
+
+	FTest t = FTest([&]() {F(); });
+};

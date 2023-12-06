@@ -177,6 +177,30 @@
     <ClInclude Include="Include\GurgelNet\Objects\NetObjectOwnership.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\GurgelNet\Objects\NetworkFunction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\Objects\NetworkFunctions\NetFuncList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Include\Objects\NetworkFunctions\NetFuncCaller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\GurgelNet\Objects\NetFunctionsInternal\TemplateHandles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\GurgelNet\Objects\NetFunctionsInternal\Locality.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\GurgelNet\Objects\NetFunctionsInternal\NetFunctionHandle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\GurgelNet\Objects\NetFunctionsInternal\INetFuncCaller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\GurgelNet\Objects\NetFunctionsInternal\InternalMacros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Network.cpp">
@@ -270,6 +294,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Src\Source\NetLayerMessages\ServerObjectMessageProcessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\Objects\NetFuncList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\Objects\NetworkFunctions\NetFunctionHandle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Source\Objects\NetworkFunctions\NetFuncCaller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -11,9 +11,13 @@
 
 #pragma once
 
+#include <functional>
+
 // ------------------------------------------------------------
 
 class CNetworkVariable;
+class IRpcInvoker;
+class CNetFuncHandle;
 
 // ------------------------------------------------------------
 
@@ -24,6 +28,7 @@ public:
 	virtual ClientID GetLocalNetID() const = 0;
 	virtual ClientID GetOwnerMask() const = 0;
 	virtual void RegisterNetVar(CNetworkVariable& regVar) = 0;
+	virtual void RegisterNetFunc(CNetFuncHandle& rpc) = 0;
 };
 
 // ------------------------------------------------------------

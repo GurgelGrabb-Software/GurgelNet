@@ -19,6 +19,7 @@ public:
 private:
 	void ProcessSpawnRequest(const SNetMessageHeader& header, INetMessageReader& reader);
 	void ProcessNetVarSync(INetMessageReader& reader);
+	void ProcessNetFuncCall(INetMessageReader& reader);
 
 	CServerObjectHandler& _objectHandler;
 };

@@ -23,7 +23,7 @@ void CServerObjectHandler::SpawnObject(CNetObject& object, ENetObjectOwner owner
 
 	ObjectFactory()->PreSpawn(object);
 
-	CNetObjectInitializer initializer(ClientID_Server, objHandle, NetObjectOwnerMask(owner, ClientID_Server));
+	CNetObjectInitializer initializer(_netContext, objHandle, NetObjectOwnerMask(owner, ClientID_Server));
 	object.OnNetworkSpawn(initializer);
 
 	ObjectFactory()->PostSpawn(object);
@@ -44,7 +44,7 @@ void CServerObjectHandler::ProcessObjectSpawnRequest(ClientID requestingClient, 
 	ObjectFactory()->PreSpawn(*objectPtr);
 	requestMsg.ReadPreSpawnData(objHandle);
 
-	CNetObjectInitializer initializer(ClientID_Server, objHandle, requestMsg.ownerID);
+	CNetObjectInitializer initializer(_netContext, objHandle, requestMsg.ownerID);
 	objectPtr->OnNetworkSpawn(initializer);
 
 	ObjectFactory()->PostSpawn(*objectPtr);
@@ -66,6 +66,8 @@ void CServerObjectHandler::ProcessObjectSpawnRequest(ClientID requestingClient, 
 	_netContext.layer.msgQueuePtr->Send(spawnMsg, ClientID_AllExcept(ClientID_Server | requestingClient), true);
 }
 
+// ------------------------------------------------------------
+
 void CServerObjectHandler::ProcessNetVarSync(CObjectMsg_NetVarSync& syncMsg)
 {
 	const NetObjectID objID = syncMsg.objectID;
@@ -73,6 +75,16 @@ void CServerObjectHandler::ProcessNetVarSync(CObjectMsg_NetVarSync& syncMsg)
 
 	CNetworkVariable* varPtr = _objects.GetObject(objID).netVariables.GetVariable(varID);
 	syncMsg.DeserializeNetVarData(*varPtr);
+}
+
+// ------------------------------------------------------------
+
+void CServerObjectHandler::ProcessNetFuncCall(CObjectMsg_NetFuncCall& callMsg)
+{
+	const NetObjectID objID = callMsg.objectID;
+	const NetFuncID funcID = callMsg.functionID;
+
+	_objects.GetObject(objID).netFuncList->InvokeFunction(funcID, callMsg.GetReader());
 }
 
 // ------------------------------------------------------------

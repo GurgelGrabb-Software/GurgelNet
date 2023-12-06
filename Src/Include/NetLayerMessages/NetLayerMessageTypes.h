@@ -18,4 +18,6 @@ enum EObjectMsg
 	EObjectMsg_SpawnConfirm,		// Server confirming spawn of a requested network object
 
 	EObjectMsg_NetVarSync,			// Sync of net variable state (message will come from an owner of this net var)
+
+	EObjectMsg_NetFuncCall,			// Call via remote to a network function
 };

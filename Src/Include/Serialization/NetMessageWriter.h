@@ -9,12 +9,15 @@ class CNetMessageWriter : public INetMessageWriter
 public:
 	CNetMessageWriter();
 
+	void Reset();
+
 	void Serialize(void* ptr, size_t s) override;
 	void Serialize(INetSerializable& serializable) override;
 
 	void Write(const void* ptr, size_t s) override;
 	void Write(const INetSerializable& serializable) override;
 
+	const void* RawData() const override;
 	size_t Size() const override;
 	void Pack(void* target) override;
 

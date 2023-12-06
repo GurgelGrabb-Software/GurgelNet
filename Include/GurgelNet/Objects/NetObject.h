@@ -56,6 +56,7 @@ private:
 
 	NetObjectID _objectID = NetObjectID_Unset;
 	ClientID _objectOwnerMask;
+
 	bool _isServer = false;
 	bool _isClient = false;
 };

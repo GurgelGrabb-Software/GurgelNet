@@ -1,24 +1,39 @@
 #pragma once
 #include "GurgelNet/Objects/NetObject.h"
 #include "Src/Include/Objects/NetVarList.h"
+#include "Src/Include/Objects/NetworkFunctions/NetFuncList.h"
+
+class CNetFuncList;
 
 struct SNetObjectHandle
 {
 	SNetObjectHandle()
 		: objectPtr(nullptr)
+		, netFuncList(nullptr)
 		, netVariables()
 	{
 	}
 	SNetObjectHandle(CNetObject& obj)
 		: objectPtr(&obj)
+		, netFuncList(nullptr)
 		, netVariables()
 	{
 	}
 	SNetObjectHandle(SNetObjectHandle&& o) noexcept
 		: objectPtr(o.objectPtr)
+		, netFuncList(o.netFuncList)
 		, netVariables(std::move(o.netVariables))
 	{
 		o.objectPtr = nullptr;
+		o.netFuncList = nullptr;
+	}
+
+	~SNetObjectHandle()
+	{
+		if (netFuncList)
+		{
+			delete netFuncList;
+		}
 	}
 	
 	void operator=(SNetObjectHandle&& o) noexcept
@@ -35,5 +50,6 @@ struct SNetObjectHandle
 	}
 
 	CNetObject* objectPtr;
+	CNetFuncList* netFuncList;
 	CNetVarList netVariables;
 };

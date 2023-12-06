@@ -22,6 +22,7 @@ public:
 
 	void ProcessObjectSpawnRequest(ClientID requestingClient, CObjectMsg_SpawnRequest& requestMsg);
 	void ProcessNetVarSync(CObjectMsg_NetVarSync& syncMsg);
+	void ProcessNetFuncCall(CObjectMsg_NetFuncCall& callMsg);
 
 	void WriteLateJoinPayload(CLateJoinPayload& payload);
 
