@@ -5,6 +5,8 @@
 #include <steam/steamnetworkingsockets.h>
 #include <steam/isteamnetworkingutils.h>
 
+#include "Src/Core/Logging.h"
+
 // ------------------------------------------------------------
 
 SServerLayerConnections::SServerLayerConnections(SNetLayerContext& context)
@@ -37,6 +39,8 @@ bool SServerLayerConnections::TryFindFreeID(ClientID& outID)
 
 void SServerLayerConnections::OpenConnection(unsigned int hConnection, ClientID id)
 {
+	NET_LOG(ENetLogLevel_Confirm, "Opening connection {}, assigned ID {}", hConnection, id);
+
 	ReserveID(id);
 	_connectionHandles.push_back(SClientConnection{ .hConnection = hConnection, .clientID = id, .active = false });
 
@@ -74,6 +78,8 @@ void SServerLayerConnections::CloseConnectionByID(ClientID id)
 
 void SServerLayerConnections::SetConnectionActive(ClientID id)
 {
+	NET_LOG(ENetLogLevel_Confirm, "Client with ID {} has finalized approval and late join. Now active.", id);
+
 	if (auto connectionPtr = GetConnectionByID(id))
 	{
 		connectionPtr->active = true;

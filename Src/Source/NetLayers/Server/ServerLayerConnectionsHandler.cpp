@@ -11,6 +11,8 @@
 #include "GurgelNet/Messages/INetMessageQueue.h"
 #include "GurgelNet/LayerCallbacks.h"
 
+#include "Src/Core/Logging.h"
+
 // ------------------------------------------------------------
 
 CServerLayerConnectionsHandler::CServerLayerConnectionsHandler(CNetLayerServer& serverLayer, SNetLayerContext& netContext)
@@ -37,6 +39,8 @@ void CServerLayerConnectionsHandler::EstablishedConnection(unsigned int hConnect
 {
 	auto connectionPtr = _connections.GetConnectionByHandle(hConnection);
 	
+	NET_LOG(ENetLogLevel_Confirm, "Connection for client with ID {} established", connectionPtr->clientID);
+
 	CConnectMsg_AssignID assignIDMsg;
 	assignIDMsg.id = connectionPtr->clientID;
 
