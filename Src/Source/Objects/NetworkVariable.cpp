@@ -85,6 +85,11 @@ void CNetworkVariable::Deserialize(INetMessageReader& serializer)
 {
 }
 
+bool CNetworkVariable::IsNetworked() const
+{
+	return _netVarID != NetVarID_Unset;
+}
+
 bool CNetworkVariable::TryWrite()
 {
 	const bool r = IsOwner();

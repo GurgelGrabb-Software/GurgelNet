@@ -48,6 +48,7 @@ public:
 	virtual void Serialize(INetMessageWriter& serializer) const override;
 	virtual void Deserialize(INetMessageReader& serializer) override;
 protected:
+	bool IsNetworked() const;
 	bool TryWrite();
 
 private:
@@ -92,7 +93,7 @@ public:
 
 	void operator=(const T& rhs) 
 	{ 
-		if (_netVarID == NetVarID_Unset) { _value = rhs; }		// If the variable ID is unset, this has not yet been registered with network so allow writes as if a normal variable
+		if (!IsNetworked()) { _value = rhs; }					// If the variable is not yet networked, allow writes as if a normal variable
 		else if (TryWrite()) { _value = rhs; _dirty = true; }	// Once this is spawned, we only allow writes if you are the owner of the object
 	}
 	const T& Value() const { return _value; }
