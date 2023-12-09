@@ -90,7 +90,11 @@ public:
 		}
 	}
 
-	void operator=(const T& rhs) { if (TryWrite()) { _value = rhs; _dirty = true; } }
+	void operator=(const T& rhs) 
+	{ 
+		if (_netVarID == NetVarID_Unset) { _value = rhs; }		// If the variable ID is unset, this has not yet been registered with network so allow writes as if a normal variable
+		else if (TryWrite()) { _value = rhs; _dirty = true; }	// Once this is spawned, we only allow writes if you are the owner of the object
+	}
 	const T& Value() const { return _value; }
 private:
 	T _value;
