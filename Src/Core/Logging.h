@@ -8,6 +8,7 @@
 
 #define NETLOG_CLIENT(Level, Msg, ...) CNetLogger::LogClientMessage( Level, logger::FormatLogMsg( Msg , __VA_ARGS__ ) )
 #define NETLOG_SERVER(Level, Msg, ...) CNetLogger::LogServerMessage( Level, logger::FormatLogMsg( Msg , __VA_ARGS__ ) )
+#define NETLOG_LIB(Level, Msg, ...) CNetLogger::LogLibMessage(Level, logger::FormatLogMsg(Msg, __VA_ARGS__))
 
 namespace logger
 {
@@ -23,5 +24,6 @@ class CNetLogger
 public:
 	static void LogClientMessage(ENetLogLevel l, const std::string& msg);
 	static void LogServerMessage(ENetLogLevel l, const std::string& msg);
+	static void LogLibMessage(ENetLogLevel l, const std::string& msg);
 	static FNetLibLogCallback _logCallback;
 };

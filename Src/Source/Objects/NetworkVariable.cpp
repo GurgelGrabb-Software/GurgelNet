@@ -96,7 +96,7 @@ bool CNetworkVariable::TryWrite()
 
 	if (!r)
 	{
-		NET_LOG(ENetLogLevel_Warning, "Tried writing to network variable that was not owned");
+		NETLOG_LIB(ENetLogLevel_Warning, "Tried writing to network variable that was not owned");
 	}
 
 	return r;

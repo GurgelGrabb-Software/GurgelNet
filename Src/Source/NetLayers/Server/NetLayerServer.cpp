@@ -28,7 +28,7 @@ CNetLayerServer::CNetLayerServer()
 
 void CNetLayerServer::Start()
 {
-	NET_LOG(ENetLogLevel_Message, "Starting server - Listen on port: {}", _port);
+	NETLOG_SERVER(ENetLogLevel_Message, "Starting server - Listen on port: {}", _port);
 
 	// Start up the backend
 	auto interfacePtr = _netContext.backend.interfacePtr;
@@ -53,7 +53,7 @@ void CNetLayerServer::Start()
 	_netContext.backend.hConnection = hConnection;
 	_netContext.backend.hPollGroup = hPollGroup;
 
-	NET_LOG(ENetLogLevel_Message, "Server is active and listening");
+	NETLOG_SERVER(ENetLogLevel_Message, "Server is active and listening");
 
 	ChangeState(EConnectState_Connected);
 }
@@ -64,7 +64,7 @@ void CNetLayerServer::Shutdown()
 {
 	if (CurrentState() != EConnectState_Inactive)
 	{
-		NET_LOG(ENetLogLevel_Message, "Shutting down and cleaning up server");
+		NETLOG_SERVER(ENetLogLevel_Message, "Shutting down and cleaning up server");
 
 		auto interfacePtr = _netContext.backend.interfacePtr;
 		interfacePtr->DestroyPollGroup(_netContext.backend.hPollGroup);
@@ -73,7 +73,7 @@ void CNetLayerServer::Shutdown()
 		_netContext.backend.hConnection = 0;
 		_netContext.backend.hPollGroup = 0;
 
-		NET_LOG(ENetLogLevel_Confirm, "Cleanup complete, server is shut down");
+		NETLOG_SERVER(ENetLogLevel_Confirm, "Cleanup complete, server is shut down");
 	}
 
 	ChangeState(EConnectState_Inactive);

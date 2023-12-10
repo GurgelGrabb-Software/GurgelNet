@@ -32,7 +32,7 @@ void GurgelNet_Init(SNetLibSetting* pSettings, int nSettings)
 			break;
 		case ENetLibSetting_Multithread:
 			if (current.data.s_flag)
-				NET_LOG(ENetLogLevel_Warning, "Multithread was enabled but is not yet implemented");
+				NETLOG_LIB(ENetLogLevel_Warning, "Multithread was enabled but is not yet implemented");
 			break;
 
 		default:
@@ -47,7 +47,7 @@ void GurgelNet_Init(SNetLibSetting* pSettings, int nSettings)
 	SteamNetworkingErrMsg errorMsg;
 	if (!GameNetworkingSockets_Init(&id, errorMsg))
 	{
-		NET_LOG(ENetLogLevel_Error, "Failed to init net library. Message: '{}'", errorMsg);
+		NETLOG_LIB(ENetLogLevel_Error, "Failed to init net library. Message: '{}'", errorMsg);
 	}
 }
 
@@ -106,7 +106,7 @@ bool GurgelNet_CreateClient(SNetLayerSettings& clientSettings, HNetLayer& outHan
 
 	if (s_numLayers == 3)
 	{
-		NET_LOG(ENetLogLevel_Error, "Cannot create more than 2 net layers");
+		NETLOG_LIB(ENetLogLevel_Error, "Cannot create more than 2 net layers");
 		return false;
 	}
 
@@ -124,7 +124,7 @@ bool GurgelNet_CreateServer(SNetLayerSettings& serverSettings, HNetLayer& outHan
 
 	if (s_numLayers == 3)
 	{
-		NET_LOG(ENetLogLevel_Error, "Cannot create more than 2 net layers");
+		NETLOG_LIB(ENetLogLevel_Error, "Cannot create more than 2 net layers");
 		return false;
 	}
 

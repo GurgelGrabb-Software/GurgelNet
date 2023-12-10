@@ -19,3 +19,12 @@ void CNetLogger::LogServerMessage(ENetLogLevel l, const std::string& msg)
 		_logCallback(l, fullmsg.c_str());
 	}
 }
+
+void CNetLogger::LogLibMessage(ENetLogLevel l, const std::string& msg)
+{
+	if (_logCallback)
+	{
+		const std::string fullmsg = logger::FormatLogMsg("{} {}", "|GurgelNet|", msg);
+		_logCallback(l, fullmsg.c_str());
+	}
+}
