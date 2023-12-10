@@ -39,7 +39,7 @@ bool SServerLayerConnections::TryFindFreeID(ClientID& outID)
 
 void SServerLayerConnections::OpenConnection(unsigned int hConnection, ClientID id)
 {
-	NET_LOG(ENetLogLevel_Confirm, "Opening connection {}, assigned ID {}", hConnection, id);
+	NETLOG_SERVER(ENetLogLevel_Confirm, "Opening connection {}, assigned ID {}", hConnection, id);
 
 	ReserveID(id);
 	_connectionHandles.push_back(SClientConnection{ .hConnection = hConnection, .clientID = id, .active = false });
@@ -63,7 +63,12 @@ void SServerLayerConnections::CloseConnectionByHandle(unsigned int hConnection)
 	// Erase the connection if it exists in our connections
 	if (auto connectionPtr = GetConnectionByHandle(hConnection))
 	{
+		NETLOG_SERVER(ENetLogLevel_Message, "Client (client ID {}) disconnected", connectionPtr->clientID );
 		ReleaseID(connectionPtr->clientID);
+	}
+	else
+	{
+		NETLOG_SERVER(ENetLogLevel_Message, "Connection (ID {}) closed before assigned client ID", hConnection);
 	}
 }
 
@@ -78,7 +83,7 @@ void SServerLayerConnections::CloseConnectionByID(ClientID id)
 
 void SServerLayerConnections::SetConnectionActive(ClientID id)
 {
-	NET_LOG(ENetLogLevel_Confirm, "Client with ID {} has finalized approval and late join. Now active.", id);
+	NETLOG_SERVER(ENetLogLevel_Confirm, "Client with ID {} has finalized approval and late join. Now active.", id);
 
 	if (auto connectionPtr = GetConnectionByID(id))
 	{

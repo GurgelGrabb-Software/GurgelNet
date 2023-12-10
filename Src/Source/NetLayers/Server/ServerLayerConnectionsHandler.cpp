@@ -39,7 +39,7 @@ void CServerLayerConnectionsHandler::EstablishedConnection(unsigned int hConnect
 {
 	auto connectionPtr = _connections.GetConnectionByHandle(hConnection);
 	
-	NET_LOG(ENetLogLevel_Confirm, "Connection for client with ID {} established", connectionPtr->clientID);
+	NETLOG_SERVER(ENetLogLevel_Confirm, "Connection for client with ID {} established", connectionPtr->clientID);
 
 	CConnectMsg_AssignID assignIDMsg;
 	assignIDMsg.id = connectionPtr->clientID;

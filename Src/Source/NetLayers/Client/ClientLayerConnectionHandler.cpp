@@ -7,10 +7,13 @@
 #include "Src/Include/NetLayers/Client/NetLayerClient.h"
 #include "Src/Include/NetLayers/NetLayerContext.h"
 
+#include "Src/Core/Logging.h"
+
 CClientLayerConnectionHandler::CClientLayerConnectionHandler(CNetLayerClient& clientLayer, SNetLayerContext& context)
 	: _clientLayer(clientLayer)
 	, _netContext(context)
 {
+	NETLOG_CLIENT(ENetLogLevel_Confirm, "Client layer created");
 }
 
 void CClientLayerConnectionHandler::RecieveAssignedID(ClientID assignedID)
@@ -28,6 +31,7 @@ void CClientLayerConnectionHandler::RecieveAssignedID(ClientID assignedID)
 
 	// Send off the confirmation message
 	_netContext.layer.msgQueuePtr->Send(confirmMsg, ClientID_Server, true);
+	NETLOG_CLIENT(ENetLogLevel_Message, "Recieved assigned client ID {}", assignedID);
 }
 
 void CClientLayerConnectionHandler::RecieveLateJoinData(INetMessageReader& lateJoinReader)
@@ -38,6 +42,8 @@ void CClientLayerConnectionHandler::RecieveLateJoinData(INetMessageReader& lateJ
 	lateJoinMsg.lateJoinRead = lateJoinReadF;
 	lateJoinReader.Read(lateJoinMsg);
 
+	NETLOG_CLIENT(ENetLogLevel_Message, "Recieved late join message containing {} objects", lateJoinMsg.lateJoinPayload.numObjects);
+
 	_clientLayer.ObjectHandler().ProcessLateJoinPayload(lateJoinMsg.lateJoinPayload);
 
 	// Send the confirmation of having joined
@@ -46,5 +52,7 @@ void CClientLayerConnectionHandler::RecieveLateJoinData(INetMessageReader& lateJ
 
 void CClientLayerConnectionHandler::RecieveConnectionConfirmation()
 {
+	NETLOG_CLIENT(ENetLogLevel_Confirm, "Connection active!");
+
 	_clientLayer.ChangeClientState(EConnectState_Connected);
 }

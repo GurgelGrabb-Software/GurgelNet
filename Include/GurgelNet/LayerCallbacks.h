@@ -21,6 +21,8 @@ typedef void(*FNetWrite)(INetMessageWriter&);
 typedef void(*FNetRead)(INetMessageReader&);
 typedef bool(*FApproveClient)(INetMessageReader&);
 
+typedef void(*FNetLayerSendInfo)(unsigned, unsigned);
+
 // ------------------------------------------------------------
 
 enum ENetLayerCallback

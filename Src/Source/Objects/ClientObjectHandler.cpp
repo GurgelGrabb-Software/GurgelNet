@@ -7,6 +7,8 @@
 
 #include "Src/Include/NetLayerMessages/LateJoinPayload.h"
 
+#include "Src/Core/Logging.h"
+
 // ------------------------------------------------------------
 
 CClientObjectHandler::CClientObjectHandler(SNetLayerContext& netContext)
@@ -21,6 +23,8 @@ CClientObjectHandler::CClientObjectHandler(SNetLayerContext& netContext)
 void CClientObjectHandler::SpawnObject(CNetObject& object, ENetObjectOwner owner)
 {
 	NetObjectID pendingID = _pendingObjects.Insert(&object);
+
+	NETLOG_CLIENT(ENetLogLevel_Message, "Sending spawn object request. Pending ID: {}", pendingID);
 
 	CObjectMsg_SpawnRequest spawnRequestMsg;
 	spawnRequestMsg.objectHandle = &_pendingObjects.GetObject(pendingID);
@@ -51,6 +55,8 @@ void CClientObjectHandler::ObjectSpawnConfirmed(CObjectMsg_SpawnConfirm& confirm
 	activeHandle.objectPtr->OnNetworkSpawn(initializer);
 
 	ObjectFactory()->PostSpawn(*objectPtr);
+
+	NETLOG_CLIENT(ENetLogLevel_Message, "Requested spawn of pending ID {} was confirmed with ID {}", pendingID, confirmedID);
 }
 
 // ------------------------------------------------------------
@@ -78,6 +84,8 @@ void CClientObjectHandler::ProcessObjectSpawn(CObjectMsg_Spawn& spawnMsg)
 	spawnMsg.ReadPostSpawnData(activeHandle);
 
 	ObjectFactory()->PostSpawn(*object);
+
+	NETLOG_CLIENT(ENetLogLevel_Message, "Spawned network object of type ID {} with net object ID {}", objectTypeID, objectID);
 }
 
 // ------------------------------------------------------------
