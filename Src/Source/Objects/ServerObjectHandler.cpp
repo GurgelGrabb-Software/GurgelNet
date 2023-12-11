@@ -6,6 +6,8 @@
 #include "Src/Include/Objects/NetObjectInitializer.h"
 #include "Src/Include/NetLayerMessages/LateJoinPayload.h"
 
+#include "Src/Core/Logging.h"
+
 // ------------------------------------------------------------
 
 CServerObjectHandler::CServerObjectHandler(SNetLayerContext& netContext)
@@ -33,6 +35,7 @@ void CServerObjectHandler::SpawnObject(CNetObject& object, ENetObjectOwner owner
 	_netContext.layer.msgQueuePtr->Send(spawnMsg, ClientID_AllClients, true);
 
 	if (_netContext.analyzerPtr) _netContext.analyzerPtr->UpdateNetObjectCount(_objects.NumObjects());
+	NETLOG_SERVER(ENetLogLevel_Message, "Spawned object. Assigned net ID {}", object.GetNetObjectID());
 }
 
 // ------------------------------------------------------------
@@ -43,6 +46,8 @@ void CServerObjectHandler::DespawnObject(CNetObject& object)
 
 	if (object.IsOwner(ClientID_Server))
 	{
+		NETLOG_SERVER(ENetLogLevel_Message, "Despawning object with net ID {}", object.GetNetObjectID());
+
 		CObjectMsg_Despawn despawnMsg;
 		despawnMsg.id = id;
 		_netContext.layer.msgQueuePtr->Send(despawnMsg, ClientID_AllClients, true);
@@ -87,6 +92,7 @@ void CServerObjectHandler::ProcessObjectSpawnRequest(ClientID requestingClient, 
 	_netContext.layer.msgQueuePtr->Send(spawnMsg, ClientID_AllExcept(ClientID_Server | requestingClient), true);
 
 	if (_netContext.analyzerPtr) _netContext.analyzerPtr->UpdateNetObjectCount(_objects.NumObjects());
+	NETLOG_SERVER(ENetLogLevel_Message, "Spawned object requested by client. Assigned net ID {}", objectPtr->GetNetObjectID());
 }
 
 // ------------------------------------------------------------
