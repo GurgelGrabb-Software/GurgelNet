@@ -49,9 +49,9 @@ void CServerObjectHandler::DespawnObject(CNetObject& object)
 
 		_objects.Remove(id);
 		object.OnNetworkDespawn();
-
-		if (_netContext.analyzerPtr) _netContext.analyzerPtr->UpdateNetObjectCount(_objects.NumObjects());
 	}
+
+	if (_netContext.analyzerPtr) _netContext.analyzerPtr->UpdateNetObjectCount(_objects.NumObjects());
 }
 
 // ------------------------------------------------------------

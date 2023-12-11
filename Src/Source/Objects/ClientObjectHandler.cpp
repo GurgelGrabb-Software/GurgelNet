@@ -113,6 +113,7 @@ void CClientObjectHandler::ProcessObjectSpawn(CObjectMsg_Spawn& spawnMsg)
 void CClientObjectHandler::ProcessObjectDespawn(CObjectMsg_Despawn& despawnMsg)
 {
 	const NetObjectID despawnedID = despawnMsg.id;
+
 	if (!_activeObjects.HasObject(despawnedID)) return;
 
 	CNetObject* object = _activeObjects.GetObject(despawnedID).objectPtr;
@@ -127,6 +128,8 @@ void CClientObjectHandler::SyncNetVar(CObjectMsg_NetVarSync& syncMsg)
 	const NetObjectID objID = syncMsg.objectID;
 	const NetVarID varID = syncMsg.varID;
 
+	if (!_activeObjects.HasObject(objID)) return;
+
 	CNetworkVariable* variable = _activeObjects.GetObject(objID).netVariables.GetVariable(varID);
 	syncMsg.DeserializeNetVarData(*variable);
 }
@@ -137,6 +140,9 @@ void CClientObjectHandler::ProcessNetFuncCall(CObjectMsg_NetFuncCall& callMsg)
 {
 	const NetObjectID objID = callMsg.objectID;
 	const NetFuncID funcID = callMsg.functionID;
+
+	if (!_activeObjects.HasObject(objID)) return;
+
 	_activeObjects.GetObject(objID).netFuncList->InvokeFunction(funcID, callMsg.GetReader());
 }
 
