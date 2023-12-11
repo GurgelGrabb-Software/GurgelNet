@@ -33,21 +33,27 @@ struct SNetObjectHandle
 		if (netFuncList)
 		{
 			delete netFuncList;
+			netFuncList = nullptr;
 		}
 	}
 	
 	void operator=(SNetObjectHandle&& o) noexcept
 	{
 		objectPtr = o.objectPtr;
-		netVariables = std::move(o.netVariables);
 		o.objectPtr = nullptr;
+		netVariables = std::move(o.netVariables);
+		netFuncList = o.netFuncList;
+		o.netFuncList = nullptr;
 	}
 
 	void Reset()
 	{
 		objectPtr = nullptr;
 		netVariables.Clear();
-		netFuncList->Reset();
+		if (netFuncList)
+		{
+			netFuncList->Reset();
+		}
 	}
 
 	bool Valid() const
