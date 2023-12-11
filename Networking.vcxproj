@@ -152,6 +152,7 @@
     <ClInclude Include="Include\GurgelNet\Core\LibrarySettings.h" />
     <ClInclude Include="Include\GurgelNet\Core\NetLogging.h" />
     <ClInclude Include="Include\GurgelNet\Core\NetTypes.h" />
+    <ClInclude Include="Include\GurgelNet\Dev\INetLayerAnalyzer.h" />
     <ClInclude Include="Include\GurgelNet\INetLayer.h" />
     <ClInclude Include="Include\GurgelNet\LayerCallbacks.h" />
     <ClInclude Include="Include\GurgelNet\Messages\INetMessage.h" />

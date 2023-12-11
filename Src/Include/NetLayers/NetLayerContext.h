@@ -1,5 +1,6 @@
 #pragma once
 #include "GurgelNet/Core/NetTypes.h"
+#include "GurgelNet/Dev/INetLayerAnalyzer.h"
 
 class ISteamNetworkingSockets;
 class CNetLayerCallbackStore;
@@ -23,4 +24,5 @@ struct SNetLayerContext
 {
 	SNetLayerContextLayerData layer;
 	SNetLayerContextBackendData backend;
+	INetLayerAnalyzer* analyzerPtr;
 };

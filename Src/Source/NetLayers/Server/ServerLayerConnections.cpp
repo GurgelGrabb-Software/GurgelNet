@@ -65,6 +65,7 @@ void SServerLayerConnections::CloseConnectionByHandle(unsigned int hConnection)
 	{
 		NETLOG_SERVER(ENetLogLevel_Message, "Client (client ID {}) disconnected", connectionPtr->clientID );
 		ReleaseID(connectionPtr->clientID);
+		if (_netContext.analyzerPtr) _netContext.analyzerPtr->UpdateConnectionCount((unsigned int)_connectionHandles.size());
 	}
 	else
 	{
@@ -88,6 +89,7 @@ void SServerLayerConnections::SetConnectionActive(ClientID id)
 	if (auto connectionPtr = GetConnectionByID(id))
 	{
 		connectionPtr->active = true;
+		if (_netContext.analyzerPtr)_netContext.analyzerPtr->UpdateConnectionCount((unsigned int)_connectionHandles.size());
 	}
 }
 

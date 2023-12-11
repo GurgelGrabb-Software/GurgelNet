@@ -201,6 +201,9 @@
     <ClInclude Include="Include\GurgelNet\Objects\NetFunctionsInternal\InternalMacros.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\GurgelNet\Dev\INetLayerAnalyzer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Network.cpp">

@@ -41,6 +41,11 @@ void CNetObjectList::Remove(NetObjectID id)
 	_freeIDs.push(id);
 }
 
+unsigned int CNetObjectList::NumObjects() const
+{
+	return (unsigned int)(_objects.size() - _freeIDs.size());
+}
+
 // ------------------------------------------------------------
 
 SNetObjectHandle& CNetObjectList::GetObject(NetObjectID id)

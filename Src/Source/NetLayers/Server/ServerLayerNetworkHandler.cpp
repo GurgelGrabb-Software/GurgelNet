@@ -26,6 +26,8 @@ void CServerLayerNetworkHandler::RecievePending(CNetMessageQueue& messageQueue)
 	SteamNetworkingMessage_t* msgPtr;
 	while (interfacePtr->ReceiveMessagesOnPollGroup(_netContext.backend.hPollGroup, &msgPtr, 1) > 0)
 	{
+		if (_netContext.analyzerPtr) _netContext.analyzerPtr->NetDataRecieve(msgPtr->m_cbSize);
+
 		RecieveMessage(msgPtr->m_pData, msgPtr->m_cbSize, messageQueue);
 		msgPtr->Release();
 	}
@@ -85,6 +87,7 @@ void CServerLayerNetworkHandler::TrySendToConnection(SNetMessage& msg, int sendF
 
 	if (connectionTargeted && connectionTargetable)
 	{
+		if (_netContext.analyzerPtr) _netContext.analyzerPtr->NetDataSend((unsigned int)msg.nBytes);
 		_netContext.backend.interfacePtr->SendMessageToConnection(connection.hConnection, msg.pData, (uint32)msg.nBytes, sendFlag, nullptr);
 	}
 }

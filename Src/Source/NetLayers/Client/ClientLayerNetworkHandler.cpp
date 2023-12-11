@@ -25,6 +25,8 @@ void CClientLayerNetworkHandler::RecievePending(CNetMessageQueue& messageQueue)
 	SteamNetworkingMessage_t* msgPtr;
 	while (interfacePtr->ReceiveMessagesOnConnection(_netContext.backend.hConnection, &msgPtr, 1) > 0)
 	{
+		if (_netContext.analyzerPtr) _netContext.analyzerPtr->NetDataRecieve(msgPtr->m_cbSize);
+
 		messageQueue.PushRecieved(SNetMessage(msgPtr->m_pData, (size_t)msgPtr->m_cbSize));
 		msgPtr->Release();
 	}
@@ -43,6 +45,8 @@ void CClientLayerNetworkHandler::SendPending(CNetMessageQueue& messageQueue)
 		const int sendFlag = msg.reliable ? k_nSteamNetworkingSend_Reliable : k_nSteamNetworkingSend_Unreliable;
 
 		interfacePtr->SendMessageToConnection(_netContext.backend.hConnection, msg.pData, (uint32)msg.nBytes, sendFlag, nullptr);
+
+		if (_netContext.analyzerPtr) _netContext.analyzerPtr->NetDataSend((unsigned int)msg.nBytes);
 	}
 }
 

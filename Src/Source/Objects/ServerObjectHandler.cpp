@@ -31,6 +31,8 @@ void CServerObjectHandler::SpawnObject(CNetObject& object, ENetObjectOwner owner
 	CObjectMsg_Spawn spawnMsg;
 	spawnMsg.objectHandle = &objHandle;
 	_netContext.layer.msgQueuePtr->Send(spawnMsg, ClientID_AllClients, true);
+
+	if (_netContext.analyzerPtr) _netContext.analyzerPtr->UpdateNetObjectCount(_objects.NumObjects());
 }
 
 // ------------------------------------------------------------
@@ -64,6 +66,8 @@ void CServerObjectHandler::ProcessObjectSpawnRequest(ClientID requestingClient, 
 
 	_netContext.layer.msgQueuePtr->Send(confirmMsg, requestingClient, true);
 	_netContext.layer.msgQueuePtr->Send(spawnMsg, ClientID_AllExcept(ClientID_Server | requestingClient), true);
+
+	if (_netContext.analyzerPtr) _netContext.analyzerPtr->UpdateNetObjectCount(_objects.NumObjects());
 }
 
 // ------------------------------------------------------------

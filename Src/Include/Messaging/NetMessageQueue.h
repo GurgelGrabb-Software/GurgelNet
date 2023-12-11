@@ -4,6 +4,8 @@
 #include "GurgelNet/Core/NetTypes.h"
 #include <queue>
 
+struct SNetLayerContext;
+
 class CNetMessageQueue : public INetMessageQueue
 {
 public:

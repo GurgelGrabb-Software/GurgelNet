@@ -17,6 +17,8 @@ public:
 
 	void Remove(NetObjectID id);
 
+	unsigned int NumObjects() const;
+
 	SNetObjectHandle& GetObject(NetObjectID id);
 	const SNetObjectHandle& GetObject(NetObjectID id) const;
 

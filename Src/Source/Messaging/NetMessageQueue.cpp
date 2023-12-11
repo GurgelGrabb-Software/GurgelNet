@@ -2,7 +2,7 @@
 #include "GurgelNet/Serialization/INetSerializable.h"
 #include "GurgelNet/Messages/INetMessage.h"
 #include "Src/Include/Serialization/NetMessageWriter.h"
-
+#include "Src/Include/NetLayers/NetLayerContext.h"
 
 void CNetMessageQueue::Send(const INetMessage& customMessage, bool reliable)
 {

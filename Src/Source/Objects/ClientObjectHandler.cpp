@@ -57,6 +57,8 @@ void CClientObjectHandler::ObjectSpawnConfirmed(CObjectMsg_SpawnConfirm& confirm
 	ObjectFactory()->PostSpawn(*objectPtr);
 
 	NETLOG_CLIENT(ENetLogLevel_Message, "Requested spawn of pending ID {} was confirmed with ID {}", pendingID, confirmedID);
+
+	if (_netContext.analyzerPtr) _netContext.analyzerPtr->UpdateNetObjectCount(_activeObjects.NumObjects());
 }
 
 // ------------------------------------------------------------
@@ -86,6 +88,8 @@ void CClientObjectHandler::ProcessObjectSpawn(CObjectMsg_Spawn& spawnMsg)
 	ObjectFactory()->PostSpawn(*object);
 
 	NETLOG_CLIENT(ENetLogLevel_Message, "Spawned network object of type ID {} with net object ID {}", objectTypeID, objectID);
+
+	if (_netContext.analyzerPtr) _netContext.analyzerPtr->UpdateNetObjectCount(_activeObjects.NumObjects());
 }
 
 // ------------------------------------------------------------
@@ -131,6 +135,8 @@ void CClientObjectHandler::ProcessLateJoinPayload(CLateJoinPayload& payload)
 
 		ObjectFactory()->PostSpawn(*objPtr);
 	}
+
+	if (_netContext.analyzerPtr) _netContext.analyzerPtr->UpdateNetObjectCount(_activeObjects.NumObjects());
 }
 
 // ------------------------------------------------------------
