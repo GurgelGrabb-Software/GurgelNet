@@ -69,6 +69,7 @@ void CNetLayerShared::Initialize(SNetLayerSettings& settings)
 
 	// Bind the interface of the net context
 	_netContext.backend.interfacePtr = SteamNetworkingSockets();
+	_netContext.analyzerPtr = settings.analyzerPtr;
 
 	_objectHandler.AssignObjectFactory(settings.objectFactoryPtr);
 }
