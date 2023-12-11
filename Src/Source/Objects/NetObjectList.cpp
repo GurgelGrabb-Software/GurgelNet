@@ -41,12 +41,19 @@ void CNetObjectList::Remove(NetObjectID id)
 	_freeIDs.push(id);
 }
 
+// ------------------------------------------------------------
+
 unsigned int CNetObjectList::NumObjects() const
 {
 	return (unsigned int)(_objects.size() - _freeIDs.size());
 }
 
 // ------------------------------------------------------------
+
+bool CNetObjectList::HasObject(NetObjectID id) const
+{
+	return _objects[id].Valid();
+}
 
 SNetObjectHandle& CNetObjectList::GetObject(NetObjectID id)
 {
@@ -66,7 +73,7 @@ void CNetObjectList::ForEach(std::function<void(SNetObjectHandle&)> forEach)
 {
 	for (auto& handle : _objects)
 	{
-		if(handle.objectPtr != nullptr)
+		if(handle.Valid())
 			forEach(handle);
 	}
 }

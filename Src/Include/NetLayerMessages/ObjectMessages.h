@@ -98,6 +98,22 @@ public:
 	}
 };
 
+class CObjectMsg_Despawn : public TObjectMsg<EObjectMsg_Despawn>
+{
+public:
+	NetObjectID id;
+
+	void Serialize(INetMessageWriter& serializer) const override
+	{
+		serializer.Write(id);
+	}
+
+	void Deserialize(INetMessageReader& serializer) override
+	{
+		serializer.Read(id);
+	}
+};
+
 class CObjectMsg_NetVarSync : public TObjectMsg<EObjectMsg_NetVarSync>
 {
 public:

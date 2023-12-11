@@ -19,8 +19,10 @@ public:
 	CServerObjectHandler(SNetLayerContext& netContext);
 
 	void SpawnObject(CNetObject& object, ENetObjectOwner owner) override;
+	void DespawnObject(CNetObject& object) override;
 
 	void ProcessObjectSpawnRequest(ClientID requestingClient, CObjectMsg_SpawnRequest& requestMsg);
+	void ProcessObjectDespawn(ClientID requestingClient, CObjectMsg_Despawn& despawnMsg);
 	void ProcessNetVarSync(CObjectMsg_NetVarSync& syncMsg);
 	void ProcessNetFuncCall(CObjectMsg_NetFuncCall& callMsg);
 

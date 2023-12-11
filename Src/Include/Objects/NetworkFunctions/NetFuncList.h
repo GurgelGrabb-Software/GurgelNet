@@ -17,6 +17,8 @@ public:
 	CNetFuncList(const CNetFuncList&) = delete;
 	CNetFuncList(CNetFuncList&& o) noexcept;
 
+	void Reset();
+
 	ClientID GetLocalID() const;
 	INetMessageQueue& GetQueue();
 

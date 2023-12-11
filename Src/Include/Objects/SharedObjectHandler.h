@@ -16,6 +16,8 @@ public:
 	void AssignObjectFactory(INetObjectFactory* factoryPtr);
 
 	virtual void SpawnObject(CNetObject& object, ENetObjectOwner owner) = 0;
+	virtual void DespawnObject(CNetObject& object) = 0;
+
 	virtual void RunNetObjectUpdate() = 0;
 
 protected:

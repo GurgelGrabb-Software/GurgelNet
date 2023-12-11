@@ -32,6 +32,7 @@ void CClientObjectMessageProcessor::Process(const SNetMessageHeader& header, INe
 	case EObjectMsg_SpawnConfirm: ProcessObjectSpawnConfirm(reader); break;
 	case EObjectMsg_NetVarSync: ProcessNetVarSync(reader); break;
 	case EObjectMsg_NetFuncCall: ProcessNetFuncCall(reader); break;
+	case EObjectMsg_Despawn: ProcessObjectDespawn(reader); break;
 	}
 }
 
@@ -51,6 +52,15 @@ void CClientObjectMessageProcessor::ProcessObjectSpawn(INetMessageReader& reader
 	CObjectMsg_Spawn spawnMsg;
 	reader.Read(spawnMsg);
 	_objectHandler.ProcessObjectSpawn(spawnMsg);
+}
+
+// ------------------------------------------------------------
+
+void CClientObjectMessageProcessor::ProcessObjectDespawn(INetMessageReader& reader)
+{
+	CObjectMsg_Despawn despawnMsg;
+	reader.Read(despawnMsg);
+	_objectHandler.ProcessObjectDespawn(despawnMsg);
 }
 
 // ------------------------------------------------------------

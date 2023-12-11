@@ -47,6 +47,12 @@ struct SNetObjectHandle
 	{
 		objectPtr = nullptr;
 		netVariables.Clear();
+		netFuncList->Reset();
+	}
+
+	bool Valid() const
+	{
+		return objectPtr != nullptr;
 	}
 
 	CNetObject* objectPtr;

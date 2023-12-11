@@ -64,6 +64,12 @@ public:
 	/// <param name="spawn">The object to spawn</param>
 	/// <param name="owner">The owner of this object (defaults to server)</param>
 	virtual void SpawnNetworkObject(CNetObject& spawn, ENetObjectOwner owner = ENetObjectOwner::Server) = 0;
+
+	/// <summary>
+	/// Despawn the provided object if it is currently active on network
+	/// </summary>
+	/// <param name="despawn">The object to despawn</param>
+	virtual void DespawnNetworkObject(CNetObject& despawn) = 0;
 };
 
 // ------------------------------------------------------------

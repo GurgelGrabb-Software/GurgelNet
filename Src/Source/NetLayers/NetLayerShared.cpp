@@ -58,6 +58,13 @@ void CNetLayerShared::SpawnNetworkObject(CNetObject& spawn, ENetObjectOwner owne
 
 // ------------------------------------------------------------
 
+void CNetLayerShared::DespawnNetworkObject(CNetObject& despawn)
+{
+	_objectHandler.DespawnObject(despawn);
+}
+
+// ------------------------------------------------------------
+
 void CNetLayerShared::Initialize(SNetLayerSettings& settings)
 {
 	// Store IP and Port for later startup

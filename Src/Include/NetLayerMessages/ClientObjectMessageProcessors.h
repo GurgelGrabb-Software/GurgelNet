@@ -19,6 +19,7 @@ public:
 private:
 	void ProcessObjectSpawnConfirm( INetMessageReader& reader );
 	void ProcessObjectSpawn(INetMessageReader& reader);
+	void ProcessObjectDespawn(INetMessageReader& reader);
 	void ProcessNetVarSync(INetMessageReader& reader);
 	void ProcessNetFuncCall(INetMessageReader& reader);
 

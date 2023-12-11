@@ -16,6 +16,7 @@ enum EObjectMsg
 	EObjectMsg_Spawn,				// Server notifying about the spawn of a network object
 	EObjectMsg_SpawnRequest,		// Client requesting spawn of a network object
 	EObjectMsg_SpawnConfirm,		// Server confirming spawn of a requested network object
+	EObjectMsg_Despawn,				// An object has been despawned and should be removed
 
 	EObjectMsg_NetVarSync,			// Sync of net variable state (message will come from an owner of this net var)
 

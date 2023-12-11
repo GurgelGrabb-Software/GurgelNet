@@ -30,6 +30,7 @@ public:
 	INetMessageQueue& MessageQueue() override;
 
 	virtual void SpawnNetworkObject(CNetObject& spawn, ENetObjectOwner owner);
+	virtual void DespawnNetworkObject(CNetObject& despawn);
 
 	// ------------------------------------------------------------
 	// Execution Flow

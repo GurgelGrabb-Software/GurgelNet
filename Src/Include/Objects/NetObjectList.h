@@ -19,6 +19,7 @@ public:
 
 	unsigned int NumObjects() const;
 
+	bool HasObject(NetObjectID id) const;
 	SNetObjectHandle& GetObject(NetObjectID id);
 	const SNetObjectHandle& GetObject(NetObjectID id) const;
 

@@ -19,6 +19,11 @@ CNetFuncList::CNetFuncList(CNetFuncList&& o) noexcept
 {
 }
 
+void CNetFuncList::Reset()
+{
+	_registeredFunctions.clear();
+}
+
 // ------------------------------------------------------------
 
 ClientID CNetFuncList::GetLocalID() const

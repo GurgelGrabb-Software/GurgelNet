@@ -31,6 +31,7 @@ void CServerObjectMessageProcessor::Process(const SNetMessageHeader& header, INe
 	case EObjectMsg_SpawnRequest: ProcessSpawnRequest(header, reader); break;
 	case EObjectMsg_NetVarSync: ProcessNetVarSync(reader); break;
 	case EObjectMsg_NetFuncCall: ProcessNetFuncCall(reader); break;
+	case EObjectMsg_Despawn: ProcessDespawn(header, reader); break;
 	}
 }
 
@@ -41,6 +42,15 @@ void CServerObjectMessageProcessor::ProcessSpawnRequest(const SNetMessageHeader&
 	CObjectMsg_SpawnRequest requestMsg;
 	reader.Read(requestMsg);
 	_objectHandler.ProcessObjectSpawnRequest(header.senderID, requestMsg);
+}
+
+// ------------------------------------------------------------
+
+void CServerObjectMessageProcessor::ProcessDespawn(const SNetMessageHeader& header, INetMessageReader& reader)
+{
+	CObjectMsg_Despawn despawnMsg;
+	reader.Read(despawnMsg);
+	_objectHandler.ProcessObjectDespawn(header.senderID, despawnMsg);
 }
 
 // ------------------------------------------------------------

@@ -37,6 +37,22 @@ void CClientObjectHandler::SpawnObject(CNetObject& object, ENetObjectOwner owner
 
 // ------------------------------------------------------------
 
+void CClientObjectHandler::DespawnObject(CNetObject& object)
+{
+	const NetObjectID id = object.GetNetObjectID();
+
+	if (object.IsOwner(_netContext.layer.layerNetworkID))
+	{
+		// This client is the considered owner of this object so we should request a despawn
+		// Send despawn message
+	}
+	
+	_activeObjects.Remove(id);
+	object.OnNetworkDespawn(); 
+}
+
+// ------------------------------------------------------------
+
 void CClientObjectHandler::ObjectSpawnConfirmed(CObjectMsg_SpawnConfirm& confirmMsg)
 {
 	const NetObjectID pendingID = confirmMsg.pendingID;
@@ -90,6 +106,18 @@ void CClientObjectHandler::ProcessObjectSpawn(CObjectMsg_Spawn& spawnMsg)
 	NETLOG_CLIENT(ENetLogLevel_Message, "Spawned network object of type ID {} with net object ID {}", objectTypeID, objectID);
 
 	if (_netContext.analyzerPtr) _netContext.analyzerPtr->UpdateNetObjectCount(_activeObjects.NumObjects());
+}
+
+// ------------------------------------------------------------
+
+void CClientObjectHandler::ProcessObjectDespawn(CObjectMsg_Despawn& despawnMsg)
+{
+	const NetObjectID despawnedID = despawnMsg.id;
+	if (!_activeObjects.HasObject(despawnedID)) return;
+
+	CNetObject* object = _activeObjects.GetObject(despawnedID).objectPtr;
+	_activeObjects.Remove(despawnedID);
+	object->OnNetworkDespawn();
 }
 
 // ------------------------------------------------------------
