@@ -52,7 +52,7 @@ unsigned int CNetObjectList::NumObjects() const
 
 bool CNetObjectList::HasObject(NetObjectID id) const
 {
-	return _objects[id].Valid();
+	return (id < (NetObjectID)_objects.size()) && _objects[id].Valid();
 }
 
 SNetObjectHandle& CNetObjectList::GetObject(NetObjectID id)
