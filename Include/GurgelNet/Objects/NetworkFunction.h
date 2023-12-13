@@ -34,7 +34,10 @@
 // If called on server, behaves like a normal function call
 // ------------------------------------------------------------
 
-#define ServerFunc( Name, ... ) NF_M_SELECTOR( __VA_ARGS__, NetFunc_3Arg, NetFunc_2Arg, NetFunc_1Arg, NetFunc_0Arg )( ENetFuncLocality_Server, Name, __VA_ARGS__ )
+#define ServerFunc_0arg( Name )				NetFunc_0Arg( ENetFuncLocality_Server, Name )
+#define ServerFunc_1arg( Name, T1 )			NetFunc_1Arg( ENetFuncLocality_Server, Name, T1 )
+#define ServerFunc_2arg( Name, T1, T2 )		NetFunc_2Arg( ENetFuncLocality_Server, Name, T1, T2 )
+#define ServerFunc_3arg( Name, T1, T2, T3 ) NetFunc_3Arg( ENetFuncLocality_Server, Name, T1, T2, T3 )
 #define ServerFuncImpl( Name ) void Name##_ImplNOCALL
 
 // ------------------------------------------------------------
@@ -46,8 +49,11 @@
 // If called on a client, behaves like a normal function call
 // ------------------------------------------------------------
 
-#define ClientFunc( Name, ... ) NF_M_SELECTOR( __VA_ARGS__, NetFunc_3Arg, NetFunc_2Arg, NetFunc_1Arg, NetFunc_0Arg )( ENetFuncLocality_Client, Name, __VA_ARGS__ )
-#define ClientFuncImpl( Name ) void Name##_ImplNOCALL
+#define ClientFunc_0arg( Name )				NetFunc_0Arg( ENetFuncLocality_Client, Name )
+#define ClientFunc_1arg( Name, T1 )			NetFunc_1Arg( ENetFuncLocality_Client, Name, T1 )
+#define ClientFunc_2arg( Name, T1, T2 )		NetFunc_2Arg( ENetFuncLocality_Client, Name, T1, T2 )
+#define ClientFunc_3arg( Name, T1, T2, T3 ) NetFunc_3Arg( ENetFuncLocality_Client, Name, T1, T2, T3 )
+#define ClientFuncImpl( Name )				void Name##_ImplNOCALL
 
 // ------------------------------------------------------------
 // ------------------------------------------------------------
