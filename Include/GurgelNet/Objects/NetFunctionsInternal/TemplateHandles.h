@@ -113,7 +113,7 @@ public:
 			Write(c);
 			DoInvokeRemote();
 		}
-		_f();
+		_f(a, b, c);
 	}
 
 	void RunInvoke(INetMessageReader& r) override
