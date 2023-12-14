@@ -84,6 +84,7 @@ void CServerObjectHandler::ProcessObjectSpawnRequest(ClientID requestingClient, 
 	CObjectMsg_SpawnConfirm confirmMsg;
 	confirmMsg.pendingID = requestMsg.pendingSpawnID;
 	confirmMsg.confirmedID = assignedID;
+	confirmMsg.ownerMask = requestMsg.ownerID;
 
 	CObjectMsg_Spawn spawnMsg;
 	spawnMsg.objectHandle = &objHandle;
