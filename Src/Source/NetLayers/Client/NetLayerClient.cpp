@@ -91,7 +91,6 @@ void CNetLayerClient::ConnectCallback(SteamNetConnectionStatusChangedCallback_t*
 		ChangeState(EConnectState_PendingConnect);
 		break;
 	case k_ESteamNetworkingConnectionState_Connected:
-		ChangeState(EConnectState_FinalizingConnection);
 		break;
 	case k_ESteamNetworkingConnectionState_ClosedByPeer:
 	case k_ESteamNetworkingConnectionState_ProblemDetectedLocally:
