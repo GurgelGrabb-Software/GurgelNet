@@ -42,34 +42,20 @@ void CServerObjectHandler::SpawnObject(CNetObject& object, ENetObjectOwner owner
 
 void CServerObjectHandler::DespawnObject(CNetObject& object)
 {
-	const NetObjectID id = object.GetNetObjectID();
-
-	if (object.IsOwner(ClientID_Server))
-	{
-		NETLOG_SERVER(ENetLogLevel_Message, "Despawning object with net ID {}", object.GetNetObjectID());
-
-		CObjectMsg_Despawn despawnMsg;
-		despawnMsg.id = id;
-		_netContext.layer.msgQueuePtr->Send(despawnMsg, ClientID_AllClients, true);
-
-		_objects.Remove(id);
-		object.OnNetworkDespawn();
-	}
-
-	if (_netContext.analyzerPtr) _netContext.analyzerPtr->UpdateNetObjectCount(_objects.NumObjects());
+	DespawnInternal(object, ClientID_Server);
 }
 
 // ------------------------------------------------------------
 
-void CServerObjectHandler::DespawnAllClientObjects(ClientID id)
+void CServerObjectHandler::DespawnAllClientObjects(ClientID cID)
 {
-	auto mapIT = _clientOwnedObjectIDs.find(id);
+	auto mapIT = _clientOwnedObjectIDs.find(cID);
 	if (mapIT != _clientOwnedObjectIDs.end())
 	{
-		for (NetObjectID id : mapIT->second)
+		for (NetObjectID oID : mapIT->second)
 		{
-			auto& handle = _objects.GetObject(id);
-			DespawnObject(*(handle.objectPtr));
+			auto& handle = _objects.GetObject(oID);
+			DespawnInternal(*(handle.objectPtr), cID);
 		}
 
 		_clientOwnedObjectIDs.erase(mapIT);
@@ -162,6 +148,25 @@ void CServerObjectHandler::WriteLateJoinPayload(CLateJoinPayload& payload)
 void CServerObjectHandler::RunNetObjectUpdate()
 {
 	_objects.ForEach([&](auto& h) {UpdateNetObject(h); });
+}
+
+void CServerObjectHandler::DespawnInternal(CNetObject& object, ClientID expectedOwner)
+{
+	const NetObjectID id = object.GetNetObjectID();
+
+	if (object.IsOwner(expectedOwner))
+	{
+		NETLOG_SERVER(ENetLogLevel_Message, "Despawning object with net ID {}", object.GetNetObjectID());
+
+		CObjectMsg_Despawn despawnMsg;
+		despawnMsg.id = id;
+		_netContext.layer.msgQueuePtr->Send(despawnMsg, ClientID_AllClients, true);
+
+		_objects.Remove(id);
+		object.OnNetworkDespawn();
+	}
+
+	if (_netContext.analyzerPtr) _netContext.analyzerPtr->UpdateNetObjectCount(_objects.NumObjects());
 }
 
 // ------------------------------------------------------------

@@ -32,6 +32,8 @@ public:
 	void RunNetObjectUpdate() override;
 
 private:
+	void DespawnInternal(CNetObject& object, ClientID expectedOwner);
+
 	CNetObjectList _objects;
 	std::map<ClientID, std::vector<NetObjectID>> _clientOwnedObjectIDs;
 };
