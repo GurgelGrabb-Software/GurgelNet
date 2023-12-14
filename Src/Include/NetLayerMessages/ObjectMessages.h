@@ -55,7 +55,7 @@ public:
 	{
 		serializer.Write(objectHandle->objectPtr->GetNetObjectID());
 		serializer.Write(objectHandle->objectPtr->GetNetTypeID());
-		serializer.Write(objectHandle->objectPtr->GetOwnerMask());
+		serializer.Write(ownerID);
 		objectHandle->objectPtr->WriteSpawnData(serializer);
 	}
 
