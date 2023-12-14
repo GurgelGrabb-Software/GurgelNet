@@ -81,18 +81,19 @@ void GurgelNet_Tick()
 
 void GurgelNet_Shutdown()
 {
-	GameNetworkingSockets_Kill();
 
 	for (CNetLayerShared* l : s_layerPtrs)
 	{
 		if (l != nullptr)
 		{
+			l->Shutdown();
 			delete l;
 			l = nullptr;
 		}
 	}
 
 	s_numLayers = 1;
+	GameNetworkingSockets_Kill();
 }
 
 void AssignLayerSettings(CNetLayerShared& layer, SNetLayerSettings& settings)
