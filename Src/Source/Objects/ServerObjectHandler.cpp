@@ -61,6 +61,23 @@ void CServerObjectHandler::DespawnObject(CNetObject& object)
 
 // ------------------------------------------------------------
 
+void CServerObjectHandler::DespawnAllClientObjects(ClientID id)
+{
+	auto mapIT = _clientOwnedObjectIDs.find(id);
+	if (mapIT != _clientOwnedObjectIDs.end())
+	{
+		for (NetObjectID id : mapIT->second)
+		{
+			auto& handle = _objects.GetObject(id);
+			DespawnObject(*(handle.objectPtr));
+		}
+
+		_clientOwnedObjectIDs.erase(mapIT);
+	}
+}
+
+// ------------------------------------------------------------
+
 void CServerObjectHandler::ProcessObjectSpawnRequest(ClientID requestingClient, CObjectMsg_SpawnRequest& requestMsg)
 {
 	CNetObject* objectPtr = ObjectFactory()->MakeObject(requestMsg.spawnedTypeID);

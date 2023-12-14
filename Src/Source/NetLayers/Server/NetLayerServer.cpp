@@ -107,7 +107,7 @@ void CNetLayerServer::ConnectCallback(SteamNetConnectionStatusChangedCallback_t*
 		break;
 	case k_ESteamNetworkingConnectionState_ClosedByPeer:
 	case k_ESteamNetworkingConnectionState_ProblemDetectedLocally:
-		_connectionsHandler.ClosedConnection(info->m_hConn);
+		_connectionsHandler.ClosedConnection(info->m_hConn, _objectHandler);
 		break;
 	}
 }

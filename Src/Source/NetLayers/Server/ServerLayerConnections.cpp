@@ -1,6 +1,7 @@
 #include "Src/Include/NetLayers/Server/ServerLayerConnections.h"
 
 #include "Src/Include/NetLayers/NetLayerContext.h"
+#include "Src/Include/Objects/ServerObjectHandler.h"
 
 #include <steam/steamnetworkingsockets.h>
 #include <steam/isteamnetworkingutils.h>
@@ -54,7 +55,7 @@ void SServerLayerConnections::OpenConnection(unsigned int hConnection, ClientID 
 
 // ------------------------------------------------------------
 
-void SServerLayerConnections::CloseConnectionByHandle(unsigned int hConnection)
+void SServerLayerConnections::CloseConnectionByHandle(unsigned int hConnection, CServerObjectHandler* objectHandler)
 {
 	// Close the backend
 	auto backendInterface = _netContext.backend.interfacePtr;
@@ -64,6 +65,10 @@ void SServerLayerConnections::CloseConnectionByHandle(unsigned int hConnection)
 	if (auto connectionPtr = GetConnectionByHandle(hConnection))
 	{
 		NETLOG_SERVER(ENetLogLevel_Message, "Client (client ID {}) disconnected", connectionPtr->clientID );
+		
+		if(objectHandler) 
+			objectHandler->DespawnAllClientObjects(connectionPtr->clientID);
+
 		ReleaseID(connectionPtr->clientID);
 		if (_netContext.analyzerPtr) _netContext.analyzerPtr->UpdateConnectionCount((unsigned int)_connectionHandles.size());
 	}
@@ -77,7 +82,7 @@ void SServerLayerConnections::CloseConnectionByHandle(unsigned int hConnection)
 
 void SServerLayerConnections::CloseConnectionByID(ClientID id)
 {
-	CloseConnectionByHandle(GetConnectionByID(id)->hConnection);
+	CloseConnectionByHandle(GetConnectionByID(id)->hConnection, nullptr);
 }
 
 // ------------------------------------------------------------

@@ -12,7 +12,7 @@ public:
 
 	void IncomingConnection(unsigned int hConnection);
 	void EstablishedConnection(unsigned int hConnection);
-	void ClosedConnection(unsigned int hConnection);
+	void ClosedConnection(unsigned int hConnection, CServerObjectHandler& objectHandler);
 
 	void RunClientApproval(ClientID clientID, INetMessageReader& approvalDataReader);
 	void LateJoinCompleted(ClientID clientID);

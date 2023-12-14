@@ -3,6 +3,8 @@
 #include <vector>
 
 struct SNetLayerContext;
+class CServerObjectHandler;
+
 
 // ------------------------------------------------------------
 
@@ -26,7 +28,7 @@ public:
 	// ------------------------------------------------------------
 	bool TryFindFreeID(ClientID& outID);
 	void OpenConnection(unsigned int hConnection, ClientID id);
-	void CloseConnectionByHandle(unsigned int hConnection);
+	void CloseConnectionByHandle(unsigned int hConnection, CServerObjectHandler* objectHandler);
 	void CloseConnectionByID(ClientID id);
 	void SetConnectionActive(ClientID id);
 

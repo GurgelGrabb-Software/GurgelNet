@@ -49,9 +49,9 @@ void CServerLayerConnectionsHandler::EstablishedConnection(unsigned int hConnect
 
 // ------------------------------------------------------------
 
-void CServerLayerConnectionsHandler::ClosedConnection(unsigned int hConnection)
+void CServerLayerConnectionsHandler::ClosedConnection(unsigned int hConnection, CServerObjectHandler& objectHandler)
 {
-	_connections.CloseConnectionByHandle(hConnection);
+	_connections.CloseConnectionByHandle(hConnection, &objectHandler);
 }
 
 // ------------------------------------------------------------

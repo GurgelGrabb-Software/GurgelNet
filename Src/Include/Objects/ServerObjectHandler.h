@@ -20,6 +20,7 @@ public:
 
 	void SpawnObject(CNetObject& object, ENetObjectOwner owner) override;
 	void DespawnObject(CNetObject& object) override;
+	void DespawnAllClientObjects(ClientID id);
 
 	void ProcessObjectSpawnRequest(ClientID requestingClient, CObjectMsg_SpawnRequest& requestMsg);
 	void ProcessObjectDespawn(ClientID requestingClient, CObjectMsg_Despawn& despawnMsg);
